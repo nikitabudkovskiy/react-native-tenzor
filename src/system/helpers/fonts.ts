@@ -1,6 +1,4 @@
 export const fonts = {
-    // geometriaLight: 'Geometria-Light',
-    // geometriaBold: 'Geometria-Bold',
-    // openSansRegular: 'OpenSans-Regular',
-    
+    robotoRegular: 'Roboto-Regular',
+    robotoBold: 'Roboto-Bold',
 }

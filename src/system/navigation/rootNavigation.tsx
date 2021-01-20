@@ -1,14 +1,14 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { ListPages  } from 'app/system/navigation'
-import { Loader } from 'app/module/global/view/Loader'
+import { ChooseCity } from 'app/module/main/view/ChooseCity'
 
 const Stack = createStackNavigator()
 
 export const RootNavigator = (): JSX.Element => {
   return (
     <Stack.Navigator headerMode={undefined}>
-      <Stack.Screen name={ListPages.Login} component={Loader} />
+      <Stack.Screen name={ListPages.ChooseCity} component={ChooseCity} />
     </Stack.Navigator>
   )
 }

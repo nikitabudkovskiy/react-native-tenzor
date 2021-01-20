@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { AppState, AppStateStatus, YellowBox, } from 'react-native'
+import { AppState, AppStateStatus, YellowBox, StatusBar } from 'react-native'
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native'
 import { RootNavigator } from 'app/system/navigation/rootNavigation'
 import { Provider } from 'react-redux'
@@ -39,6 +39,7 @@ export class App extends PureComponent<IProps, IState>{
 
   componentDidMount(): void {
     AppState.addEventListener('change', this.handleAppStateChange)
+    // StatusBar.setBarStyle('dark-content')
   }
 
   componentWillUnmount(): void {

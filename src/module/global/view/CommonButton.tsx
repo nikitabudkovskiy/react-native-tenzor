@@ -2,30 +2,46 @@ import React, { PureComponent } from 'react'
 import { 
   Text,
   TouchableOpacity, 
-  TouchableOpacityProps, 
+  TouchableOpacityProps,
+  ViewStyle, 
 } from 'react-native'
 import {
   styleSheetCreate,
   style,
+  Color,
+  windowWidth,
+  fonts,
+  styleSheetFlatten,
 } from 'app/system/helpers'
 
 interface IProps extends TouchableOpacityProps {
-
+  title: string
+  styleButton: ViewStyle
 }
 
 interface IState {
 
 }
 
-export class CustomButton extends PureComponent<IProps,IState>{
+export class CommonButton extends PureComponent<IProps,IState>{
+
   render() {
+
+    const container = styleSheetFlatten([
+      styles.container,
+      this.props.styleButton,
+      {
+        opacity: this.props.disabled ? 0.5 : 1,
+      }
+    ])
+
     return (
       <TouchableOpacity
         {...this.props}
-        style={styles.container}
+        style={container}
       >
-        <Text>
-
+        <Text style={styles.text}>
+          {this.props.title}
         </Text>
       </TouchableOpacity>
     )
@@ -34,7 +50,17 @@ export class CustomButton extends PureComponent<IProps,IState>{
 
 const styles = styleSheetCreate({
   container: style.view({
-
+    backgroundColor: Color.electricOrange,
+    height: windowWidth * 0.1,
+    borderRadius: windowWidth * 0.03,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }),
+  text: style.text({
+    textTransform: 'uppercase',
+    fontSize: windowWidth * 0.036,
+    color: Color.white,
+    fontFamily: fonts.robotoBold,
   }),
 })
 

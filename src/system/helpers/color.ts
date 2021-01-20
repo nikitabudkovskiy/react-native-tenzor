@@ -5,4 +5,5 @@ export enum Color {
     electricOrange = "#FE330F",
     gray = "rgba(0, 0, 0, 0.4)",
     anitFlashWhite = "#EFF2F8",
+    gray100 = "rgba(0, 0, 0, 0.1)",
 }
