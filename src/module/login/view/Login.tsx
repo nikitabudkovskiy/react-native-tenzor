@@ -27,10 +27,11 @@ export class Login extends PureComponent<IProps, IState> {
   }
 
   handleChangeText = (phoneNumber: string) => {
-    this.setState({ phoneNumber }, () => {console.log(phoneNumber.length)})
+    this.setState({ phoneNumber })
   }
 
   render() {
+    console.log(this.props.navigation)
     return (
       <View style={styles.content}>
         <Text style={styles.enterPhoneTitle}>
@@ -42,21 +43,21 @@ export class Login extends PureComponent<IProps, IState> {
             options={{
               mask: '+7 (999) 999-99-99'
             }}
-            // placeholderTextColor={Color.sonicSilver}
+            placeholderTextColor={Color.gray}
             placeholder='+7 (925)123-45-67  '
             style={styles.numberInputStyle}
             value={this.state.phoneNumber}
             onChangeText={this.handleChangeText}
-
             keyboardType="numeric"
           />
         </View>
         <CommonButton
           title='ДАЛЕЕ'
           styleButton={styles.continueButton}
-          disabled={this.state.phoneNumber.length == 18 ? false : true}
-          onPress={this.props.navigation.navigate('Password')}
-          
+          disabled={!(this.state.phoneNumber.length === 18)}
+          onPress={() => {
+            this.props.navigation.push('Password')
+          }}
          />
       </View>
     )
@@ -80,7 +81,7 @@ const styles = styleSheetCreate({
   }),
   enterPhoneTitle: style.text({
     textAlign: 'center',
-    paddingTop: windowWidth * 0.27,
+    paddingTop: windowWidth * 0.17,
     fontSize: windowWidth * 0.064,
     fontFamily: fonts.robotoBold
   }),

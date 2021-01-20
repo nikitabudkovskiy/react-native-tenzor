@@ -4,14 +4,18 @@ import { ListPages  } from 'app/system/navigation'
 import { ChooseCity } from 'app/module/main/view/ChooseCity'
 import { Login } from 'app/module/login/view/Login'
 import { Password } from 'app/module/login/view/Password'
+import { AccessCode } from 'app/module/login/view/AccessCode'
+import { MainPage } from 'app/module/main/view/MainPage'
 
 const Stack = createStackNavigator()
 
 export const RootNavigator = (): JSX.Element => {
   return (
     <Stack.Navigator headerMode={undefined}>
-      {/* <Stack.Screen name={ListPages.Login} component={Login} /> */}
-      <Stack.Screen name={ListPages.Password} component={Password} />
+      {/* <Stack.Screen name={ListPages.Login} component={Login} />
+      <Stack.Screen name={ListPages.Password} component={Password} /> */}
+      {/* <Stack.Screen name={ListPages.AccessCode} component={AccessCode} /> */}
+      <Stack.Screen name={ListPages.MainPage} component={MainPage} />
     </Stack.Navigator>
   )
 }

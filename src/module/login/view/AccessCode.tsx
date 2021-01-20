@@ -19,12 +19,14 @@ import {
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
 import { useState } from 'react';
-import { weekdaysMin } from 'moment';
+
 
 
 const CELL_COUNT = 6;
 
-export const Password = (navigation: any) => {
+
+
+export const AccessCode = (navigation: any) => {
   const [value, setValue] = useState('');
   const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
@@ -35,10 +37,13 @@ export const Password = (navigation: any) => {
   return (
     <SafeAreaView style={styles.root}>
       <Text style={styles.title}>
-        Укажите пароль для {'\n'} +7(925)123-45-67
+        Пароль отправлен {'\n'} в СМС
       </Text>
       <Text style={styles.description}>
-        Пароль состоит из 6 цифр
+        Мы отправили СМС с паролем {'\n'} на номер {''}
+        <Text style={styles.descriptionPhoneNumber}>
+          +7(925)123-45-67
+          </Text>
       </Text>
       <CodeField
         ref={ref}
@@ -61,19 +66,24 @@ export const Password = (navigation: any) => {
           </View>
         )}
       />
-      <TouchableOpacity 
+     
+      {/* <TouchableOpacity
         style={styles.forgetPasswordButton}
         onPress={() => {
-          navigation.push('AccessCode')
+          navigation.navigate('AccessCode')
         }}
       >
         <Text style={styles.forgetPasswordTitle}>
           Я не помню пароль
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </SafeAreaView>
   );
 };
+
+const setTimePassed = () => {
+  
+}
 
 const styles = styleSheetCreate({
   root: style.view({
@@ -87,10 +97,15 @@ const styles = styleSheetCreate({
     fontFamily: fonts.robotoBold,
     paddingTop: windowWidth * 0.17
   }),
+  descriptionPhoneNumber: style.text({
+    fontFamily: fonts.robotoBold,
+    fontSize: windowWidth * 0.048,
+  }),
   description: style.text({
     fontSize: windowWidth * 0.048,
     fontFamily: fonts.robotoRegular,
-    paddingTop: windowWidth * 0.04
+    paddingTop: windowWidth * 0.04,
+    textAlign: 'center',
   }),
   cellRoot: style.view({
     marginTop: windowWidth * 0.09,
@@ -122,3 +137,4 @@ const styles = styleSheetCreate({
     color: Color.electricOrange,
   }),
 })
+
