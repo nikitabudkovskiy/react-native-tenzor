@@ -1,0 +1,241 @@
+import React from 'react'
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+  Keyboard,
+} from 'react-native'
+import {
+  styleSheetCreate,
+  fonts,
+  Color,
+  style,
+  windowWidth,
+  ImageRepository,
+  keyboardShowEvent,
+  keyboardHideEvent,
+  styleSheetFlatten,
+} from 'app/system/helpers'
+import {
+  CodeField,
+  Cursor,
+  useBlurOnFulfill,
+  useClearByFocusCell,
+} from 'react-native-confirmation-code-field'
+import { useState, useEffect, useRef, } from 'react'
+import { StackNavigationProp } from '@react-navigation/stack'
+
+const CELL_COUNT = 6
+
+interface IProps {
+  navigation: StackNavigationProp<any>
+}
+
+export const PasswordSingIn = ({ navigation }: IProps) => {
+  let intervalId: any = useRef(null)
+  const isInitialMount = useRef(true)
+
+  const [IsResending, setIsResending] = useState<boolean>(false)
+  const [isUserForgotPassword, setIsUserForgotPassword] = useState<boolean>(false)
+  const [timeSendingCode, setTimeSendingCode] = useState<number>(15)
+
+  const [isKeyboardShow, setIsKeyboardShow] = useState<boolean>(false)
+  const [heightKeybord, setHeightKeybord] = useState<number>(0)
+  const [value, setValue] = useState('')
+  const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT })
+  const [props, getCellOnLayoutHandler] = useClearByFocusCell({
+    value,
+    setValue,
+  })
+
+  useEffect(() => {
+    Keyboard.addListener(keyboardShowEvent, (event) => {
+      setIsKeyboardShow(true)
+      setHeightKeybord(event.endCoordinates.height)
+    })
+
+    Keyboard.addListener(keyboardHideEvent, () => {
+      setIsKeyboardShow(true)
+      setHeightKeybord(0)
+    })
+  }, [])
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false
+    } else {
+      if (!timeSendingCode) {
+        clearInterval(intervalId.current)
+        setTimeSendingCode(5)
+        setIsUserForgotPassword(false)
+      }
+      if (!IsResending) {
+        setIsResending(true)
+      }
+    }
+
+  }, [timeSendingCode])
+
+  const goBackHandler = () => {
+    navigation.goBack()
+  }
+
+  const forgotPasswordHandler = (): void => {
+    setIsUserForgotPassword(true)
+    intervalId.current = setInterval(() => {
+      setTimeSendingCode(timeSendingCode => timeSendingCode - 1)
+      console.log('timeSendingCode', timeSendingCode)
+    }, 1000)
+  }
+
+  const forgetPasswordButton = styleSheetFlatten([
+    styles.forgetPasswordButton,
+    {
+      bottom: isKeyboardShow
+        ? windowWidth * 0.06 + heightKeybord
+        : windowWidth * 0.06
+    }
+  ])
+
+  return (
+    <ScrollView
+      keyboardShouldPersistTaps="handled"
+      contentContainerStyle={styles.root}
+      bounces={false}
+      showsVerticalScrollIndicator={false}
+    >
+      <TouchableOpacity
+        onPress={goBackHandler}
+        hitSlop={{ left: 15, right: 15, top: 15, bottom: 15 }}
+        style={styles.backArrowButton}
+      >
+        <Image
+          source={ImageRepository.signInBackArrow}
+          style={styles.backArrow}
+        />
+      </TouchableOpacity>
+      <Text style={styles.title}>
+        Введите код из СМС
+      </Text>
+      <Text style={styles.description}>
+        Мы отправили СМС с кодом на номер +7(925)123-45-67
+      </Text>
+      <CodeField
+        ref={ref}
+        {...props}
+        value={value}
+        onChangeText={setValue}
+        cellCount={CELL_COUNT}
+        rootStyle={styles.codeFieldRoot}
+        keyboardType="number-pad"
+        textContentType="oneTimeCode"
+        renderCell={({ index, symbol, isFocused }) => (
+          <View
+            onLayout={getCellOnLayoutHandler(index)}
+            key={index}
+            style={[styles.cellRoot, isFocused && styles.focusCell]}>
+            <Text style={styles.cellText}>
+              {
+                symbol || (isFocused
+                  ? <Cursor />
+                  : null)
+              }
+            </Text>
+          </View>
+        )}
+      />
+      <TouchableOpacity
+        style={forgetPasswordButton}
+        onPress={forgotPasswordHandler}
+        disabled={isUserForgotPassword}
+      >
+        {
+          !isUserForgotPassword && !IsResending
+            ? (
+              <Text style={styles.forgetPasswordTitle}>
+                Я не помню пароль
+              </Text>
+            ) : !isUserForgotPassword && IsResending
+              ? (
+                <Text style={styles.forgetPasswordTitle}>
+                  Отправить новый код
+                </Text>
+              )
+              : (
+                <Text style={styles.forgetPasswordTitleSendCode}>
+                  Отправка нового кода через <Text style={styles.forgetPasswordTitleSendCodeTime}>{timeSendingCode}</Text> сек
+                </Text>
+              )
+        }
+      </TouchableOpacity>
+    </ScrollView>
+  )
+}
+
+const styles = styleSheetCreate({
+  root: style.view({
+    paddingHorizontal: windowWidth * 0.12,
+    alignItems: 'center',
+    height: '100%'
+  }),
+  title: style.text({
+    textAlign: 'center',
+    fontSize: windowWidth * 0.064,
+    fontFamily: fonts.robotoBold,
+    paddingTop: windowWidth * 0.17
+  }),
+  description: style.text({
+    fontSize: windowWidth * 0.048,
+    fontFamily: fonts.robotoRegular,
+    paddingTop: windowWidth * 0.04
+  }),
+  cellRoot: style.view({
+    marginTop: windowWidth * 0.09,
+    width: windowWidth * 0.1,
+    height: windowWidth * 0.13,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomColor: Color.gray100,
+    borderBottomWidth: 2,
+    borderRadius: 1,
+    marginHorizontal: windowWidth * 0.021,
+  }),
+  cellText: style.text({
+    color: Color.black,
+    fontSize: windowWidth * 0.064,
+    textAlign: 'center',
+  }),
+  focusCell: style.view({
+    borderBottomColor: Color.black,
+    borderBottomWidth: 2,
+  }),
+  forgetPasswordButton: style.view({
+    position: 'absolute',
+    bottom: windowWidth * 0.06,
+  }),
+  forgetPasswordTitle: style.text({
+    fontFamily: fonts.robotoRegular,
+    fontSize: windowWidth * 0.04,
+    color: Color.electricOrange,
+  }),
+  forgetPasswordTitleSendCode: style.text({
+    fontFamily: fonts.robotoRegular,
+    fontSize: windowWidth * 0.04,
+    color: Color.gray,
+  }),
+  forgetPasswordTitleSendCodeTime: style.text({
+    fontFamily: fonts.robotoBold,
+    fontSize: windowWidth * 0.04,
+    color: Color.black,
+  }),
+  backArrowButton: style.view({
+    marginTop: windowWidth * 0.12,
+    alignSelf: 'flex-start',
+  }),
+  backArrow: style.image({
+    width: windowWidth * 0.04,
+    height: windowWidth * 0.04,
+  }),
+})

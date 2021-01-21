@@ -15,7 +15,7 @@ import {
   windowHeight,
   ImageRepository,
 } from 'app/system/helpers'
-
+import Barcode from "react-native-barcode-builder"
 
 interface IProps {
 
@@ -114,6 +114,24 @@ export class MainPage extends PureComponent<IProps, IState> {
                   )
                 })
               }
+            </View>
+          </View>
+          <View style={styles.cardContent}>
+            <View style={styles.cardContainer}>
+              <Barcode
+                // width={windowWidth * 0.015}
+                // height={windowWidth * 0.33}
+                background={Color.white}
+                value="3243240000000"
+                format="CODE128" />
+              <Text style={styles.barCodeNumber}>
+                3243240000000
+            </Text>
+              <View style={styles.cardDescriptionContainer}>
+                <Text style={styles.cardDescription}>
+                  Карта любимого клиента
+              </Text>
+              </View>
             </View>
           </View>
           <ScrollView
@@ -289,7 +307,7 @@ export class MainPage extends PureComponent<IProps, IState> {
 
 const styles = styleSheetCreate({
   content: style.view({
-    backgroundColor: Color.white,
+    // backgroundColor: Color.white,
   }),
   container: style.view({
     width: windowWidth * 2.436,
@@ -507,5 +525,34 @@ const styles = styleSheetCreate({
   titleElementBar: style.text({
     fontSize: windowWidth * 0.029,
     fontFamily: fonts.robotoRegular
-  })
+  }),
+  cardContainer: style.view({
+    alignItems: 'center',
+    backgroundColor: Color.white,
+    marginTop: windowWidth * 0.05,
+    borderRadius: windowWidth * 0.05,
+    width: windowWidth * 0.9,
+    // marginLeft: windowWidth * 0.06,
+    height: windowWidth * 0.57,
+  }),
+  barCodeNumber: style.text({
+    fontSize: windowWidth * 0.064,
+  }),
+  cardDescriptionContainer: style.view({
+    backgroundColor: Color.black,
+    width: windowWidth * 0.9,
+    height: windowHeight * 0.088,
+    borderBottomLeftRadius: windowWidth * 0.05,
+    borderBottomRightRadius: windowWidth * 0.05,
+    marginTop: windowWidth * 0.04,
+    justifyContent: 'center'
+  }),
+  cardDescription: style.text({
+    color: Color.white,
+    textAlign: 'center',
+    fontSize: windowWidth * 0.04,
+  }),
+  cardContent: style.view({
+    alignItems: 'center',
+  }),
 })

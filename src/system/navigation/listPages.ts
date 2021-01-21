@@ -1,8 +1,9 @@
 export class ListPages {
-  static readonly Login = 'Login'
+  static readonly EnterPhoneNumber = 'EnterPhoneNumberSingIn'
   static readonly ChooseCity = 'ChooseCity'
-  static readonly Password = 'Password'
-  static readonly AccessCode = 'AccessCode'
+  static readonly PasswordSingIn = 'PasswordSingIn'
+  static readonly EnterPhoneNumberSingInRegistration = 'EnterPhoneNumberSingInRegistration'
+  static readonly PasswordRegistration = 'PasswordRegistration'
   static readonly MainPage = 'MainPage'
   
 }
