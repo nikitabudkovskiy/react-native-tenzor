@@ -13,12 +13,13 @@ import {
   windowWidth,
   ImageRepository,
   styleSheetFlatten,
+  isLongDevices,
+  windowHeight,
 } from 'app/system/helpers'
 import { TextInputMask } from 'react-native-masked-text'
 import { CommonInput } from 'app/module/global/view/CommonInput'
 import { CommonButton } from 'app/module/global/view/CommonButton'
-
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 interface IProps {
 
@@ -31,6 +32,7 @@ interface IState {
   correctName: boolean
   name: string
   termsOfUseChecked: boolean
+  isInputTouched: boolean
 }
 
 export class Contacts extends PureComponent<IProps, IState> {
@@ -41,6 +43,7 @@ export class Contacts extends PureComponent<IProps, IState> {
     name: '',
     correctName: true,
     termsOfUseChecked: false,
+    isInputTouched: false,
   }
 
   handleChangeBirthDate = (birthDate: string) => {
@@ -56,15 +59,28 @@ export class Contacts extends PureComponent<IProps, IState> {
   }
 
   checkBirthDate = () => {
-    this.setState({ correctBirthDate: /^\s*(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})\s*$/.test(this.state.birthDate)})
+    if (!this.state.isInputTouched) {
+      this.setState({ isInputTouched: true })
+    }
+    this.setState({ 
+      correctBirthDate: /^\s*(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})\s*$/
+        .test(this.state.birthDate)
+    })
   }
 
   checkName = () => {
-    this.setState({correctName: /^[а-яА-Я\-]+$/.test(this.state.name)})
+    if (!this.state.isInputTouched) {
+      this.setState({ isInputTouched: true })
+    }
+    this.setState({ 
+      correctName: /^[а-яА-Я\-]+$/.test(this.state.name) 
+    })
   }
   
   checkTermsOfUse = () => {
-    this.setState({termsOfUseChecked: !this.state.termsOfUseChecked})
+    this.setState({ 
+      termsOfUseChecked: !this.state.termsOfUseChecked 
+    })
   }
 
   render() {
@@ -86,10 +102,22 @@ export class Contacts extends PureComponent<IProps, IState> {
       }
     ])
 
+    const contentTitle = styleSheetFlatten([
+      styles.contentTitle,
+      {
+        paddingTop: isLongDevices ? windowWidth * 0.12 : windowWidth * 0.04,
+      }
+    ])
 
     return (
-      <View style={styles.container}>
-        <Text style={styles.contentTitle}>
+      <KeyboardAwareScrollView 
+        keyboardShouldPersistTaps="handled"
+        style={styles.container}
+        bounces={false}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.content}>
+        <Text style={contentTitle}>
           Укажите контакты
         </Text>
         <Text style={styles.contentDescription}>
@@ -169,7 +197,9 @@ export class Contacts extends PureComponent<IProps, IState> {
                 source={ImageRepository.contactsCheckMark}
                 style={styles.contactsCheckMark}
               />
-              : undefined
+              : (
+                <View style={styles.contactsCheckMarkEndCap} />
+              )
             }
           </TouchableOpacity>
           <Text style={styles.termsOfUseDescription}>
@@ -179,25 +209,31 @@ export class Contacts extends PureComponent<IProps, IState> {
             </Text>
           </Text>
         </View>
-        <CommonButton 
-          title='ЗАВЕРШИТЬ'
-          styleButton={styles.fininshButton}
-        />
-      </View>
+        </View>
+        <View style={styles.fininshButtonContainer}>
+          <CommonButton 
+            title='ЗАВЕРШИТЬ'
+            styleButton={styles.fininshButton}
+            disabled={!((this.state.correctBirthDate && this.state.isInputTouched) && (this.state.correctName && this.state.isInputTouched))}
+          />
+        </View>
+      </KeyboardAwareScrollView>
     )
   }
 }
 
 const styles = styleSheetCreate({
   contentTitle: style.text({
-    paddingTop: windowWidth * 0.037,
     fontFamily: fonts.robotoBold,
     fontSize: windowWidth * 0.05,
   }),
   container: style.view({
-    paddingLeft: windowWidth * 0.037,
+    paddingHorizontal: windowWidth * 0.02,
     backgroundColor: Color.white,
-    height: '100%'
+    flex: 1,
+  }),
+  content: style.view({
+    height: windowHeight * 0.92,
   }),
   contentDescription: style.text({
     fontFamily: fonts.robotoRegular,
@@ -208,8 +244,9 @@ const styles = styleSheetCreate({
   inputContainer: style.view({
     marginTop: windowWidth * 0.064
   }),
-  // birthDateInput: style.view({
-  // }),
+  birthDateInput: style.view({
+    height: '100%',
+  }),
   birthDateInputLabel: style.text({
     position: 'absolute',
     top: windowWidth * -0.023,
@@ -230,8 +267,8 @@ const styles = styleSheetCreate({
   }),
   radioBox: style.view({
     borderWidth: windowWidth * 0.005,
-    width: windowWidth * 0.053,
-    height: windowWidth * 0.053,
+    width: windowWidth * 0.05,
+    height: windowWidth * 0.05,
     borderRadius: windowWidth * 0.026,
     marginRight: windowWidth * 0.032,
     alignItems: 'center',
@@ -248,7 +285,7 @@ const styles = styleSheetCreate({
     color: Color.gray
   }),
   genderTitle: style.text({
-    fontSize: windowWidth * 0.045,
+    fontSize: windowWidth * 0.036,
   }),
   selectedGender: style.view({
     width: windowWidth * 0.021,
@@ -260,9 +297,9 @@ const styles = styleSheetCreate({
     width: windowWidth * 0.05,
     height: windowWidth * 0.05,
     backgroundColor: Color.black,
-    borderRadius: windowWidth * 0.01,
+    borderRadius: windowWidth * 0.005,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   }),
   termsOfUseContainer: style.view({
     flexDirection: 'row',
@@ -271,7 +308,7 @@ const styles = styleSheetCreate({
   }),
   termsOfUseDescription: style.text({
     paddingLeft: windowWidth * 0.032,
-    fontSize: windowWidth * 0.04,
+    fontSize: windowWidth * 0.036,
     fontFamily: fonts.robotoRegular
   }),
   termsOfUseDescriptionUnderline: style.text({
@@ -281,10 +318,16 @@ const styles = styleSheetCreate({
     width: windowWidth * 0.035,
     height: windowWidth * 0.026,
   }),
+  contactsCheckMarkEndCap: style.view({
+    width: windowWidth * 0.04,
+    height: windowWidth * 0.04,
+    backgroundColor: Color.white,
+  }), 
+  fininshButtonContainer: style.view({
+    alignItems: 'center',
+    width: windowWidth,
+  }),
   fininshButton: style.view({
-    position: 'absolute',
-    width: windowWidth * 0.914,
-    bottom: windowWidth * 0.012,
-    marginLeft: windowWidth * 0.037,
+    width: windowWidth * 0.92, 
   }),
 })

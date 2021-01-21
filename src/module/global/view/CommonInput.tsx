@@ -74,6 +74,7 @@ const styles = styleSheetCreate({
     borderWidth: windowWidth * 0.0026,
     borderRadius: windowWidth * 0.032,
     paddingHorizontal: windowWidth * 0.04,
+    paddingVertical: windowWidth * 0.04,
     borderColor: Color.gray
   }),
   text: style.text({

@@ -10,6 +10,7 @@ import { IApplicationState } from 'app/system/store'
 import { Loader } from 'app/module/global/view/Loader'
 import { localization } from 'app/system/localization'
 import { configureStore } from './system/store/configureStore'
+import { Color, platform } from './system/helpers'
 
 YellowBox.ignoreWarnings(['Remote debugger'])
 
@@ -39,7 +40,10 @@ export class App extends PureComponent<IProps, IState>{
 
   componentDidMount(): void {
     AppState.addEventListener('change', this.handleAppStateChange)
-    // StatusBar.setBarStyle('dark-content')
+    if (platform.isAndroid) {
+      StatusBar.setBackgroundColor(Color.white)
+      StatusBar.setBarStyle('dark-content')
+    }
   }
 
   componentWillUnmount(): void {

@@ -5,7 +5,6 @@ import { ChooseCity } from 'app/module/main/view/ChooseCity'
 import { EnterPhoneNumberSingIn } from 'app/module/login/view/EnterPhoneNumberSingIn'
 import { PasswordSingIn } from 'app/module/login/view/PasswordSingIn'
 import { MainPage } from 'app/module/main/view/MainPage'
-import { ForgotPassword } from 'app/module/login/view/ForgotPasswordSingIn'
 import { Contacts } from 'app/module/registration/view/Contacts'
 
 const Stack = createStackNavigator()
@@ -13,9 +12,10 @@ const Stack = createStackNavigator()
 export const RootNavigator = (): JSX.Element => {
   return (
     <Stack.Navigator headerMode={undefined}>
+      <Stack.Screen name={ListPages.MainPage} component={MainPage} />
       {/* <Stack.Screen name={ListPages.EnterPhoneNumber} component={EnterPhoneNumberSingIn} />
       <Stack.Screen name={ListPages.PasswordSingIn} component={PasswordSingIn} /> */}
-      <Stack.Screen name={ListPages.Contacts} component={Contacts} />
+      {/* <Stack.Screen name={ListPages.Contacts} component={Contacts} /> */}
     </Stack.Navigator>
   )
 }

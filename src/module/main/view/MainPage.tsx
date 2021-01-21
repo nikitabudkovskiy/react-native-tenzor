@@ -4,7 +4,6 @@ import {
   Text,
   ScrollView,
   Image,
-  TouchableOpacity,
 } from 'react-native'
 import {
   styleSheetCreate,
@@ -12,8 +11,10 @@ import {
   fonts,
   Color,
   windowWidth,
-  windowHeight,
   ImageRepository,
+  styleSheetFlatten,
+  platform,
+  isLongDevices,
 } from 'app/system/helpers'
 import Barcode from "react-native-barcode-builder"
 
@@ -51,15 +52,32 @@ export class MainPage extends PureComponent<IProps, IState> {
   }
 
   render() {
+
+    const logoContainer = styleSheetFlatten([
+      styles.logoContainer,
+      {
+        paddingTop: isLongDevices 
+          ? windowWidth * 0.1 
+          : platform.isIos 
+            ? windowWidth * 0.05 
+            : 0
+      }
+    ])
+
     return (
       <View style={styles.content}>
         <ScrollView
           scrollEnabled
+          bounces={false}
+          showsVerticalScrollIndicator={false}
         >
-          <Image
-            source={ImageRepository.logo}
-            style={styles.logo}
-          />
+          <View style={logoContainer}>
+            <Image
+              source={ImageRepository.logo}
+              style={styles.logo}
+              resizeMode="contain"
+            />
+          </View>
           <ScrollView
             horizontal
             contentContainerStyle={styles.container}
@@ -116,17 +134,20 @@ export class MainPage extends PureComponent<IProps, IState> {
               }
             </View>
           </View>
+
           <View style={styles.cardContent}>
             <View style={styles.cardContainer}>
-              <Barcode
-                // width={windowWidth * 0.015}
-                // height={windowWidth * 0.33}
-                background={Color.white}
-                value="3243240000000"
-                format="CODE128" />
-              <Text style={styles.barCodeNumber}>
-                3243240000000
-            </Text>
+              <View style={styles.cardBarcode}>
+                <Barcode
+                  background={Color.white}
+                  value="3243240000000"
+                  format="CODE128" 
+                  width={2.7}
+                />
+                <Text style={styles.barCodeNumber}>
+                  3243240000000
+                </Text>
+              </View>
               <View style={styles.cardDescriptionContainer}>
                 <Text style={styles.cardDescription}>
                   Карта любимого клиента
@@ -134,6 +155,7 @@ export class MainPage extends PureComponent<IProps, IState> {
               </View>
             </View>
           </View>
+
           <ScrollView
             horizontal
             contentContainerStyle={styles.bonusesContainer}
@@ -200,6 +222,7 @@ export class MainPage extends PureComponent<IProps, IState> {
               <Image
                 source={ImageRepository.sign}
                 style={styles.sign}
+                resizeMode="contain"
               />
               <Text style={styles.appointmentDescription}>
                 Запись{'\n'} на услугу
@@ -209,6 +232,7 @@ export class MainPage extends PureComponent<IProps, IState> {
               <Image
                 source={ImageRepository.recordingMaster}
                 style={styles.sign}
+                resizeMode="contain"
               />
               <Text style={styles.appointmentDescription}>
                 Запись{'\n'} к мастеру
@@ -218,12 +242,14 @@ export class MainPage extends PureComponent<IProps, IState> {
               <Image
                 source={ImageRepository.solariumAppointment}
                 style={styles.sign}
+                resizeMode="contain"
               />
               <Text style={styles.appointmentDescription}>
                 Запись{'\n'} в солярий
               </Text>
             </View>
           </View>
+{/* 
           <View style={styles.menuContainer}>
             <TouchableOpacity style={styles.changeLocation}>
               <Image
@@ -298,7 +324,8 @@ export class MainPage extends PureComponent<IProps, IState> {
                 Контакты
             </Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
+
         </ScrollView>
       </View>
     )
@@ -316,12 +343,10 @@ const styles = styleSheetCreate({
     height: windowWidth * 0.387,
     marginTop: windowWidth * 0.05,
   }),
-
   promotionSlidesContainer: style.view({
     flexDirection: 'row',
     paddingLeft: windowWidth * 0.043,
   }),
-
   bonusesSlidesContainer: style.view({
     flexDirection: 'row',
     paddingLeft: windowWidth * 0.043,
@@ -339,7 +364,6 @@ const styles = styleSheetCreate({
     paddingTop: windowWidth * 0.041,
     borderRadius: windowWidth * 0.032,
   }),
-
   bonusSlideOne: style.view({
     width: windowWidth * 0.42,
     height: windowWidth * 0.384,
@@ -366,40 +390,47 @@ const styles = styleSheetCreate({
   }),
   slideOneTitle: style.text({
     fontFamily: fonts.robotoBold,
-    fontSize: windowWidth * 0.064,
+    fontSize: windowWidth * 0.058,
     color: Color.white,
+    marginBottom: windowWidth * 0.01,
   }),
   bounusSlideOneTitle: style.text({
     fontFamily: fonts.robotoBold,
-    fontSize: windowWidth * 0.064,
+    fontSize: windowWidth * 0.058,
     color: Color.black,
+    marginBottom: windowWidth * 0.01,
   }),
   bounusSlideTwoTitle: style.text({
     fontFamily: fonts.robotoBold,
-    fontSize: windowWidth * 0.064,
+    fontSize: windowWidth * 0.058,
     color: Color.white,
+    marginBottom: windowWidth * 0.01,
   }),
   slideOneDescription: style.text({
     fontFamily: fonts.robotoRegular,
-    fontSize: windowWidth * 0.04,
+    fontSize: windowWidth * 0.036,
     color: Color.white,
   }),
   slideTwoDescription: style.text({
     fontFamily: fonts.robotoRegular,
-    fontSize: windowWidth * 0.04,
+    fontSize: windowWidth * 0.036,
     color: Color.white,
   }),
   bounusSlideOneDescription: style.text({
     fontFamily: fonts.robotoRegular,
-    fontSize: windowWidth * 0.04,
+    fontSize: windowWidth * 0.036,
     color: Color.black,
     textAlign: 'left'
   }),
   bounusSlideTwoDescription: style.text({
     fontFamily: fonts.robotoRegular,
-    fontSize: windowWidth * 0.04,
+    fontSize: windowWidth * 0.036,
     color: Color.white,
     textAlign: 'left'
+  }),
+  logoContainer: style.view({
+    // paddingTop: windowWidth * 0.1,
+    backgroundColor:  Color.white,
   }),
   logo: style.image({
     width: windowWidth,
@@ -446,6 +477,7 @@ const styles = styleSheetCreate({
   sign: style.image({
     width: windowWidth * 0.0858,
     height: windowWidth * 0.0835,
+    marginBottom: windowWidth * 0.02,
   }),
   appointmentDescription: style.text({
     fontFamily: fonts.robotoRegular,
@@ -515,25 +547,30 @@ const styles = styleSheetCreate({
     fontSize: windowWidth * 0.029,
     fontFamily: fonts.robotoRegular
   }),
+  cardBarcode: style.view({
+    // backgroundColor: 'red',
+    paddingTop: windowWidth * 0.03,
+    // width: '92%',
+  }),
   cardContainer: style.view({
     alignItems: 'center',
     backgroundColor: Color.white,
     marginTop: windowWidth * 0.05,
     borderRadius: windowWidth * 0.05,
-    width: windowWidth * 0.9,
-    height: windowWidth * 0.57,
   }),
   barCodeNumber: style.text({
-    fontSize: windowWidth * 0.064,
+    fontSize: windowWidth * 0.058,
+    textAlign: 'center',
   }),
   cardDescriptionContainer: style.view({
     backgroundColor: Color.black,
     width: windowWidth * 0.9,
-    height: windowHeight * 0.088,
+    // height: windowHeight * 0.088,
     borderBottomLeftRadius: windowWidth * 0.05,
     borderBottomRightRadius: windowWidth * 0.05,
     marginTop: windowWidth * 0.04,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    paddingVertical: windowWidth * 0.02,
   }),
   cardDescription: style.text({
     color: Color.white,
