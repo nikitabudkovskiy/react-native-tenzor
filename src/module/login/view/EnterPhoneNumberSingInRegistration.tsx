@@ -16,7 +16,6 @@ import {
 import { TextInputMask } from 'react-native-masked-text'
 import { CommonButton } from 'app/module/global/view/CommonButton'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { ListPages } from 'app/system/navigation'
 import { StackNavigationProp } from '@react-navigation/stack'
 
 interface IState {
@@ -79,7 +78,7 @@ export class EnterPhoneNumberSingInRegistration extends PureComponent<IProps, IS
     return (
       <KeyboardAwareScrollView 
          contentContainerStyle={styles.content}
-        //  keyboardShouldPersistTaps="handled"
+         keyboardShouldPersistTaps="handled"
       >
         <Text style={styles.enterPhoneTitle}>
           Введите номер{'\n'}телефона для заказа
@@ -137,6 +136,5 @@ const styles = styleSheetCreate({
   continueButton: style.view({
     position: 'absolute',
     width: windowWidth * 0.914,
-    // bottom: 301,
   }),
 })

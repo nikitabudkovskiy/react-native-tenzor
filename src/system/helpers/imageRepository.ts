@@ -13,4 +13,5 @@ export class ImageRepository {
   static readonly menu = require('assets/images/main/menu.png')
   static readonly disabledRecordingMaster = require('assets/images/main/disableRecordingMaster.png')
   static readonly disabledSign = require('assets/images/main/disableSign.png')
+  static readonly contactsCheckMark = require('assets/images/main/contactsCheckMark.png')
 }

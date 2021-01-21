@@ -306,32 +306,24 @@ export class MainPage extends PureComponent<IProps, IState> {
 }
 
 const styles = styleSheetCreate({
-  content: style.view({
-    // backgroundColor: Color.white,
-  }),
   container: style.view({
     width: windowWidth * 2.436,
     height: windowWidth * 0.266,
-    // backgroundColor: 'green',
     marginTop: windowWidth * 0.05,
   }),
   bonusesContainer: style.view({
     width: windowWidth * 1.42,
-    // width: windowWidth * 1.8,
     height: windowWidth * 0.387,
-    // backgroundColor: 'green',
     marginTop: windowWidth * 0.05,
   }),
 
   promotionSlidesContainer: style.view({
     flexDirection: 'row',
-    // backgroundColor: 'green',
     paddingLeft: windowWidth * 0.043,
   }),
 
   bonusesSlidesContainer: style.view({
     flexDirection: 'row',
-    // backgroundColor: 'green',
     paddingLeft: windowWidth * 0.043,
   }),
 
@@ -376,7 +368,6 @@ const styles = styleSheetCreate({
     fontFamily: fonts.robotoBold,
     fontSize: windowWidth * 0.064,
     color: Color.white,
-
   }),
   bounusSlideOneTitle: style.text({
     fontFamily: fonts.robotoBold,
@@ -431,7 +422,6 @@ const styles = styleSheetCreate({
   dotConteiner: style.view({
     height: windowWidth * 0.0106,
     flexDirection: 'column',
-    // backgroundColor: 'yellow',
     alignItems: 'center',
     marginTop: windowWidth * 0.032,
   }),
@@ -470,7 +460,6 @@ const styles = styleSheetCreate({
   changeLocation: style.view({
     width: windowWidth * 0.88,
     height: windowWidth * 0.13,
-    // backgroundColor: 'red',
     flexDirection: 'row',
     alignItems: 'center'
   }),
@@ -532,7 +521,6 @@ const styles = styleSheetCreate({
     marginTop: windowWidth * 0.05,
     borderRadius: windowWidth * 0.05,
     width: windowWidth * 0.9,
-    // marginLeft: windowWidth * 0.06,
     height: windowWidth * 0.57,
   }),
   barCodeNumber: style.text({

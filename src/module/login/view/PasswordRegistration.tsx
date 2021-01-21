@@ -86,7 +86,6 @@ export const PasswordSingIn = ({ navigation }: IProps) => {
     setIsUserForgotPassword(true)
     intervalId.current = setInterval(() => {
       setTimeSendingCode(timeSendingCode => timeSendingCode - 1)
-      console.log('timeSendingCode', timeSendingCode)
     }, 1000)
   }
 
@@ -198,8 +197,8 @@ const styles = styleSheetCreate({
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomColor: Color.gray100,
-    borderBottomWidth: 2,
-    borderRadius: 1,
+    borderBottomWidth: windowWidth * 0.005,
+    borderRadius: windowWidth * 0.002,
     marginHorizontal: windowWidth * 0.021,
   }),
   cellText: style.text({
@@ -209,7 +208,7 @@ const styles = styleSheetCreate({
   }),
   focusCell: style.view({
     borderBottomColor: Color.black,
-    borderBottomWidth: 2,
+    borderBottomWidth: windowWidth * 0.005,
   }),
   forgetPasswordButton: style.view({
     position: 'absolute',

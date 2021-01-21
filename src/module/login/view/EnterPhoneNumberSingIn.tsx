@@ -137,6 +137,5 @@ const styles = styleSheetCreate({
   continueButton: style.view({
     position: 'absolute',
     width: windowWidth * 0.914,
-    // bottom: 301,
   }),
 })
