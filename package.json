@@ -30,7 +30,7 @@
     "react-native-confirmation-code-field": "^6.5.1",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-iphone-x-helper": "^1.2.1",
-    "react-native-keyboard-aware-scroll-view": "^0.9.1",
+    "react-native-keyboard-aware-scroll-view": "^0.9.3",
     "react-native-localization": "^2.1.6",
     "react-native-masked-text": "^1.13.0",
     "react-native-orientation": "^3.1.3",
