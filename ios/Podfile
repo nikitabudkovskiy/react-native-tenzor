@@ -78,6 +78,7 @@ target 'boiler' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
   pod 'ReactNativeLocalization', :path => '../node_modules/react-native-localization'
+  pod 'ReactNativeART', :path => '../node_modules/@react-native-community/art'
 
   target 'boilerTests' do
     inherit! :complete

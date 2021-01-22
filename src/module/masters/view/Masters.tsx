@@ -14,10 +14,11 @@ import {
   fonts,
   Color,
   windowWidth,
-  windowHeight,
   ImageRepository,
 } from 'app/system/helpers'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { StringHelper } from 'app/system/helpers/stringHelper'
+import { CommonModal } from 'app/module/global/view/CommonModal'
 
 
 interface IProps {
@@ -45,62 +46,74 @@ export class Masters extends PureComponent<IProps, IState> {
 
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.searchMasterContainer}>
-          <Image 
-            source={ImageRepository.masterArrowLeft}
-            style={styles.masterArrowLeft}
-          />
-          <TextInput
-            style={styles.masterInput}
-            placeholder="Введите имя мастера"
-            onChangeText={this.searchMaster}
-            value={this.state.searchValue}
-          />
-        </View>
-        {
-          
-          drawerList
-          .filter(items => StringHelper.search(items.name, this.state.searchValue ))
-          .map(items => {
-            return (
-              <TouchableOpacity 
-              key={items.name}
-              style={styles.hairDresserContainer}>
-                <Image
-                  source={items.image}
-                  style={styles.master}
-                />
-                <View style={styles.hairDresserInfoContainer}>
-                  <Text style={styles.hairDresserName}>
-                    {items.name}
-                  </Text>
-                  <Text style={styles.hairDresserPosition}>
-                    {items.position}
-                  </Text>
-                  <View style={styles.starContainer}>
-                    {
-                      [1, 2, 3, 4, 5].map(item => {
-                        return (
-                          <Image
-                            key={item}
-                            source={ImageRepository.masterStar}
-                            style={styles.masterStar}
-                          />
-                        )
-                      })
-                    }
+      <ScrollView
+        scrollEnabled
+        bounces={false}
+        showsVerticalScrollIndicator={false}
+      >
+        <CommonModal 
+        
+        />
+        <KeyboardAwareScrollView 
+        keyboardShouldPersistTaps="handled"
+        style={styles.container}>
+          <View style={styles.searchMasterContainer}>
+            <TouchableOpacity>
+              <Image 
+                source={ImageRepository.masterArrowLeft}
+                style={styles.masterArrowLeft}
+              />
+            </TouchableOpacity>
+            <TextInput
+              style={styles.masterInput}
+              placeholder="Введите имя мастера"
+              onChangeText={this.searchMaster}
+              value={this.state.searchValue}
+            />
+          </View>
+          {
+            drawerList
+            .filter(items => StringHelper.search(items.name, this.state.searchValue ))
+            .map(items => {
+              return (
+                <TouchableOpacity 
+                key={items.name}
+                style={styles.hairDresserContainer}>
+                  <Image
+                    source={items.image}
+                    style={styles.master}
+                  />
+                  <View style={styles.hairDresserInfoContainer}>
+                    <Text style={styles.hairDresserName}>
+                      {items.name}
+                    </Text>
+                    <Text style={styles.hairDresserPosition}>
+                      {items.position}
+                    </Text>
+                    <View style={styles.starContainer}>
+                      {
+                        [1, 2, 3, 4, 5].map(item => {
+                          return (
+                            <Image
+                              key={item}
+                              source={ImageRepository.masterStar}
+                              style={styles.masterStar}
+                            />
+                          )
+                        })
+                      }
+                    </View>
                   </View>
-                </View>
-                <Image
-                  source={ImageRepository.masterArrowRight}
-                  style={styles.masterArrowRight}
-                />
-              </TouchableOpacity>
-            )
-          })
-        }
-      </View>
+                  <Image
+                    source={ImageRepository.masterArrowRight}
+                    style={styles.masterArrowRight}
+                  />
+                </TouchableOpacity>
+              )
+            })
+          }
+        </KeyboardAwareScrollView>
+      </ScrollView>
     )
   }
 }

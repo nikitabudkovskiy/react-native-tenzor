@@ -7,5 +7,6 @@ export class ListPages {
   static readonly MainPage = 'MainPage'
   static readonly Contacts = 'Contacts'
   static readonly Masters = 'Masters'
+  static readonly AppointmentType = 'AppointmentType'
   
 }
