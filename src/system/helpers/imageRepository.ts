@@ -14,4 +14,9 @@ export class ImageRepository {
   static readonly disabledRecordingMaster = require('assets/images/main/disableRecordingMaster.png')
   static readonly disabledSign = require('assets/images/main/disableSign.png')
   static readonly contactsCheckMark = require('assets/images/main/contactsCheckMark.png')
+  static readonly masterOne = require('assets/images/masters/masterOne.png')
+  static readonly masterStar = require('assets/images/masters/masterStar.png')
+  static readonly masterArrowRight = require('assets/images/masters/masterArrowRight.png')
+  static readonly masterArrowLeft = require('assets/images/masters/masterArrowLeft.png')
+  static readonly masterTwo = require('assets/images/masters/masterTwo.png')
 }

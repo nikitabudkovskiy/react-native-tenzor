@@ -9,7 +9,7 @@ export class StringHelper {
   }
 
   static search = (value: string, searchValue: string): boolean => {
-    return value.toLowerCase().includes(searchValue.toLowerCase())
+    return value.toLowerCase().trim().includes(searchValue.toLowerCase().trim())
   }
 
   static capitalizeFirstLetter = (string: string): string => {

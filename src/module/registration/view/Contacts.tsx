@@ -26,7 +26,7 @@ interface IProps {
 
 interface IState {
   birthDate: string,
-  maleGenderSelected: boolean
+  genderSelected: string
   correctBirthDate: boolean
   correctName: boolean
   name: string
@@ -36,7 +36,7 @@ interface IState {
 export class Contacts extends PureComponent<IProps, IState> {
   state = {
     birthDate: '',
-    maleGenderSelected: undefined,
+    genderSelected: '',
     correctBirthDate: true,
     name: '',
     correctName: true,
@@ -51,20 +51,24 @@ export class Contacts extends PureComponent<IProps, IState> {
     this.setState({ name })
   }
 
-  handleSelectedGender = () => {
-    this.setState({ maleGenderSelected: !this.state.maleGenderSelected })
+  handleSelectedGender = (sex: string) => {
+    if (this.state.genderSelected === sex) {
+      this.setState({ genderSelected: '' })
+      return
+    }
+    this.setState({ genderSelected: sex })
   }
 
   checkBirthDate = () => {
-    this.setState({ correctBirthDate: /^\s*(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})\s*$/.test(this.state.birthDate)})
+    this.setState({ correctBirthDate: /^\s*(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})\s*$/.test(this.state.birthDate) })
   }
 
   checkName = () => {
-    this.setState({correctName: /^[а-яА-Я\-]+$/.test(this.state.name)})
+    this.setState({ correctName: /^[а-яА-Я\-]+$/.test(this.state.name) })
   }
-  
+
   checkTermsOfUse = () => {
-    this.setState({termsOfUseChecked: !this.state.termsOfUseChecked})
+    this.setState({ termsOfUseChecked: !this.state.termsOfUseChecked })
   }
 
   render() {
@@ -72,17 +76,17 @@ export class Contacts extends PureComponent<IProps, IState> {
     const birthDateInputFlatten = styleSheetFlatten([
       styles.birthDateContainer,
       {
-        borderColor: this.state.correctBirthDate == true?
-        Color.gray:
-        Color.electricOrange
+        borderColor: this.state.correctBirthDate == true ?
+          Color.gray :
+          Color.electricOrange
       }
     ])
 
     const nameInputFlatten = styleSheetFlatten([
       {
-        borderColor: this.state.correctName == true?
-        Color.gray:
-        Color.electricOrange
+        borderColor: this.state.correctName == true ?
+          Color.gray :
+          Color.electricOrange
       }
     ])
 
@@ -127,11 +131,11 @@ export class Contacts extends PureComponent<IProps, IState> {
             Ваш пол
           </Text>
           <TouchableOpacity
-            onPress={this.handleSelectedGender}
+            onPress={this.handleSelectedGender.bind(this, 'male')}
             style={styles.genderChoiceContainer}>
             <View style={styles.radioBox}>
               {
-                this.state.maleGenderSelected == true ?
+                this.state.genderSelected == 'male' ?
                   (
                     <View style={styles.selectedGender}>
                     </View>
@@ -143,11 +147,11 @@ export class Contacts extends PureComponent<IProps, IState> {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={this.handleSelectedGender}
+            onPress={this.handleSelectedGender.bind(this, 'female')}
             style={styles.genderChoiceContainer}>
             <View style={styles.radioBox}>
               {
-                this.state.maleGenderSelected == false ?
+                this.state.genderSelected == 'female' ?
                   <View style={styles.selectedGender}>
                   </View>
                   : undefined
@@ -159,17 +163,17 @@ export class Contacts extends PureComponent<IProps, IState> {
           </TouchableOpacity>
         </View>
         <View style={styles.termsOfUseContainer}>
-          <TouchableOpacity 
-          style={styles.checkBox}
-          onPress={this.checkTermsOfUse}
+          <TouchableOpacity
+            style={styles.checkBox}
+            onPress={this.checkTermsOfUse}
           >
             {
-              this.state.termsOfUseChecked == true?
-              <Image 
-                source={ImageRepository.contactsCheckMark}
-                style={styles.contactsCheckMark}
-              />
-              : undefined
+              this.state.termsOfUseChecked == true ?
+                <Image
+                  source={ImageRepository.contactsCheckMark}
+                  style={styles.contactsCheckMark}
+                />
+                : undefined
             }
           </TouchableOpacity>
           <Text style={styles.termsOfUseDescription}>
@@ -179,7 +183,7 @@ export class Contacts extends PureComponent<IProps, IState> {
             </Text>
           </Text>
         </View>
-        <CommonButton 
+        <CommonButton
           title='ЗАВЕРШИТЬ'
           styleButton={styles.fininshButton}
         />

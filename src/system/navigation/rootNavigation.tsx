@@ -7,6 +7,7 @@ import { PasswordSingIn } from 'app/module/login/view/PasswordSingIn'
 import { MainPage } from 'app/module/main/view/MainPage'
 import { ForgotPassword } from 'app/module/login/view/ForgotPasswordSingIn'
 import { Contacts } from 'app/module/registration/view/Contacts'
+import { Masters } from 'app/module/masters/view/Masters'
 
 const Stack = createStackNavigator()
 
@@ -16,6 +17,9 @@ export const RootNavigator = (): JSX.Element => {
       {/* <Stack.Screen name={ListPages.EnterPhoneNumber} component={EnterPhoneNumberSingIn} />
       <Stack.Screen name={ListPages.PasswordSingIn} component={PasswordSingIn} /> */}
       <Stack.Screen name={ListPages.Contacts} component={Contacts} />
+      {/* <Stack.Screen name={ListPages.MainPage} component={MainPage} />
+      <Stack.Screen name={ListPages.ChooseCity} component={ChooseCity} /> */}
+      {/* <Stack.Screen name={ListPages.Masters} component={Masters} /> */}
     </Stack.Navigator>
   )
 }

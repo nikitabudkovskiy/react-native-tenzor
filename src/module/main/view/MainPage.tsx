@@ -16,20 +16,24 @@ import {
   ImageRepository,
 } from 'app/system/helpers'
 import Barcode from "react-native-barcode-builder"
+import { StackNavigationProp } from '@react-navigation/stack'
+import { CommonButton } from 'app/module/global/view'
 
 interface IProps {
-
+  navigation: StackNavigationProp<any>
 }
 
 interface IState {
   activeDot: number
   bonusActiveDot: number
+  loginStatus: boolean
 }
 
 export class MainPage extends PureComponent<IProps, IState> {
   state = {
     activeDot: 0,
     bonusActiveDot: 0,
+    loginStatus: false,
   }
 
   onPromotionScrollHandler = (event: any): void => {
@@ -48,6 +52,10 @@ export class MainPage extends PureComponent<IProps, IState> {
     this.setState({ bonusActiveDot }, () => {
       console.log("bonusActiveDot", bonusActiveDot)
     })
+  }
+
+  goChooseCity = () => {
+    this.props.navigation.navigate('ChooseCity')
   }
 
   render() {
@@ -116,85 +124,107 @@ export class MainPage extends PureComponent<IProps, IState> {
               }
             </View>
           </View>
-          <View style={styles.cardContent}>
-            <View style={styles.cardContainer}>
-              <Barcode
-                // width={windowWidth * 0.015}
-                // height={windowWidth * 0.33}
-                background={Color.white}
-                value="3243240000000"
-                format="CODE128" />
-              <Text style={styles.barCodeNumber}>
-                3243240000000
-            </Text>
-              <View style={styles.cardDescriptionContainer}>
-                <Text style={styles.cardDescription}>
-                  Карта любимого клиента
-              </Text>
-              </View>
-            </View>
-          </View>
-          <ScrollView
-            horizontal
-            contentContainerStyle={styles.bonusesContainer}
-            showsHorizontalScrollIndicator={false}
-            decelerationRate="normal"
-            // pagingEnabled
-            scrollEnabled
-            onScroll={this.onBonusesScrollHandler}
-          >
-            <View style={styles.bonusesSlidesContainer}>
-              <View style={styles.slides}>
-                <View style={styles.bonusSlideOne}>
-                  <Text style={styles.bounusSlideOneTitle}>
-                    5900 ₽
-                </Text>
-                  <Text style={styles.bounusSlideOneDescription}>
-                    Баланс{'\n'}
-                  абонемента{'\n'}
-                  110₽ сгорят через{'\n'}
-                  3 дня (под вопросом???)
-                </Text>
-                </View>
-              </View>
-              <View style={styles.slides}>
-                <View style={styles.bonusSlideTwo}>
-                  <Text style={styles.bounusSlideTwoTitle}>
-                    50 ₽
-                </Text>
-                  <Text style={styles.bounusSlideTwoDescription}>
-                    Бонусы Прядки в{'\n'}
-                  Порядке
-                </Text>
-                </View>
-              </View>
-              <View style={styles.slides}>
-                <View style={styles.bonusSlideThree}>
-                  <Text style={styles.bounusSlideTwoTitle}>
-                    100 ₽
-                </Text>
-                  <Text style={styles.bounusSlideTwoDescription}>
-                    Бонусы Кенди{'\n'}
-                  Денди
-                </Text>
-                </View>
-              </View>
-            </View>
-          </ScrollView>
-          <View style={styles.dotConteiner}>
-            <View style={styles.dots}>
-              {
-                [0, 1, 2].map(item => {
-                  return (
-                    <View
-                      key={item}
-                      style={this.state.bonusActiveDot === item ? styles.dotIsActive : styles.dotInactive}>
+          {
+            this.state.loginStatus ?
+              <View>
+                <View style={styles.cardContent}>
+                  <View style={styles.cardContainer}>
+                    <Barcode
+                      // width={windowWidth * 0.015}
+                      // height={windowWidth * 0.33}
+                      background={Color.white}
+                      value="3243240000000"
+                      format="CODE128" />
+                    <Text style={styles.barCodeNumber}>
+                      3243240000000
+                  </Text>
+                    <View style={styles.cardDescriptionContainer}>
+                      <Text style={styles.cardDescription}>
+                        Карта любимого клиента
+                      </Text>
                     </View>
-                  )
-                })
-              }
-            </View>
-          </View>
+                  </View>
+                </View>
+                <ScrollView
+                  horizontal
+                  contentContainerStyle={styles.bonusesContainer}
+                  showsHorizontalScrollIndicator={false}
+                  decelerationRate="normal"
+                  // pagingEnabled
+                  scrollEnabled
+                  onScroll={this.onBonusesScrollHandler}
+                >
+                  <View style={styles.bonusesSlidesContainer}>
+                    <View style={styles.slides}>
+                      <View style={styles.bonusSlideOne}>
+                        <Text style={styles.bounusSlideOneTitle}>
+                          5900 ₽
+                        </Text>
+                        <Text style={styles.bounusSlideOneDescription}>
+                          Баланс{'\n'}
+                          абонемента{'\n'}
+                          110₽ сгорят через{'\n'}
+                          3 дня (под вопросом???)
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={styles.slides}>
+                      <View style={styles.bonusSlideTwo}>
+                        <Text style={styles.bounusSlideTwoTitle}>
+                          50 ₽
+                        </Text>
+                        <Text style={styles.bounusSlideTwoDescription}>
+                          Бонусы Прядки в{'\n'}
+                          Порядке
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={styles.slides}>
+                      <View style={styles.bonusSlideThree}>
+                        <Text style={styles.bounusSlideTwoTitle}>
+                          100 ₽
+                        </Text>
+                        <Text style={styles.bounusSlideTwoDescription}>
+                          Бонусы Кенди{'\n'}
+                          Денди
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </ScrollView>
+                <View style={styles.dotConteiner}>
+                  <View style={styles.dots}>
+                    {
+                      [0, 1, 2].map(item => {
+                        return (
+                          <View
+                            key={item}
+                            style={this.state.bonusActiveDot === item ? styles.dotIsActive : styles.dotInactive}>
+                          </View>
+                        )
+                      })
+                    }
+                  </View>
+                </View>
+              </View>
+              :
+              <View style={styles.cardContent}>
+                <View style={styles.loginRequestCardContainer}>
+                  <Image 
+                    source={ImageRepository.profile}
+                  />
+                  <Text>
+                    Для просмотра бонусов и карты клиента войдите в кабинет
+                  </Text>
+                  <CommonButton 
+                    title='Войти'
+                    styleButton={styles.loginRequestEnterButton}
+                  />
+                </View>
+              </View>
+          }
+
+
           <View style={styles.appointments}>
             <View style={styles.serviceAppointment}>
               <Image
@@ -225,7 +255,9 @@ export class MainPage extends PureComponent<IProps, IState> {
             </View>
           </View>
           <View style={styles.menuContainer}>
-            <TouchableOpacity style={styles.changeLocation}>
+            <TouchableOpacity
+              onPress={this.goChooseCity}
+              style={styles.changeLocation}>
               <Image
                 source={ImageRepository.changeLocation}
                 style={styles.changeCity}
@@ -543,4 +575,18 @@ const styles = styleSheetCreate({
   cardContent: style.view({
     alignItems: 'center',
   }),
+  loginRequestCardContainer: style.view({
+    width: windowWidth * 0.914,
+    height: windowWidth * 0.62,
+    borderColor: Color.electricOrange,
+    borderStyle: 'dotted',
+    borderWidth: windowWidth * 0.005,
+    borderRadius: windowWidth * 0.032,
+    marginTop: windowWidth * 0.05,
+    alignItems: 'center',
+  }),
+  loginRequestEnterButton: style.view({
+    width: windowWidth * 0.722,
+    height: windowWidth * 0.1
+  })
 })
