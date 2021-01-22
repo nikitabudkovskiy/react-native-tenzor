@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import { 
   Text,
+  TextStyle,
   TouchableOpacity, 
   TouchableOpacityProps,
   ViewStyle, 
@@ -16,7 +17,8 @@ import {
 
 interface IProps extends TouchableOpacityProps {
   title: string
-  styleButton: ViewStyle
+  styleButton?: ViewStyle
+  styleText?: TextStyle
 }
 
 interface IState {
@@ -35,12 +37,17 @@ export class CommonButton extends PureComponent<IProps,IState>{
       }
     ])
 
+    const text = styleSheetFlatten([
+      styles.text,
+      this.props.styleText,
+    ])
+
     return (
       <TouchableOpacity
         {...this.props}
         style={container}
       >
-        <Text style={styles.text}>
+        <Text style={text}>
           {this.props.title}
         </Text>
       </TouchableOpacity>

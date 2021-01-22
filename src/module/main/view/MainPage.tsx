@@ -4,6 +4,7 @@ import {
   Text,
   ScrollView,
   Image,
+  TouchableOpacity,
 } from 'react-native'
 import {
   styleSheetCreate,
@@ -17,20 +18,24 @@ import {
   isLongDevices,
 } from 'app/system/helpers'
 import Barcode from "react-native-barcode-builder"
+import { CommonButton } from 'app/module/global/view'
+import { StackNavigationProp } from '@react-navigation/stack'
 
 interface IProps {
-
+  navigation: StackNavigationProp<any>
 }
 
 interface IState {
   activeDot: number
   bonusActiveDot: number
+  loginStatus: boolean
 }
 
 export class MainPage extends PureComponent<IProps, IState> {
   state = {
     activeDot: 0,
     bonusActiveDot: 0,
+    loginStatus: false,
   }
 
   onPromotionScrollHandler = (event: any): void => {
@@ -51,15 +56,23 @@ export class MainPage extends PureComponent<IProps, IState> {
     })
   }
 
+  changeCity = () => {
+    this.props.navigation.navigate('ChooseCity')
+  }
+
+  goToLoginPage = () => {
+    this.props.navigation.navigate('EnterPhoneNumberSingIn')
+  }
+
   render() {
 
     const logoContainer = styleSheetFlatten([
       styles.logoContainer,
       {
-        paddingTop: isLongDevices 
-          ? windowWidth * 0.1 
-          : platform.isIos 
-            ? windowWidth * 0.05 
+        paddingTop: isLongDevices
+          ? windowWidth * 0.1
+          : platform.isIos
+            ? windowWidth * 0.05
             : 0
       }
     ])
@@ -135,88 +148,113 @@ export class MainPage extends PureComponent<IProps, IState> {
             </View>
           </View>
 
-          <View style={styles.cardContent}>
-            <View style={styles.cardContainer}>
-              <View style={styles.cardBarcode}>
-                <Barcode
-                  background={Color.white}
-                  value="3243240000000"
-                  format="CODE128" 
-                  width={2.7}
-                />
-                <Text style={styles.barCodeNumber}>
-                  3243240000000
-                </Text>
-              </View>
-              <View style={styles.cardDescriptionContainer}>
-                <Text style={styles.cardDescription}>
-                  Карта любимого клиента
-              </Text>
-              </View>
-            </View>
-          </View>
-
-          <ScrollView
-            horizontal
-            contentContainerStyle={styles.bonusesContainer}
-            showsHorizontalScrollIndicator={false}
-            decelerationRate="normal"
-            // pagingEnabled
-            scrollEnabled
-            onScroll={this.onBonusesScrollHandler}
-          >
-            <View style={styles.bonusesSlidesContainer}>
-              <View style={styles.slides}>
-                <View style={styles.bonusSlideOne}>
-                  <Text style={styles.bounusSlideOneTitle}>
-                    5900 ₽
-                </Text>
-                  <Text style={styles.bounusSlideOneDescription}>
-                    Баланс{'\n'}
-                  абонемента{'\n'}
-                  110₽ сгорят через{'\n'}
-                  3 дня (под вопросом???)
-                </Text>
-                </View>
-              </View>
-              <View style={styles.slides}>
-                <View style={styles.bonusSlideTwo}>
-                  <Text style={styles.bounusSlideTwoTitle}>
-                    50 ₽
-                </Text>
-                  <Text style={styles.bounusSlideTwoDescription}>
-                    Бонусы Прядки в{'\n'}
-                  Порядке
-                </Text>
-                </View>
-              </View>
-              <View style={styles.slides}>
-                <View style={styles.bonusSlideThree}>
-                  <Text style={styles.bounusSlideTwoTitle}>
-                    100 ₽
-                </Text>
-                  <Text style={styles.bounusSlideTwoDescription}>
-                    Бонусы Кенди{'\n'}
-                  Денди
-                </Text>
-                </View>
-              </View>
-            </View>
-          </ScrollView>
-          <View style={styles.dotConteiner}>
-            <View style={styles.dots}>
-              {
-                [0, 1, 2].map(item => {
-                  return (
-                    <View
-                      key={item}
-                      style={this.state.bonusActiveDot === item ? styles.dotIsActive : styles.dotInactive}>
+          {
+            this.state.loginStatus
+              ? (
+                <View>
+                  <View style={styles.cardContent}>
+                    <View style={styles.cardContainer}>
+                      <View style={styles.cardBarcode}>
+                        <Barcode
+                          background={Color.white}
+                          value="3243240000000"
+                          format="CODE128"
+                          width={2.7}
+                        />
+                        <Text style={styles.barCodeNumber}>
+                          3243240000000
+                        </Text>
+                      </View>
+                      <View style={styles.cardDescriptionContainer}>
+                        <Text style={styles.cardDescription}>
+                          Карта любимого клиента
+                        </Text>
+                      </View>
                     </View>
-                  )
-                })
-              }
-            </View>
-          </View>
+                  </View>
+                  <ScrollView
+                    horizontal
+                    contentContainerStyle={styles.bonusesContainer}
+                    showsHorizontalScrollIndicator={false}
+                    decelerationRate="normal"
+                    // pagingEnabled
+                    scrollEnabled
+                    onScroll={this.onBonusesScrollHandler}
+                  >
+                    <View style={styles.bonusesSlidesContainer}>
+                      <View style={styles.slides}>
+                        <View style={styles.bonusSlideOne}>
+                          <Text style={styles.bounusSlideOneTitle}>
+                            5900 ₽
+                          </Text>
+                          <Text style={styles.bounusSlideOneDescription}>
+                            Баланс{'\n'}
+                            абонемента{'\n'}
+                            110₽ сгорят через{'\n'}
+                            3 дня (под вопросом???)
+                          </Text>
+                        </View>
+                      </View>
+                      <View style={styles.slides}>
+                        <View style={styles.bonusSlideTwo}>
+                          <Text style={styles.bounusSlideTwoTitle}>
+                            50 ₽
+                          </Text>
+                          <Text style={styles.bounusSlideTwoDescription}>
+                            Бонусы Прядки в{'\n'}
+                            Порядке
+                          </Text>
+                        </View>
+                      </View>
+                      <View style={styles.slides}>
+                        <View style={styles.bonusSlideThree}>
+                          <Text style={styles.bounusSlideTwoTitle}>
+                            100 ₽
+                          </Text>
+                          <Text style={styles.bounusSlideTwoDescription}>
+                            Бонусы Кенди{'\n'}
+                            Денди
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                  </ScrollView>
+                  <View style={styles.dotConteiner}>
+                    <View style={styles.dots}>
+                      {
+                        [0, 1, 2].map(item => {
+                          return (
+                            <View
+                              key={item}
+                              style={this.state.bonusActiveDot === item ? styles.dotIsActive : styles.dotInactive}>
+                            </View>
+                          )
+                        })
+                      }
+                    </View>
+                  </View>
+                </View>
+              ) : (
+                <View style={styles.cardContent}>
+                  <View style={styles.loginRequestContainer}>
+                    <Image
+                      source={ImageRepository.userNonLogin}
+                      style={styles.loginRequestProfile}
+                    />
+                    <Text style={styles.loginRequestDescription}>
+                      Для просмотра бонусов и карты {'\n'} клиента войдите в кабинет
+                    </Text>
+                    <CommonButton
+                      title='ВОЙТИ'
+                      styleButton={styles.loginButton}
+                      onPress={this.goToLoginPage}
+                    />
+                  </View>
+                </View>
+              )
+          }
+
+
           <View style={styles.appointments}>
             <View style={styles.serviceAppointment}>
               <Image
@@ -249,35 +287,76 @@ export class MainPage extends PureComponent<IProps, IState> {
               </Text>
             </View>
           </View>
-{/* 
-          <View style={styles.menuContainer}>
-            <TouchableOpacity style={styles.changeLocation}>
-              <Image
-                source={ImageRepository.changeLocation}
-                style={styles.changeCity}
-              />
-              <Text style={styles.changeLocationTitle}>
-                Изменить город
-              </Text>
-              <Image
-                source={ImageRepository.arrowRight}
-                style={styles.arrowRight}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.exitContainer}>
-              <Image
-                source={ImageRepository.exit}
-                style={styles.exit}
-              />
-              <Text style={styles.exitTitle}>
-                Выход
-              </Text>
-              <Image
-                source={ImageRepository.arrowRight}
-                style={styles.arrowRight}
-              />
-            </TouchableOpacity>
-          </View>
+          {
+            this.state.loginStatus
+              ? (
+                <View style={styles.menuContainer}>
+                  <TouchableOpacity 
+                  onPress={this.changeCity}
+                  style={styles.changeLocation}
+                  >
+                    <Image
+                      source={ImageRepository.changeLocation}
+                      style={styles.changeCity}
+                    />
+                    <Text style={styles.changeLocationTitle}>
+                      Изменить город
+                    </Text>
+                    <Image
+                      source={ImageRepository.arrowRight}
+                      style={styles.arrowRight}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.exitContainer}>
+                    <Image
+                      source={ImageRepository.exit}
+                      style={styles.exit}
+                    />
+                    <Text style={styles.exitTitle}>
+                      Выход
+                    </Text>
+                    <Image
+                      source={ImageRepository.arrowRight}
+                      style={styles.arrowRight}
+                    />
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <View style={styles.menuContainer}>
+                  <TouchableOpacity 
+                  onPress={this.changeCity}
+                  style={styles.changeLocation}
+                  >
+                    <Image
+                      source={ImageRepository.changeLocation}
+                      style={styles.changeCity}
+                    />
+                    <Text style={styles.changeLocationTitle}>
+                      Изменить город
+                    </Text>
+                    <Image
+                      source={ImageRepository.arrowRight}
+                      style={styles.arrowRight}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.exitContainer}>
+                    <Image
+                      source={ImageRepository.mainPageAddress}
+                      style={styles.mainPageAddress}
+                    />
+                    <Text style={styles.addressTitle}>
+                      Адреса салонов
+                    </Text>
+                    <Image
+                      source={ImageRepository.arrowRight}
+                      style={styles.arrowRight}
+                    />
+                  </TouchableOpacity>
+                </View>
+              )
+          }
+          {/* 
+          
           <View style={styles.bottomBar}>
             <TouchableOpacity style={styles.profileContainer}>
               <Image
@@ -430,7 +509,7 @@ const styles = styleSheetCreate({
   }),
   logoContainer: style.view({
     // paddingTop: windowWidth * 0.1,
-    backgroundColor:  Color.white,
+    backgroundColor: Color.white,
   }),
   logo: style.image({
     width: windowWidth,
@@ -579,5 +658,43 @@ const styles = styleSheetCreate({
   }),
   cardContent: style.view({
     alignItems: 'center',
+  }),
+  loginRequestContainer: style.view({
+    width: windowWidth * 0.91,
+    height: windowWidth * 0.62,
+    borderRadius: windowWidth * 0.032,
+    borderColor: Color.electricOrange,
+    borderWidth: windowWidth * 0.005,
+    borderStyle: 'dotted',
+    marginTop: windowWidth * 0.05,
+    alignItems: 'center'
+  }),
+  loginButton: style.view({
+    width: windowWidth * 0.72,
+    height: windowWidth * 0.1,
+    marginTop: windowWidth * 0.05
+  }),
+  loginRequestProfile: style.image({
+    width: windowWidth * 0.085,
+    height: windowWidth * 0.08,
+    marginTop: windowWidth * 0.117
+  }),
+  loginRequestDescription: style.text({
+    fontSize: windowWidth * 0.04,
+    textAlign: 'center',
+    fontFamily: fonts.robotoRegular,
+    paddingTop: windowWidth * 0.08
+  }),
+  mainPageAddress: style.image({
+    width: windowWidth * 0.064,
+    height: windowWidth * 0.064,
+    position: 'absolute',
+    left: 0,
+  }),
+  addressTitle: style.text({
+    paddingLeft: windowWidth * 0.07,
+    paddingRight: windowWidth * 0.42,
+    fontFamily: fonts.robotoRegular,
+    fontSize: windowWidth * 0.04,
   }),
 })

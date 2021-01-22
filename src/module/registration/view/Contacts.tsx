@@ -27,7 +27,7 @@ interface IProps {
 
 interface IState {
   birthDate: string,
-  maleGenderSelected: boolean
+  genderSelected: string
   correctBirthDate: boolean
   correctName: boolean
   name: string
@@ -38,7 +38,7 @@ interface IState {
 export class Contacts extends PureComponent<IProps, IState> {
   state = {
     birthDate: '',
-    maleGenderSelected: undefined,
+    genderSelected: '',
     correctBirthDate: true,
     name: '',
     correctName: true,
@@ -54,8 +54,12 @@ export class Contacts extends PureComponent<IProps, IState> {
     this.setState({ name })
   }
 
-  handleSelectedGender = () => {
-    this.setState({ maleGenderSelected: !this.state.maleGenderSelected })
+  handleSelectedGender = (sex: string) => {
+    if (this.state.genderSelected === sex) {
+      this.setState({ genderSelected: '' })
+      return
+    }
+    this.setState({ genderSelected: sex })
   }
 
   checkBirthDate = () => {
@@ -76,7 +80,7 @@ export class Contacts extends PureComponent<IProps, IState> {
       correctName: /^[а-яА-Я\-]+$/.test(this.state.name) 
     })
   }
-  
+
   checkTermsOfUse = () => {
     this.setState({ 
       termsOfUseChecked: !this.state.termsOfUseChecked 
@@ -88,17 +92,17 @@ export class Contacts extends PureComponent<IProps, IState> {
     const birthDateInputFlatten = styleSheetFlatten([
       styles.birthDateContainer,
       {
-        borderColor: this.state.correctBirthDate == true?
-        Color.gray:
-        Color.electricOrange
+        borderColor: this.state.correctBirthDate == true ?
+          Color.gray :
+          Color.electricOrange
       }
     ])
 
     const nameInputFlatten = styleSheetFlatten([
       {
-        borderColor: this.state.correctName == true?
-        Color.gray:
-        Color.electricOrange
+        borderColor: this.state.correctName == true ?
+          Color.gray :
+          Color.electricOrange
       }
     ])
 
@@ -155,12 +159,12 @@ export class Contacts extends PureComponent<IProps, IState> {
             Ваш пол
           </Text>
           <TouchableOpacity
-            onPress={this.handleSelectedGender}
+            onPress={this.handleSelectedGender.bind(this, 'male')}
             style={styles.genderChoiceContainer}>
             <View style={styles.radioBox}>
               {
-                this.state.maleGenderSelected == true ?
-                  (
+                this.state.genderSelected == 'male'
+                ? (
                     <View style={styles.selectedGender}>
                     </View>
                   ) : undefined
@@ -171,14 +175,15 @@ export class Contacts extends PureComponent<IProps, IState> {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={this.handleSelectedGender}
+            onPress={this.handleSelectedGender.bind(this, 'female')}
             style={styles.genderChoiceContainer}>
             <View style={styles.radioBox}>
               {
-                this.state.maleGenderSelected == false ?
-                  <View style={styles.selectedGender}>
-                  </View>
-                  : undefined
+                this.state.genderSelected == 'female' 
+                ? (
+                <View style={styles.selectedGender}>
+                </View>
+                ): undefined
               }
             </View>
             <Text style={styles.genderTitle}>
@@ -187,9 +192,9 @@ export class Contacts extends PureComponent<IProps, IState> {
           </TouchableOpacity>
         </View>
         <View style={styles.termsOfUseContainer}>
-          <TouchableOpacity 
-          style={styles.checkBox}
-          onPress={this.checkTermsOfUse}
+          <TouchableOpacity
+            style={styles.checkBox}
+            onPress={this.checkTermsOfUse}
           >
             {
               this.state.termsOfUseChecked == true?
@@ -257,7 +262,7 @@ const styles = styleSheetCreate({
     color: Color.gray
   }),
   birthDateContainer: style.view({
-    marginTop: 30,
+    marginTop: windowWidth * 0.08,
     width: windowWidth * 0.914,
     height: windowWidth * 0.133,
     borderWidth: windowWidth * 0.0026,
@@ -290,7 +295,7 @@ const styles = styleSheetCreate({
   selectedGender: style.view({
     width: windowWidth * 0.021,
     height: windowWidth * 0.021,
-    borderRadius: 10,
+    borderRadius: windowWidth * 0.266,
     backgroundColor: Color.black,
   }),
   checkBox: style.view({
