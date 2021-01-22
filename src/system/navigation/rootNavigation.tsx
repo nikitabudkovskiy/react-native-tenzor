@@ -11,7 +11,7 @@ const Stack = createStackNavigator()
 
 export const RootNavigator = (): JSX.Element => {
   return (
-    <Stack.Navigator headerMode={undefined}>
+    <Stack.Navigator headerMode="none">
       <Stack.Screen name={ListPages.MainPage} component={MainPage} />
       {/* <Stack.Screen name={ListPages.EnterPhoneNumber} component={EnterPhoneNumberSingIn} />
       <Stack.Screen name={ListPages.PasswordSingIn} component={PasswordSingIn} /> */}
