@@ -26,4 +26,12 @@ export class ImageRepository {
   static readonly mainPageAddress = require('assets/images/main/mainPageAddress.png')
 
   static readonly tabBarAdd = require('assets/images/tabBar/add.png')
+  static readonly tabBarProfile = require('assets/images/tabBar/profile.png')
+  static readonly tabBarProfileActive = require('assets/images/tabBar/profile_active.png')
+  static readonly tabBarMasters = require('assets/images/tabBar/masters.png')
+  static readonly tabBarMastersActive = require('assets/images/tabBar/masters_active.png')
+  static readonly tabBarMyNotes = require('assets/images/tabBar/myNotes.png')
+  static readonly tabBarMyNotesActive = require('assets/images/tabBar/myNotes_active.png')
+  static readonly tabBarContacts = require('assets/images/tabBar/contacts.png')
+  static readonly tabBarMycontactsActive = require('assets/images/tabBar/contacts_active.png')
 }

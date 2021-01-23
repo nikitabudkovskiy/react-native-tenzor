@@ -43,17 +43,17 @@ export const listTabBar: Array<IListTabBar> = [
   },
   {
     name: 'Мои записи',
-    component: ChooseCity,
+    component: AppointmentType,
     icon: ImageRepository.changeLocation,
     style: { width: windowWidth * 0.05, height: windowWidth * 0.05 },
-    routeName: 'Masters1',
+    routeName: 'AppointmentType',
   },
   {
     name: 'Контакты',
-    component: ChooseCity,
+    component: EnterPhoneNumberSingIn,
     icon: ImageRepository.changeLocation,
     style: { width: windowWidth * 0.05, height: windowWidth * 0.05 },
-    routeName: 'EnterPhoneNumber',
+    routeName: 'EnterPhoneNumberSingIn',
   },
 ]
 

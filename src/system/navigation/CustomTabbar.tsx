@@ -16,6 +16,7 @@ import {
   isLongDevices,
   ImageRepository,
 } from 'app/system/helpers'
+import { ListPages } from './listPages'
 // import { IListTabBar, ITabInformation } from 'app/interfaces';
 
 interface IRoutes {
@@ -80,8 +81,92 @@ export class CustomTabbar extends PureComponent<IProps, IState>{
     return (
       <View style={mainContainer}>
         <View style={styles.container}>
+          
+          <View
+            key={Math.random().toString()}
+            style={styles.tab}
+          >
+            <TouchableOpacity
+              disabled={state.index === 0}
+              onPress={this.onPressTabBarHandler.bind(this,  state.routes[0])}
+              style={styles.tabContainer}
+            >
+              <Image
+                source={state.index === 0 ? ImageRepository.tabBarProfileActive  : ImageRepository.tabBarProfile}
+                style={styles.tabImage}
+                resizeMode="contain"
+              />
+               <Text style={state.index === 0 ? styles.activeText  : styles.text}>
+                Профиль
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <View
+            key={Math.random().toString()}
+            style={styles.tab}
+          >
+            <TouchableOpacity
+              disabled={state.index === 1}
+              onPress={this.onPressTabBarHandler.bind(this,  state.routes[1])}
+              style={styles.tabContainer}
+            >
+              <Image
+               source={state.index === 1 ? ImageRepository.tabBarProfileActive  : ImageRepository.tabBarProfile}
+               style={styles.tabImage}
+                resizeMode="contain"
+              />
+              <Text style={state.index === 1 ? styles.activeText  : styles.text}>
+                Мастера
+              </Text>
+            </TouchableOpacity>
+          </View>
+  
+
+          <View
+            key={Math.random().toString()}
+            style={styles.tab}
+          >
+            <TouchableOpacity
+              disabled={state.index === 2}
+              onPress={this.onPressTabBarHandler.bind(this,  state.routes[2])}
+              style={styles.tabContainer}
+            >
+              <Image
+               source={state.index === 2 ? ImageRepository.tabBarMyNotesActive  : ImageRepository.tabBarMyNotes}
+                style={styles.tabImage}
+                resizeMode="contain"
+              />
+              <Text style={state.index === 2 ? styles.activeText  : styles.text}>
+                Мои записи
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <View
+            key={Math.random().toString()}
+            style={styles.tab}
+          >
+            <TouchableOpacity
+              disabled={state.index === 3}
+              onPress={this.onPressTabBarHandler.bind(this,  state.routes[3])}
+              style={styles.tabContainer}
+            >
+              <Image
+               source={state.index === 3 ? ImageRepository.tabBarMycontactsActive  : ImageRepository.tabBarContacts}
+                style={styles.tabImage}
+                resizeMode="contain"
+              />
+              <Text style={state.index === 3 ? styles.activeText  : styles.text}>
+                Мои записи
+              </Text>
+            </TouchableOpacity>
+          </View>
+  
+
 
         </View>
+
         {/* {
           state.routes.map((item: IRoutes, index: number) => {
             const isFocused = state.index === index
@@ -151,13 +236,14 @@ const styles = styleSheetCreate({
   mainContainer: style.view({
     borderTopLeftRadius: windowWidth * 0.1,
     borderTopRightRadius: windowWidth * 0.1,
-    backgroundColor: 'red',
+    // backgroundColor: 'red',
     height: windowWidth * 0.2,
+    backgroundColor: Color.linen,
   }),
   container: style.view({
-    backgroundColor: Color.linen,
     flexDirection: 'row',
     height: windowWidth * 0.15,
+    marginTop: windowWidth * 0.03,
   }),
   tabContainer: style.view({
     alignItems: 'center',
@@ -171,8 +257,15 @@ const styles = styleSheetCreate({
     alignItems: 'center',
     justifyContent: 'center',
   }),
+  tabImage: style.image({
+    width: windowWidth * 0.06, 
+    height: windowWidth * 0.06,
+  }),
+  activeText: style.text({
+    color: Color.electricOrange,
+    fontSize: windowWidth * 0.022,
+  }),
   text: style.text({
-    marginTop: windowWidth * 0.015,
     color: Color.philippineGray,
     fontSize: windowWidth * 0.022,
     // fontFamily: fonts.geometriaMedium,
