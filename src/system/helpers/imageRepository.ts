@@ -34,4 +34,7 @@ export class ImageRepository {
   static readonly tabBarMyNotesActive = require('assets/images/tabBar/myNotes_active.png')
   static readonly tabBarContacts = require('assets/images/tabBar/contacts.png')
   static readonly tabBarMycontactsActive = require('assets/images/tabBar/contacts_active.png')
+
+  static readonly selectServiceArrowBottom = require('assets/images/appointments/selectServiceArrowBottom.png')
+  static readonly selectServiceNotChecked = require('assets/images/appointments/selectServiceNotChecked.png')
 }
