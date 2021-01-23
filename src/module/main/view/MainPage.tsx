@@ -259,7 +259,7 @@ export class MainPage extends PureComponent<IProps, IState> {
               <Image
                 source={ImageRepository.sign}
                 style={styles.sign}
-                resizeMode="contain"
+                // resizeMode="contain"
               />
               <Text style={styles.appointmentDescription}>
                 Запись{'\n'} на услугу
@@ -269,7 +269,7 @@ export class MainPage extends PureComponent<IProps, IState> {
               <Image
                 source={ImageRepository.recordingMaster}
                 style={styles.sign}
-                resizeMode="contain"
+                // resizeMode="contain"
               />
               <Text style={styles.appointmentDescription}>
                 Запись{'\n'} к мастеру
@@ -279,7 +279,7 @@ export class MainPage extends PureComponent<IProps, IState> {
               <Image
                 source={ImageRepository.solariumAppointment}
                 style={styles.sign}
-                resizeMode="contain"
+                // resizeMode="contain"
               />
               <Text style={styles.appointmentDescription}>
                 Запись{'\n'} в солярий
@@ -354,56 +354,6 @@ export class MainPage extends PureComponent<IProps, IState> {
                 </View>
               )
           }
-          {/* 
-          
-          <View style={styles.bottomBar}>
-            <TouchableOpacity style={styles.profileContainer}>
-              <Image
-                source={ImageRepository.profile}
-                style={styles.profile}
-              />
-              <Text style={styles.titleElementBar}>
-                Профиль
-            </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.profileContainer}>
-              <Image
-                source={ImageRepository.disabledRecordingMaster}
-                style={styles.profile}
-              />
-              <Text style={styles.titleElementBar}>
-                Мастера
-            </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.profileContainer}>
-              <Image
-                source={ImageRepository.disabledSign}
-                style={styles.profile}
-              />
-              <Text style={styles.titleElementBar}>
-                Запись
-            </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.profileContainer}>
-              <Image
-                source={ImageRepository.menu}
-                style={styles.profile}
-              />
-              <Text style={styles.titleElementBar}>
-                Мои записи
-            </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.profileContainer}>
-              <Image
-                source={ImageRepository.contacts}
-                style={styles.profile}
-              />
-              <Text style={styles.titleElementBar}>
-                Контакты
-            </Text>
-            </TouchableOpacity>
-          </View> */}
-
         </ScrollView>
       </View>
     )

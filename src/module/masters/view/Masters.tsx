@@ -15,11 +15,13 @@ import {
   Color,
   windowWidth,
   ImageRepository,
+  styleSheetFlatten,
+  isLongDevices,
+  windowHeight,
 } from 'app/system/helpers'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { StringHelper } from 'app/system/helpers/stringHelper'
 import { CommonModal } from 'app/module/global/view/CommonModal'
-
+import { isEmpty } from 'lodash'
 
 interface IProps {
 
@@ -45,21 +47,29 @@ export class Masters extends PureComponent<IProps, IState> {
   }
 
   render() {
+
+    const container = styleSheetFlatten([
+      styles.container,
+      {
+        marginTop: isLongDevices ? windowWidth * 0.08 : windowWidth * 0.05
+      }
+    ])
+
+    const masterList = drawerList
+      .filter(items => StringHelper.search(items.name, this.state.searchValue))
+
     return (
       <ScrollView
         scrollEnabled
         bounces={false}
         showsVerticalScrollIndicator={false}
-      >
-        {/* <CommonModal 
-        
-        /> */}
-        <KeyboardAwareScrollView 
+        style={styles.mainContainer}
         keyboardShouldPersistTaps="handled"
-        style={styles.container}>
+      >
+        <View style={container} >
           <View style={styles.searchMasterContainer}>
             <TouchableOpacity>
-              <Image 
+              <Image
                 source={ImageRepository.masterArrowLeft}
                 style={styles.masterArrowLeft}
               />
@@ -72,9 +82,8 @@ export class Masters extends PureComponent<IProps, IState> {
             />
           </View>
           {
-            drawerList
-            .filter(items => StringHelper.search(items.name, this.state.searchValue ))
-            .map(items => {
+            !isEmpty(masterList)
+            ? masterList.map(items => {
               return (
                 <TouchableOpacity 
                 key={items.name}
@@ -110,17 +119,28 @@ export class Masters extends PureComponent<IProps, IState> {
                   />
                 </TouchableOpacity>
               )
-            })
+            }) 
+            : (
+              <View style={styles.nothingFound}>
+                <Text style={styles.nothingFoundText}>
+                  Ничего не найдено
+                </Text>
+              </View>
+            )
           }
-        </KeyboardAwareScrollView>
+        </View>
       </ScrollView>
     )
   }
 }
 
 const styles = styleSheetCreate({
+  mainContainer: style.view({
+
+  }),
   container: style.view({
-    paddingLeft: windowWidth * 0.042,
+    alignItems: 'center',
+    flex: 1,
   }),
   hairDresserContainer: style.view({
     flexDirection: 'row',
@@ -171,7 +191,17 @@ const styles = styleSheetCreate({
   }),
   masterArrowLeft: style.image({
     width: windowWidth * 0.064,
-    height: windowWidth * 0.064, 
+    height: windowWidth * 0.064,
+  }),
+  nothingFound: style.view({
+    width: '100%',
+    height: windowHeight * 0.9,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }),
+  nothingFoundText: style.text({
+    fontFamily: fonts.robotoBold,
+    fontSize: windowWidth * 0.05,
   }),
 })
 

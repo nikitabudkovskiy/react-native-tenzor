@@ -78,7 +78,6 @@ export class CustomTabbar extends PureComponent<IProps, IState>{
       }
     ])
 
-    console.log('this', this.props)
     return (
       <View style={mainContainer}>
         <ImageBackground source={ImageRepository.tabBar} style={styles.container}> 
@@ -124,6 +123,7 @@ export class CustomTabbar extends PureComponent<IProps, IState>{
 
           <TouchableOpacity
             style={styles.addButton}
+            onPress={this.onPressTabBarHandler.bind(this,  state.routes[2])}
           >
             <Image
                 source={ImageRepository.tabBarAdd}
@@ -138,16 +138,16 @@ export class CustomTabbar extends PureComponent<IProps, IState>{
             style={styles.tab}
           >
             <TouchableOpacity
-              disabled={state.index === 2}
-              onPress={this.onPressTabBarHandler.bind(this,  state.routes[2])}
+              disabled={state.index === 3}
+              onPress={this.onPressTabBarHandler.bind(this,  state.routes[3])}
               style={styles.tabContainer}
             >
               <Image
-               source={state.index === 2 ? ImageRepository.tabBarMyNotesActive  : ImageRepository.tabBarMyNotes}
+               source={state.index === 3 ? ImageRepository.tabBarMyNotesActive  : ImageRepository.tabBarMyNotes}
                 style={styles.tabImage}
                 resizeMode="contain"
               />
-              <Text style={state.index === 2 ? styles.activeText  : styles.text}>
+              <Text style={state.index === 3 ? styles.activeText  : styles.text}>
                 Мои записи
               </Text>
             </TouchableOpacity>
@@ -158,16 +158,16 @@ export class CustomTabbar extends PureComponent<IProps, IState>{
             style={styles.tab}
           >
             <TouchableOpacity
-              disabled={state.index === 3}
-              onPress={this.onPressTabBarHandler.bind(this,  state.routes[3])}
+              disabled={state.index === 4}
+              onPress={this.onPressTabBarHandler.bind(this,  state.routes[4])}
               style={styles.tabContainer}
             >
               <Image
-               source={state.index === 3 ? ImageRepository.tabBarMycontactsActive  : ImageRepository.tabBarContacts}
+               source={state.index === 4 ? ImageRepository.tabBarMycontactsActive  : ImageRepository.tabBarContacts}
                 style={styles.tabImage}
                 resizeMode="contain"
               />
-              <Text style={state.index === 3 ? styles.activeText  : styles.text}>
+              <Text style={state.index === 4 ? styles.activeText  : styles.text}>
                 Мои записи
               </Text>
             </TouchableOpacity>
@@ -198,7 +198,7 @@ const styles = styleSheetCreate({
   tab: style.view({
     flex: 1,
     marginTop: windowWidth * 0.0375,
-    height: windowWidth * 0.12,
+    // height: windowWidth * 0.12,
     alignItems: 'center',
     justifyContent: 'center',
   }),
@@ -213,7 +213,6 @@ const styles = styleSheetCreate({
   text: style.text({
     color: Color.philippineGray,
     fontSize: windowWidth * 0.022,
-    // fontFamily: fonts.geometriaMedium,
   }),
   addButton: style.view({
     marginTop: -windowWidth * 0.08,
