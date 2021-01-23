@@ -25,7 +25,6 @@ export interface IListTabBar {
   routeName: string
 }
 
-
 export const listTabBar: Array<IListTabBar> = [
   {
     name: 'Профиль',
