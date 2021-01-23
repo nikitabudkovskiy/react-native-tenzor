@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 import { View, ScrollView, Text, TouchableOpacity, Image, } from 'react-native'
 import { styleSheetCreate, style, fonts, Color, windowWidth, isLongDevices, styleSheetFlatten, ImageRepository } from 'app/system/helpers'
 import { CommonButton } from 'app/module/global/view'
+import BottomSheet from '@gorhom/bottom-sheet'
 
 interface IProps {
 
@@ -25,6 +26,10 @@ export class ChooseCity extends PureComponent<IProps, IState> {
     this.setState({ selectedСity })
   }
 
+  handleSheetChanges = (index: number) => {
+    console.log('handleSheetChanges', index)
+  }
+
   render(): JSX.Element {
 
     const list = ['Ижевск', 'Абакан', 'Адлер']
@@ -41,6 +46,7 @@ export class ChooseCity extends PureComponent<IProps, IState> {
         <ScrollView
           scrollEventThrottle={16}
           style={styles.container}
+          bounces={false}
         >
           <Text style={styles.title}>
             Выберите город
@@ -69,7 +75,7 @@ export class ChooseCity extends PureComponent<IProps, IState> {
                     }
                   </TouchableOpacity>
                   {
-                    list.length - 1 === index 
+                    list.length - 1 === index
                       ? null
                       : (
                         <View style={styles.cardDevider} />
@@ -86,6 +92,25 @@ export class ChooseCity extends PureComponent<IProps, IState> {
             styleButton={styles.chooseCity}
           />
         </ScrollView>
+        <BottomSheet
+          // ref={bottomSheetRef}
+          index={0}
+          snapPoints={['50%']}
+          onChange={this.handleSheetChanges}
+          enableHandlePanningGesture
+        >
+          <View style={styles.bottomSheetContent}>
+            <Text style={styles.bottomSheetText}>
+              Удовлетварительно
+            </Text>
+            <Text style={styles.bottomSheetYourMark}>
+            Ваша оценка
+            </Text>
+            <View style={styles.bottomSheetYourMarkContainer}>
+
+            </View>
+          </View>
+        </BottomSheet>
       </View>
     )
   }
@@ -124,5 +149,34 @@ const styles = styleSheetCreate({
   chooseCity: style.view({
     marginBottom: windowWidth * 0.1,
     marginTop: windowWidth * 0.02,
+  }),
+  bottomSheetContent: style.view({
+    paddingHorizontal: windowWidth * 0.04,
+    borderTopLeftRadius: windowWidth * 0.04,
+    borderTopRightRadius: windowWidth * 0.04,
+    backgroundColor: 'red',
+    flex: 1,
+  }),
+  bottomSheetText: style.text({
+    color: Color.chineseBlack,
+    fontSize: windowWidth * 0.058,
+    textAlign: 'center',
+    fontFamily: fonts.robotoBold,
+    marginTop: windowWidth * 0.04,
+  }),
+  bottomSheetYourMark: style.text({
+    color: Color.gray,
+    fontSize: windowWidth * 0.035,
+    textAlign: 'center',
+    fontFamily: fonts.robotoBold,
+    marginTop: windowWidth * 0.04,
+  }),
+  bottomSheetYourMarkContainer: style.text({
+    flexDirection: 'row',
+    // color: Color.gray,
+    // fontSize: windowWidth * 0.035,
+    // textAlign: 'center',
+    // fontFamily: fonts.robotoBold,
+    // marginTop: windowWidth * 0.04,
   }),
 })

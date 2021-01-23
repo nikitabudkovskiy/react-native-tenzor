@@ -74,7 +74,7 @@ const TabNavigator = () => {
 export const RootNavigator = (): JSX.Element => {
   return (
     <Stack.Navigator headerMode="none">
-      <Stack.Screen name={ListPages.MainPage} component={TabNavigator} />
+      {/* <Stack.Screen name={ListPages.MainPage} component={TabNavigator} /> */}
       <Stack.Screen name={ListPages.ChooseCity} component={ChooseCity} />
       {/* <Stack.Screen name={ListPages.EnterPhoneNumber} component={EnterPhoneNumberSingIn} />
       <Stack.Screen name={ListPages.PasswordSingIn} component={PasswordSingIn} />
