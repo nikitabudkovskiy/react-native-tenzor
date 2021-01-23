@@ -51,9 +51,9 @@ export class Masters extends PureComponent<IProps, IState> {
         bounces={false}
         showsVerticalScrollIndicator={false}
       >
-        <CommonModal 
+        {/* <CommonModal 
         
-        />
+        /> */}
         <KeyboardAwareScrollView 
         keyboardShouldPersistTaps="handled"
         style={styles.container}>

@@ -412,7 +412,7 @@ export class MainPage extends PureComponent<IProps, IState> {
 
 const styles = styleSheetCreate({
   content: style.view({
-    paddingBottom: windowWidth * 0.04,
+    // paddingBottom: windowWidth * 0.04,
   }),
   container: style.view({
     width: windowWidth * 2.436,
