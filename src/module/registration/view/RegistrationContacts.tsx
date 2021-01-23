@@ -35,7 +35,7 @@ interface IState {
   isInputTouched: boolean
 }
 
-export class Contacts extends PureComponent<IProps, IState> {
+export class RegistrationContacts extends PureComponent<IProps, IState> {
   state = {
     birthDate: '',
     genderSelected: '',
@@ -233,7 +233,7 @@ const styles = styleSheetCreate({
     fontSize: windowWidth * 0.05,
   }),
   container: style.view({
-    paddingHorizontal: windowWidth * 0.02,
+    paddingHorizontal: windowWidth * 0.04,
     backgroundColor: Color.white,
     flex: 1,
   }),
@@ -330,7 +330,6 @@ const styles = styleSheetCreate({
   }), 
   fininshButtonContainer: style.view({
     alignItems: 'center',
-    width: windowWidth,
   }),
   fininshButton: style.view({
     width: windowWidth * 0.92, 

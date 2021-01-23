@@ -27,7 +27,7 @@ export class ChooseCity extends PureComponent<IProps, IState> {
 
   render(): JSX.Element {
 
-    const list = ['Ижевск', 'Абакан']
+    const list = ['Ижевск', 'Абакан', 'Адлер']
 
     const mainContainer = styleSheetFlatten([
       styles.mainContainer,
@@ -38,40 +38,51 @@ export class ChooseCity extends PureComponent<IProps, IState> {
 
     return (
       <View style={mainContainer}>
-        <ScrollView style={styles.container}>
+        <ScrollView
+          scrollEventThrottle={16}
+          style={styles.container}
+        >
           <Text style={styles.title}>
             Выберите город
           </Text>
           {
-            list.map(item => {
+            list.map((item, index) => {
               return (
-                <TouchableOpacity
-                  style={styles.card}
-                  key={Math.random().toString()}
-                  onPress={this.onChangeCityHandler.bind(this, item)}
-                >
-                  <Text>
-                    {item}
-                  </Text>
+                <View key={Math.random().toString()}>
+                  <TouchableOpacity
+                    style={styles.card}
+                    onPress={this.onChangeCityHandler.bind(this, item)}
+                  >
+                    <Text>
+                      {item}
+                    </Text>
+                    {
+                      this.state.selectedСity === item
+                        ? (
+                          <Image
+                            source={ImageRepository.chooseCityCheck}
+                            style={styles.cardCheck}
+                            resizeMode="contain"
+                          />
+                        )
+                        : null
+                    }
+                  </TouchableOpacity>
                   {
-                    this.state.selectedСity === item
-                      ? (
-                        <Image 
-                          source={ImageRepository.chooseCityCheck} 
-                          style={styles.cardCheck}
-                          resizeMode="contain"
-                        />
+                    list.length - 1 === index 
+                      ? null
+                      : (
+                        <View style={styles.cardDevider} />
                       )
-                      : null
                   }
-                </TouchableOpacity>
+                </View>
               )
             })
           }
 
-          <CommonButton 
-            disabled={!this.state.selectedСity} 
-            title="Выбрать город" 
+          <CommonButton
+            disabled={!this.state.selectedСity}
+            title="Выбрать город"
             styleButton={styles.chooseCity}
           />
         </ScrollView>
@@ -93,14 +104,17 @@ const styles = styleSheetCreate({
     color: Color.black,
     fontSize: windowWidth * 0.05,
     marginBottom: windowWidth * 0.03,
+    textAlign: 'center',
   }),
   card: style.view({
     paddingVertical: windowWidth * 0.04,
-    borderBottomWidth: windowWidth * 0.0025,
-    borderBottomColor: Color.gray100,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+  }),
+  cardDevider: style.view({
+    borderBottomWidth: windowWidth * 0.0025,
+    borderBottomColor: Color.gray100,
   }),
   cardCheck: style.view({
     width: windowWidth * 0.038,

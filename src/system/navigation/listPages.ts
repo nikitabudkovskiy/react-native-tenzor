@@ -5,7 +5,7 @@ export class ListPages {
   static readonly EnterPhoneNumberSingInRegistration = 'EnterPhoneNumberSingInRegistration'
   static readonly PasswordRegistration = 'PasswordRegistration'
   static readonly MainPage = 'MainPage'
-  static readonly Contacts = 'Contacts'
+  static readonly RegistrationContacts = 'RegistrationContacts'
   static readonly Masters = 'Masters'
   static readonly AppointmentType = 'AppointmentType'
   

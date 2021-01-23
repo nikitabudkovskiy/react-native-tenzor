@@ -12,6 +12,8 @@ import {
   Color,
   windowWidth,
   ImageRepository,
+  isLongDevices,
+  styleSheetFlatten,
 } from 'app/system/helpers'
 
 interface IProps {
@@ -23,9 +25,18 @@ interface IState {
 }
 
 export class AppointmentType extends PureComponent<IProps, IState>{
+
   render() {
+
+    const container = styleSheetFlatten([
+      styles.container,
+      {
+        paddingTop: isLongDevices ? windowWidth * 0.12 : windowWidth * 0.04,
+      }
+    ])
+
     return (
-      <View style={styles.container}>
+      <View style={container}>
         <Text style={styles.appointmentTitle}>
           Выберите тип записи
         </Text>

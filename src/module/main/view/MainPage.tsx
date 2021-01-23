@@ -149,7 +149,7 @@ export class MainPage extends PureComponent<IProps, IState> {
           </View>
 
           {
-            this.state.loginStatus
+            !this.state.loginStatus
               ? (
                 <View>
                   <View style={styles.cardContent}>
@@ -254,7 +254,6 @@ export class MainPage extends PureComponent<IProps, IState> {
               )
           }
 
-
           <View style={styles.appointments}>
             <View style={styles.serviceAppointment}>
               <Image
@@ -291,9 +290,9 @@ export class MainPage extends PureComponent<IProps, IState> {
             this.state.loginStatus
               ? (
                 <View style={styles.menuContainer}>
-                  <TouchableOpacity 
-                  onPress={this.changeCity}
-                  style={styles.changeLocation}
+                  <TouchableOpacity
+                    onPress={this.changeCity}
+                    style={styles.changeLocation}
                   >
                     <Image
                       source={ImageRepository.changeLocation}
@@ -323,9 +322,9 @@ export class MainPage extends PureComponent<IProps, IState> {
                 </View>
               ) : (
                 <View style={styles.menuContainer}>
-                  <TouchableOpacity 
-                  onPress={this.changeCity}
-                  style={styles.changeLocation}
+                  <TouchableOpacity
+                    onPress={this.changeCity}
+                    style={styles.changeLocation}
                   >
                     <Image
                       source={ImageRepository.changeLocation}
@@ -412,6 +411,9 @@ export class MainPage extends PureComponent<IProps, IState> {
 }
 
 const styles = styleSheetCreate({
+  content: style.view({
+    paddingBottom: windowWidth * 0.04,
+  }),
   container: style.view({
     width: windowWidth * 2.436,
     height: windowWidth * 0.266,
@@ -665,7 +667,7 @@ const styles = styleSheetCreate({
     borderRadius: windowWidth * 0.032,
     borderColor: Color.electricOrange,
     borderWidth: windowWidth * 0.005,
-    borderStyle: 'dotted',
+    borderStyle: 'dashed',
     marginTop: windowWidth * 0.05,
     alignItems: 'center'
   }),
