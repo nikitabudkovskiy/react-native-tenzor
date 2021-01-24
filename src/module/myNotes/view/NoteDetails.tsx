@@ -5,8 +5,6 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
-  ImageURISource,
-  TextInput
 } from 'react-native'
 import {
   styleSheetCreate,
@@ -17,23 +15,47 @@ import {
   ImageRepository,
   styleSheetFlatten,
   isLongDevices,
+  windowHeight,
 } from 'app/system/helpers'
-import { CommonButton } from 'app/module/global/view'
+import { CommonButton, CommonInput } from 'app/module/global/view'
 import { StackNavigationProp } from '@react-navigation/stack'
 import Modal from 'react-native-modal'
+import BottomSheet from 'reanimated-bottom-sheet'
+import Svg, { Path } from 'react-native-svg'
 
 interface IProps {
-  naviagation: StackNavigationProp<any>
+  navigation: StackNavigationProp<any>
 }
 
 interface IState {
   isModalShow: boolean
+  masterAssessment: number
+  yourOpinion: string
+  inputIsCorrect: boolean
 }
 
+const masterAssessment = [1, 2, 3, 4, 5]
+
 export class NoteDetails extends PureComponent<IProps, IState>{
+  refBottomSheet: any
 
   state = {
     isModalShow: false,
+    masterAssessment: 0,
+    yourOpinion: '',
+    inputIsCorrect: true,
+  }
+
+  onChangeMasterAssessmentHandler = (masterAssessment: number): void => {
+    this.setState({ masterAssessment })
+  }
+
+  onChangeYourOpinionHandler = (yourOpinion: string): void => {
+    this.setState({ yourOpinion })
+  }
+
+  checkYourOpinionHandler = (): void => {
+    this.setState({ inputIsCorrect: !!this.state.yourOpinion })
   }
 
   openCancelRecordModal = (): void => {
@@ -42,6 +64,40 @@ export class NoteDetails extends PureComponent<IProps, IState>{
 
   hideCancelRecordModal = (): void => {
     this.setState({ isModalShow: false })
+  }
+
+  openBottomSheetHandler = (masterAssessment: number): void => {
+    this.setState({ masterAssessment }, () =>  this.refBottomSheet.snapTo(0))
+  }
+
+  closeBottomSheetHandler = (): void => {
+    this.refBottomSheet.snapTo(1)
+  }
+
+  refBottomSheetHandler = (ref: any): void => {
+    this.refBottomSheet = ref
+  }
+
+  goBackHandler = (): void => {
+    if (this.props.navigation.canGoBack()) {
+      this.props.navigation.goBack()
+    }
+  }
+
+  renderBottomSheetHeader = (): JSX.Element => {
+    return (
+      <View style={styles.bottomSheetHeader}>
+        <View style={styles.bottomSheetHeaderButton} />
+      </View>
+    )
+  }
+
+  renderBottomSheetContent = (): JSX.Element => {
+    return (
+      <View style={styles.bottomSheetHeader}>
+        <View style={styles.bottomSheetHeaderButton} />
+      </View>
+    )
   }
 
   render() {
@@ -53,43 +109,25 @@ export class NoteDetails extends PureComponent<IProps, IState>{
       }
     ])
 
+    const yourOpinionFlatten = styleSheetFlatten([
+      {
+        borderColor: this.state.inputIsCorrect 
+          ? Color.gray 
+          : Color.electricOrange
+      }
+    ])
+
     return (
       <View style={container}>
-
-        <Modal 
-          onBackdropPress={this.hideCancelRecordModal} 
-          isVisible={this.state.isModalShow}
-        >
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>
-              Отменить запись?
-          </Text>
-            <Text style={styles.modalDescription}>
-              Вы точно хотите отменить запись?
-          </Text>
-            <View style={styles.modalButtonsContainer}>
-              <CommonButton
-                title='Нет'
-                styleButton={styles.modalNoButton}
-                styleText={styles.modalNoButtonTitle}
-                onPress={this.hideCancelRecordModal}
-              />
-              <CommonButton
-                title='Да'
-                styleButton={styles.modalYesButton}
-                onPress={this.hideCancelRecordModal}
-              />
-            </View>
-          </View>
-        </Modal>
 
         <ScrollView
           scrollEnabled
           bounces={false}
           showsVerticalScrollIndicator={false}
+          style={styles.contentContainer}
         >
           <View style={styles.noteTimeContainer}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={this.goBackHandler}>
               <Image
                 source={ImageRepository.masterArrowLeft}
                 style={styles.masterArrowLeft}
@@ -123,6 +161,34 @@ export class NoteDetails extends PureComponent<IProps, IState>{
               styleText={styles.finishedRecordingButtonText}
               // onPress={this.openCancelRecordModal}
             />
+            <View style={{ alignItems: 'center'}}>
+            <Text style={styles.bottomSheetYourMark}>
+                Ваша оценка
+              </Text>
+              <View style={styles.bottomSheetYourMarkContainer}>
+                {
+                  masterAssessment.map(item => {
+                    return (
+                      <TouchableOpacity
+                        onPress={this.openBottomSheetHandler.bind(this, item)}
+                        key={item}
+                        disabled={this.state.masterAssessment === item}
+                      >
+                        <Svg 
+                          height={windowWidth * 0.1} 
+                          width={windowWidth * 0.1}
+                        >
+                          <Path
+                            d="M17.9689 1.1865C18.5231 -0.193677 20.477 -0.193676 21.0312 1.1865L25.3519 11.9458L36.9197 12.7302C38.4036 12.8308 39.0074 14.689 37.866 15.6426L28.9685 23.0766L31.7972 34.3207C32.16 35.7631 30.5793 36.9115 29.3197 36.1207L19.5001 29.9558L9.68041 36.1207C8.42078 36.9115 6.84009 35.7631 7.20295 34.3207L10.0316 23.0766L1.13407 15.6426C-0.00728244 14.689 0.596486 12.8308 2.08038 12.7302L13.6483 11.9458L17.9689 1.1865Z"
+                            fill={this.state.masterAssessment >= item ? Color.electricOrange : Color.gray200}
+                          />
+                        </Svg>
+                      </TouchableOpacity>
+                    )
+                  })
+                }
+              </View>
+            </View>
           </View>
           <View style={styles.detailsContainer}>
             <Text style={styles.detailsTitle}>
@@ -204,6 +270,88 @@ export class NoteDetails extends PureComponent<IProps, IState>{
             </View>
           </View>
         </ScrollView>
+
+
+        <Modal 
+          onBackdropPress={this.hideCancelRecordModal} 
+          isVisible={this.state.isModalShow}
+        >
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>
+              Отменить запись?
+          </Text>
+            <Text style={styles.modalDescription}>
+              Вы точно хотите отменить запись?
+          </Text>
+            <View style={styles.modalButtonsContainer}>
+              <CommonButton
+                title='Нет'
+                styleButton={styles.modalNoButton}
+                styleText={styles.modalNoButtonTitle}
+                onPress={this.hideCancelRecordModal}
+              />
+              <CommonButton
+                title='Да'
+                styleButton={styles.modalYesButton}
+                onPress={this.hideCancelRecordModal}
+              />
+            </View>
+          </View>
+        </Modal>
+
+        <BottomSheet
+          ref={this.refBottomSheetHandler}
+          initialSnap={1}
+          snapPoints={[windowHeight * 0.45, -100]}
+          renderHeader={this.renderBottomSheetHeader}
+          enabledInnerScrolling={false}
+          renderContent={() => {
+            return (
+              <View style={styles.bottomSheetContent}>
+              <Text style={styles.bottomSheetText}>
+                Удовлетварительно
+              </Text>
+              <Text style={styles.bottomSheetYourMark}>
+                Ваша оценка
+              </Text>
+              <View style={styles.bottomSheetYourMarkContainer}>
+                {
+                  masterAssessment.map(item => {
+                    return (
+                      <TouchableOpacity
+                        onPress={this.onChangeMasterAssessmentHandler.bind(this, item)}
+                        key={item}
+                        disabled={this.state.masterAssessment === item}
+                      >
+                        <Svg 
+                          height={windowWidth * 0.1} 
+                          width={windowWidth * 0.1}
+                        >
+                          <Path
+                            d="M17.9689 1.1865C18.5231 -0.193677 20.477 -0.193676 21.0312 1.1865L25.3519 11.9458L36.9197 12.7302C38.4036 12.8308 39.0074 14.689 37.866 15.6426L28.9685 23.0766L31.7972 34.3207C32.16 35.7631 30.5793 36.9115 29.3197 36.1207L19.5001 29.9558L9.68041 36.1207C8.42078 36.9115 6.84009 35.7631 7.20295 34.3207L10.0316 23.0766L1.13407 15.6426C-0.00728244 14.689 0.596486 12.8308 2.08038 12.7302L13.6483 11.9458L17.9689 1.1865Z"
+                            fill={this.state.masterAssessment >= item ? Color.electricOrange : Color.gray200}
+                          />
+                        </Svg>
+                      </TouchableOpacity>
+                    )
+                  })
+                }
+              </View>
+              <CommonInput
+                label='Ваше имя'
+                containerStyle={styles.bottomSheetInput}
+                onChangeText={this.onChangeYourOpinionHandler}
+                onBlur={this.checkYourOpinionHandler}
+                inputStyle={yourOpinionFlatten}
+              />
+              <CommonButton 
+                title="Готово"
+                styleButton={styles.bottomSheetSendButton}
+              />
+            </View>
+            )
+          }}
+        />
       </View>
     )
   }
@@ -211,8 +359,10 @@ export class NoteDetails extends PureComponent<IProps, IState>{
 
 const styles = styleSheetCreate({
   container: style.view({
-    paddingHorizontal: windowWidth * 0.042,
     height: '100%'
+  }),
+  contentContainer: style.view({
+    paddingHorizontal: windowWidth * 0.042,
   }),
   noteTimeContainer: style.view({
     flexDirection: 'row',
@@ -354,5 +504,54 @@ const styles = styleSheetCreate({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingTop: windowWidth * 0.069,
+  }),
+  bottomSheetHeader: style.view({
+    backgroundColor: Color.white,
+    alignItems: 'center',
+    borderTopLeftRadius: windowWidth * 0.04,
+    borderTopRightRadius: windowWidth * 0.04,
+    //FIXME add margin for hide header bottom sheet
+   marginTop: windowWidth * 0.06,
+  }),
+  bottomSheetHeaderButton: style.view({
+    width: windowWidth * 0.1,
+    height: windowWidth * 0.01, 
+    backgroundColor: Color.gray, 
+    borderRadius: windowWidth * 0.1,
+    marginTop: windowWidth * 0.04,
+  }),
+  bottomSheetContent: style.view({
+    paddingHorizontal: windowWidth * 0.04,
+    width: '100%',
+    backgroundColor: Color.white,
+    alignItems: 'center',
+
+  }),
+  bottomSheetText: style.text({
+    color: Color.chineseBlack,
+    fontSize: windowWidth * 0.058,
+    textAlign: 'center',
+    fontFamily: fonts.robotoBold,
+    marginTop: windowWidth * 0.04,
+  }),
+  bottomSheetYourMark: style.text({
+    color: Color.gray,
+    fontSize: windowWidth * 0.035,
+    textAlign: 'center',
+    fontFamily: fonts.robotoBold,
+    marginTop: windowWidth * 0.04,
+  }),
+  bottomSheetYourMarkContainer: style.text({
+    flexDirection: 'row',
+    marginTop: windowWidth * 0.036,
+    justifyContent: 'space-between',
+    width: '75%',
+  }),
+  bottomSheetInput: style.view({
+    marginTop: windowWidth * 0.09,
+    marginBottom: windowWidth * 0.3,
+  }),
+  bottomSheetSendButton: style.view({
+    width: '100%',
   }),
 })
