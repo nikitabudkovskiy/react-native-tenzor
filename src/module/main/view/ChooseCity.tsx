@@ -1,8 +1,18 @@
 import React, { PureComponent } from 'react'
 import { View, ScrollView, Text, TouchableOpacity, Image, } from 'react-native'
-import { styleSheetCreate, style, fonts, Color, windowWidth, isLongDevices, styleSheetFlatten, ImageRepository } from 'app/system/helpers'
-import { CommonButton } from 'app/module/global/view'
+import {
+  styleSheetCreate,
+  style,
+  fonts,
+  Color,
+  windowWidth,
+  isLongDevices,
+  styleSheetFlatten,
+  ImageRepository
+} from 'app/system/helpers'
+import { CommonButton, CommonInput } from 'app/module/global/view'
 import BottomSheet from '@gorhom/bottom-sheet'
+import Svg, { Path } from 'react-native-svg'
 
 interface IProps {
 
@@ -10,20 +20,40 @@ interface IProps {
 
 interface IState {
   selectedСity: string
+  masterAssessment: number
+  yourOpinion: string
+  inputIsCorrect: boolean
 }
+
+const masterAssessment = [1, 2, 3, 4, 5]
 
 export class ChooseCity extends PureComponent<IProps, IState> {
 
   state = {
     selectedСity: '',
+    masterAssessment: 0,
+    yourOpinion: '',
+    inputIsCorrect: true,
   }
 
-  onChangeCityHandler = (selectedСity: string) => {
+  onChangeCityHandler = (selectedСity: string): void => {
     if (this.state.selectedСity === selectedСity) {
       this.setState({ selectedСity: '' })
       return
     }
     this.setState({ selectedСity })
+  }
+
+  onChangeMasterAssessmentHandler = (masterAssessment: number): void => {
+    this.setState({ masterAssessment })
+  }
+
+  onChangeYourOpinionHandler = (yourOpinion: string): void => {
+    this.setState({ yourOpinion })
+  }
+
+  checkYourOpinionHandler = (): void => {
+    this.setState({ inputIsCorrect: !!this.state.yourOpinion })
   }
 
   handleSheetChanges = (index: number) => {
@@ -38,6 +68,15 @@ export class ChooseCity extends PureComponent<IProps, IState> {
       styles.mainContainer,
       {
         paddingTop: isLongDevices ? windowWidth * 0.1 : windowWidth * 0.08,
+      }
+    ])
+
+
+    const nameInputFlatten = styleSheetFlatten([
+      {
+        borderColor: this.state.inputIsCorrect 
+          ? Color.gray 
+          : Color.electricOrange
       }
     ])
 
@@ -99,17 +138,45 @@ export class ChooseCity extends PureComponent<IProps, IState> {
           onChange={this.handleSheetChanges}
           enableHandlePanningGesture
         >
-          <View style={styles.bottomSheetContent}>
+          <ScrollView contentContainerStyle={styles.bottomSheetContent}>
             <Text style={styles.bottomSheetText}>
               Удовлетварительно
             </Text>
             <Text style={styles.bottomSheetYourMark}>
-            Ваша оценка
+              Ваша оценка
             </Text>
             <View style={styles.bottomSheetYourMarkContainer}>
-
+              {
+                masterAssessment.map(item => {
+                  return (
+                    <TouchableOpacity
+                      onPress={this.onChangeMasterAssessmentHandler.bind(this, item)}
+                      key={item}
+                      disabled={this.state.masterAssessment === item}
+                    >
+                      <Svg height={windowWidth * 0.1} width={windowWidth * 0.1}>
+                        <Path
+                          d="M17.9689 1.1865C18.5231 -0.193677 20.477 -0.193676 21.0312 1.1865L25.3519 11.9458L36.9197 12.7302C38.4036 12.8308 39.0074 14.689 37.866 15.6426L28.9685 23.0766L31.7972 34.3207C32.16 35.7631 30.5793 36.9115 29.3197 36.1207L19.5001 29.9558L9.68041 36.1207C8.42078 36.9115 6.84009 35.7631 7.20295 34.3207L10.0316 23.0766L1.13407 15.6426C-0.00728244 14.689 0.596486 12.8308 2.08038 12.7302L13.6483 11.9458L17.9689 1.1865Z"
+                          fill={this.state.masterAssessment >= item ? Color.electricOrange : Color.gray200}
+                        />
+                      </Svg>
+                    </TouchableOpacity>
+                  )
+                })
+              }
             </View>
-          </View>
+            <CommonInput
+              label='Ваше имя'
+              containerStyle={styles.bottomSheetInput}
+              onChangeText={this.onChangeYourOpinionHandler}
+              onBlur={this.checkYourOpinionHandler}
+              inputStyle={nameInputFlatten}
+            />
+            <CommonButton 
+              title="Готово"
+              styleButton={styles.bottomSheetSendButton}
+            />
+          </ScrollView>
         </BottomSheet>
       </View>
     )
@@ -154,8 +221,9 @@ const styles = styleSheetCreate({
     paddingHorizontal: windowWidth * 0.04,
     borderTopLeftRadius: windowWidth * 0.04,
     borderTopRightRadius: windowWidth * 0.04,
-    backgroundColor: 'red',
+    backgroundColor: Color.white,
     flex: 1,
+    alignItems: 'center',
   }),
   bottomSheetText: style.text({
     color: Color.chineseBlack,
@@ -173,10 +241,15 @@ const styles = styleSheetCreate({
   }),
   bottomSheetYourMarkContainer: style.text({
     flexDirection: 'row',
-    // color: Color.gray,
-    // fontSize: windowWidth * 0.035,
-    // textAlign: 'center',
-    // fontFamily: fonts.robotoBold,
-    // marginTop: windowWidth * 0.04,
+    marginTop: windowWidth * 0.036,
+    justifyContent: 'space-between',
+    width: '75%',
+  }),
+  bottomSheetInput: style.view({
+    marginTop: windowWidth * 0.09,
+    marginBottom: windowWidth * 0.3,
+  }),
+  bottomSheetSendButton: style.view({
+    width: '100%',
   }),
 })
