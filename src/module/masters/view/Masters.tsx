@@ -69,6 +69,7 @@ export class Masters extends PureComponent<IProps, IState> {
               placeholder="Введите имя мастера"
               onChangeText={this.searchMaster}
               value={this.state.searchValue}
+              placeholderTextColor={Color.gray}
             />
           </View>
           {
@@ -156,7 +157,6 @@ const styles = styleSheetCreate({
   }),
   masterInput: style.text({
     fontSize: windowWidth * 0.05,
-    color: Color.gray,
     fontFamily: fonts.robotoBold,
     paddingLeft: windowWidth * 0.085,
     width: windowWidth * 0.83,

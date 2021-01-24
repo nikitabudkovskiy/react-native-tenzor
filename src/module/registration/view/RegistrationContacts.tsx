@@ -92,7 +92,7 @@ export class RegistrationContacts extends PureComponent<IProps, IState> {
     const birthDateInputFlatten = styleSheetFlatten([
       styles.birthDateContainer,
       {
-        borderColor: this.state.correctBirthDate == true ?
+        borderColor: this.state.correctBirthDate ?
           Color.gray :
           Color.electricOrange
       }
@@ -100,7 +100,7 @@ export class RegistrationContacts extends PureComponent<IProps, IState> {
 
     const nameInputFlatten = styleSheetFlatten([
       {
-        borderColor: this.state.correctName == true ?
+        borderColor: this.state.correctName ?
           Color.gray :
           Color.electricOrange
       }
@@ -109,7 +109,9 @@ export class RegistrationContacts extends PureComponent<IProps, IState> {
     const contentTitle = styleSheetFlatten([
       styles.contentTitle,
       {
-        paddingTop: isLongDevices ? windowWidth * 0.12 : windowWidth * 0.04,
+        paddingTop: isLongDevices ? 
+        windowWidth * 0.12 : 
+        windowWidth * 0.04,
       }
     ])
 

@@ -7,10 +7,13 @@ import { PasswordSingIn } from 'app/module/login/view/PasswordSingIn'
 import { MainPage } from 'app/module/main/view/MainPage'
 import { RegistrationContacts } from 'app/module/registration/view/RegistrationContacts'
 import { Masters } from 'app/module/masters/view/Masters'
+import { MyNotes } from 'app/module/myNotes/view/MyNotes'
+import { NoteDetails } from 'app/module/myNotes/view/NoteDetails'
 import { AppointmentType } from 'app/module/appointments/view/AppointmentType'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { CustomTabbar } from 'app/system/navigation/CustomTabbar'
 import { SelectService } from 'app/module/appointments/view/SelectService'
+
 import { ImageStyle, ImageURISource } from 'react-native'
 import { ImageRepository, windowWidth } from '../helpers'
 
@@ -89,7 +92,10 @@ export const RootNavigator = (): JSX.Element => {
       <Stack.Screen name={ListPages.PasswordSingIn} component={PasswordSingIn} />
       <Stack.Screen name={ListPages.AppointmentType} component={AppointmentType} />  */}
       {/* <Stack.Screen name={ListPages.RegistrationContacts} component={RegistrationContacts} /> */}
-      <Stack.Screen name={ListPages.SelectService} component={SelectService} />
+      {/* <Stack.Screen name={ListPages.SelectService} component={SelectService} /> */}
+      {/* <Stack.Screen name={ListPages.MyNotes} component={MyNotes} /> */}
+      {/* <Stack.Screen name={ListPages.NoteDetails} component={NoteDetails} /> */}
+      <Stack.Screen name={ListPages.Masters} component={Masters} />
       
       
     </Stack.Navigator>

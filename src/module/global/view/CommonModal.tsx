@@ -21,7 +21,7 @@ import Modal from 'react-native-modal'
 import { CommonButton } from './CommonButton'
 
 interface IProps {
-
+  showModal: boolean
 }
 
 interface IState {
@@ -30,8 +30,12 @@ interface IState {
 
 export class CommonModal extends PureComponent<IProps, IState>{
   render() {
+    const { 
+      showModal,
+    } = this.props
+
     return (
-      <Modal isVisible={true}>
+      <Modal isVisible={showModal}>
         <View style={styles.container}>
           <Text style={styles.modalTitle}>
             Отменить запись?

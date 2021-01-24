@@ -12,4 +12,7 @@ export enum Color {
     philippineGray = "#8E8E8E",
     linen = "#FFEDEA",
     smokyWhite = "#EFF2F8",
+    gray50 = "rgba(0, 0, 0, 0.05)",
+    fauxLime = '#20C845',
+    gray700  = "rgba(0, 0, 0, 0.7)",
 }
