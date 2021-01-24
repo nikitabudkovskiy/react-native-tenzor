@@ -168,7 +168,7 @@ export class CustomTabbar extends PureComponent<IProps, IState>{
                 resizeMode="contain"
               />
               <Text style={state.index === 4 ? styles.activeText  : styles.text}>
-                Мои записи
+                Контакты
               </Text>
             </TouchableOpacity>
           </View>

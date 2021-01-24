@@ -16,35 +16,73 @@ import {
   windowWidth,
   ImageRepository,
   styleSheetFlatten,
+  isLongDevices,
 } from 'app/system/helpers'
 import { CommonButton } from 'app/module/global/view'
 import { StackNavigationProp } from '@react-navigation/stack'
-import { CommonModal } from 'app/module/global/view/CommonModal'
+import Modal from 'react-native-modal'
 
 interface IProps {
   naviagation: StackNavigationProp<any>
 }
 
 interface IState {
-  switchModal: boolean
+  isModalShow: boolean
 }
 
 export class NoteDetails extends PureComponent<IProps, IState>{
- state = {
-  switchModal: false,
- }
 
-  handleCancelButton = () => {
-    this.setState({ switchModal: !this.state.switchModal })
+  state = {
+    isModalShow: false,
   }
 
+  openCancelRecordModal = (): void => {
+    this.setState({ isModalShow: true })
+  }
+
+  hideCancelRecordModal = (): void => {
+    this.setState({ isModalShow: false })
+  }
 
   render() {
+
+    const container = styleSheetFlatten([
+      styles.container,
+      {
+        paddingTop: isLongDevices ? windowWidth * 0.1 : windowWidth * 0.08,
+      }
+    ])
+
     return (
-      <View style={styles.container}>
-        <CommonModal
-           showModal={this.state.switchModal}
-        />
+      <View style={container}>
+
+        <Modal 
+          onBackdropPress={this.hideCancelRecordModal} 
+          isVisible={this.state.isModalShow}
+        >
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>
+              Отменить запись?
+          </Text>
+            <Text style={styles.modalDescription}>
+              Вы точно хотите отменить запись?
+          </Text>
+            <View style={styles.modalButtonsContainer}>
+              <CommonButton
+                title='Нет'
+                styleButton={styles.modalNoButton}
+                styleText={styles.modalNoButtonTitle}
+                onPress={this.hideCancelRecordModal}
+              />
+              <CommonButton
+                title='Да'
+                styleButton={styles.modalYesButton}
+                onPress={this.hideCancelRecordModal}
+              />
+            </View>
+          </View>
+        </Modal>
+
         <ScrollView
           scrollEnabled
           bounces={false}
@@ -58,20 +96,32 @@ export class NoteDetails extends PureComponent<IProps, IState>{
               />
             </TouchableOpacity>
             <Text style={styles.noteHeadTitle}>
-              Выберите услугу
-          </Text>
+              13.05.2020, 13:45
+            </Text>
           </View>
           <View style={styles.statusContent}>
             <View style={styles.statusContainer}>
               <Text style={styles.statusTitle}>
                 Ожидает
-          </Text>
+            </Text>
             </View>
             <CommonButton
-              title='ОТМЕНИТЬ ЗАПИСЬ'
+              title='Отменить запись'
               styleButton={styles.cancelButton}
               styleText={styles.cancelTitle}
-              onPress={this.handleCancelButton}
+              onPress={this.openCancelRecordModal}
+            />
+            <CommonButton
+              title='Запись отменена'
+              styleButton={styles.entryСanceledButton}
+              styleText={styles.entryСanceledButtonText}
+              // onPress={this.openCancelRecordModal}
+            />
+            <CommonButton
+              title='Завершена'
+              styleButton={styles.finishedRecordingButton}
+              styleText={styles.finishedRecordingButtonText}
+              // onPress={this.openCancelRecordModal}
             />
           </View>
           <View style={styles.detailsContainer}>
@@ -245,8 +295,64 @@ const styles = styleSheetCreate({
     fontFamily: fonts.robotoRegular,
     textAlign: 'right'
   }),
+  entryСanceledButton: style.view({
+    backgroundColor: Color.alizarinCrimson,
+    marginVertical: windowWidth * 0.04,
+  }),
+  entryСanceledButtonText: style.text({
+    color: Color.white,
+    textTransform: 'none',
+    fontFamily: fonts.robotoRegular,
+  }),
+  finishedRecordingButton: style.view({
+    backgroundColor: Color.gray700,
+    marginBottom: windowWidth * 0.04,
+  }),
+  finishedRecordingButtonText: style.text({
+    color: Color.white,
+    textTransform: 'none',
+    fontFamily: fonts.robotoRegular,
+  }),
   priceInfo: style.text({
     fontSize: windowWidth * 0.04,
     fontFamily: fonts.robotoBold
-  })
+  }),
+  modalContainer: style.view({
+    width: windowWidth * 0.92,
+    height: windowWidth * 0.466,
+    backgroundColor: Color.white,
+    paddingHorizontal: windowWidth * 0.042,
+    borderRadius: windowWidth * 0.042
+  }),
+  modalTitle: style.text({
+    fontFamily: fonts.robotoBold,
+    fontSize: windowWidth * 0.053,
+    paddingTop: windowWidth * 0.042
+  }),
+  modalDescription: style.text({
+    fontFamily: fonts.robotoRegular,
+    fontSize: windowWidth * 0.04,
+    paddingTop: windowWidth * 0.069,
+  }),
+  modalNoButton: style.view({
+    backgroundColor: Color.white,
+    borderWidth: windowWidth * 0.0025,
+    borderColor: Color.electricOrange,
+    width: windowWidth * 0.394,
+    height: windowWidth * 0.133,
+  }),
+  modalNoButtonTitle: style.text({
+    color: Color.electricOrange
+  }),
+  modalYesButton: style.view({
+    borderWidth: windowWidth * 0.0025,
+    borderColor: Color.electricOrange,
+    width: windowWidth * 0.394,
+    height: windowWidth * 0.133,
+  }),
+  modalButtonsContainer: style.view({
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingTop: windowWidth * 0.069,
+  }),
 })

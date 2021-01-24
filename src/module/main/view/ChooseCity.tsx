@@ -12,7 +12,6 @@ import {
   windowHeight
 } from 'app/system/helpers'
 import { CommonButton, CommonInput } from 'app/module/global/view'
-// import BottomSheet from '@gorhom/bottom-sheet'
 import BottomSheet from 'reanimated-bottom-sheet'
 import Svg, { Path } from 'react-native-svg'
 

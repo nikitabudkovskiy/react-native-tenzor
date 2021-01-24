@@ -26,6 +26,16 @@ export interface IListTabBar {
 const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator()
 
+const MyNotesStack = () => {
+  return (
+    <Stack.Navigator headerMode="none">
+      <Stack.Screen name={ListPages.MyNotes} component={MyNotes} />
+      <Stack.Screen name={ListPages.NoteDetails} component={NoteDetails} />
+    </Stack.Navigator>
+  )
+}
+
+
 export const listTabBar: Array<IListTabBar> = [
   {
     name: 'Профиль',
@@ -44,7 +54,7 @@ export const listTabBar: Array<IListTabBar> = [
   },
   {
     name: 'Мои записи',
-    component: RegistrationContacts,
+    component: MyNotesStack,
     routeName: 'AppointmentType',
   },
   {
@@ -77,9 +87,8 @@ const TabNavigator = () => {
 export const RootNavigator = (): JSX.Element => {
   return (
     <Stack.Navigator headerMode="none">
-      {/* <Stack.Screen name={ListPages.MainPage} component={TabNavigator} /> */}
+      <Stack.Screen name={ListPages.MainPage} component={TabNavigator} />
       {/* <Stack.Screen name={ListPages.ChooseCity} component={ChooseCity} /> */}
-      <Stack.Screen name={ListPages.NoteDetails} component={NoteDetails} />
       {/* <Stack.Screen name={ListPages.EnterPhoneNumber} component={EnterPhoneNumberSingIn} />
       <Stack.Screen name={ListPages.PasswordSingIn} component={PasswordSingIn} />
       <Stack.Screen name={ListPages.AppointmentType} component={AppointmentType} />  */}
