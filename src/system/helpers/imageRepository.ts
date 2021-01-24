@@ -25,6 +25,7 @@ export class ImageRepository {
 
   static readonly mainPageAddress = require('assets/images/main/mainPageAddress.png')
 
+  static readonly tabBar = require('assets/images/tabBar/tabbar.png')
   static readonly tabBarAdd = require('assets/images/tabBar/add.png')
   static readonly tabBarProfile = require('assets/images/tabBar/profile.png')
   static readonly tabBarProfileActive = require('assets/images/tabBar/profile_active.png')

@@ -17,54 +17,48 @@ import { SelectService } from 'app/module/appointments/view/SelectService'
 import { ImageStyle, ImageURISource } from 'react-native'
 import { ImageRepository, windowWidth } from '../helpers'
 
-const Stack = createStackNavigator()
-const Tab = createBottomTabNavigator()
-
 export interface IListTabBar {
   name: string
   component: ComponentType<any>
-  icon: ImageURISource
-  style: ImageStyle
   routeName: string
 }
 
+const Stack = createStackNavigator()
+const Tab = createBottomTabNavigator()
 
 export const listTabBar: Array<IListTabBar> = [
   {
     name: 'Профиль',
     component: MainPage,
-    icon: ImageRepository.changeLocation,
-    style: { width: windowWidth * 0.05, height: windowWidth * 0.05 },
     routeName: 'MainPage',
   },
   {
     name: 'Мастеры',
     component: Masters,
-    icon: ImageRepository.changeLocation,
-    style: { width: windowWidth * 0.05, height: windowWidth * 0.05 },
     routeName: 'Masters',
   },
   {
-    name: 'Мои записи',
+    name: 'Добавить',
     component: AppointmentType,
-    icon: ImageRepository.changeLocation,
-    style: { width: windowWidth * 0.05, height: windowWidth * 0.05 },
+    routeName: 'Enroll',
+  },
+  {
+    name: 'Мои записи',
+    component: RegistrationContacts,
     routeName: 'AppointmentType',
   },
   {
     name: 'Контакты',
     component: EnterPhoneNumberSingIn,
-    icon: ImageRepository.changeLocation,
-    style: { width: windowWidth * 0.05, height: windowWidth * 0.05 },
     routeName: 'EnterPhoneNumberSingIn',
   },
 ]
 
-
 const TabNavigator = () => {
   return (
-    <Tab.Navigator tabBar={props => <CustomTabbar  tabs={listTabBar} {...props} />} >
-      {/* <Tab.Screen name="Test" component={MainPage} /> */}
+    <Tab.Navigator 
+      tabBar={props => <CustomTabbar  tabs={listTabBar} {...props} />} 
+    >
       {
           listTabBar.map((item, index) => {
             return (
@@ -72,9 +66,6 @@ const TabNavigator = () => {
                 key={index.toString()}
                 name={item.routeName}
                 component={item.component}
-                options={{
-                  tabBarLabel: item.routeName,
-                }}
               />
             )
           })
@@ -87,17 +78,13 @@ export const RootNavigator = (): JSX.Element => {
   return (
     <Stack.Navigator headerMode="none">
       {/* <Stack.Screen name={ListPages.MainPage} component={TabNavigator} /> */}
-      {/* <Stack.Screen name={ListPages.ChooseCity} component={ChooseCity} />
-      <Stack.Screen name={ListPages.EnterPhoneNumber} component={EnterPhoneNumberSingIn} />
+      {/* <Stack.Screen name={ListPages.ChooseCity} component={ChooseCity} /> */}
+      <Stack.Screen name={ListPages.NoteDetails} component={NoteDetails} />
+      {/* <Stack.Screen name={ListPages.EnterPhoneNumber} component={EnterPhoneNumberSingIn} />
       <Stack.Screen name={ListPages.PasswordSingIn} component={PasswordSingIn} />
       <Stack.Screen name={ListPages.AppointmentType} component={AppointmentType} />  */}
       {/* <Stack.Screen name={ListPages.RegistrationContacts} component={RegistrationContacts} /> */}
       {/* <Stack.Screen name={ListPages.SelectService} component={SelectService} /> */}
-      {/* <Stack.Screen name={ListPages.MyNotes} component={MyNotes} /> */}
-      {/* <Stack.Screen name={ListPages.NoteDetails} component={NoteDetails} /> */}
-      <Stack.Screen name={ListPages.Masters} component={Masters} />
-      
-      
     </Stack.Navigator>
   )
 }

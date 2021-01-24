@@ -1,10 +1,11 @@
-import React, { Fragment, PureComponent } from 'react'
+import React, { PureComponent } from 'react'
 import {
   View,
   Text,
   TouchableOpacity,
   Image,
   Animated,
+  ImageBackground,
 } from 'react-native'
 import {
   styleSheetCreate,
@@ -77,11 +78,9 @@ export class CustomTabbar extends PureComponent<IProps, IState>{
       }
     ])
 
-    console.log('this', this.props)
     return (
       <View style={mainContainer}>
-        <View style={styles.container}>
-          
+        <ImageBackground source={ImageRepository.tabBar} style={styles.container}> 
           <View
             key={Math.random().toString()}
             style={styles.tab}
@@ -121,27 +120,18 @@ export class CustomTabbar extends PureComponent<IProps, IState>{
               </Text>
             </TouchableOpacity>
           </View>
-  
 
-          <View
-            key={Math.random().toString()}
-            style={styles.tab}
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={this.onPressTabBarHandler.bind(this,  state.routes[2])}
           >
-            <TouchableOpacity
-              disabled={state.index === 2}
-              onPress={this.onPressTabBarHandler.bind(this,  state.routes[2])}
-              style={styles.tabContainer}
-            >
-              <Image
-               source={state.index === 2 ? ImageRepository.tabBarMyNotesActive  : ImageRepository.tabBarMyNotes}
-                style={styles.tabImage}
+            <Image
+                source={ImageRepository.tabBarAdd}
+                style={styles.addImageButton}
                 resizeMode="contain"
-              />
-              <Text style={state.index === 2 ? styles.activeText  : styles.text}>
-                Мои записи
-              </Text>
-            </TouchableOpacity>
-          </View>
+             />
+          </TouchableOpacity>
+  
 
           <View
             key={Math.random().toString()}
@@ -153,7 +143,7 @@ export class CustomTabbar extends PureComponent<IProps, IState>{
               style={styles.tabContainer}
             >
               <Image
-               source={state.index === 3 ? ImageRepository.tabBarMycontactsActive  : ImageRepository.tabBarContacts}
+               source={state.index === 3 ? ImageRepository.tabBarMyNotesActive  : ImageRepository.tabBarMyNotes}
                 style={styles.tabImage}
                 resizeMode="contain"
               />
@@ -162,71 +152,27 @@ export class CustomTabbar extends PureComponent<IProps, IState>{
               </Text>
             </TouchableOpacity>
           </View>
-  
 
-
-        </View>
-
-        {/* {
-          state.routes.map((item: IRoutes, index: number) => {
-            const isFocused = state.index === index
-            return index === 2
-              ? (
-                <Fragment>
-                  <TouchableOpacity style={styles.addButton}>
-                    <Image
-                      source={ImageRepository.tabBarAdd}
-                      style={styles.addImageButton}
-                    // resizeMode="contain" 
-                    />
-                  </TouchableOpacity>
-                  <View
-                    key={Math.random().toString()}
-                    style={styles.tab}
-                  >
-                    <TouchableOpacity
-                      disabled={isFocused}
-                      onPress={this.onPressTabBarHandler.bind(this, item)}
-                      style={styles.tabContainer}
-                    >
-                      <Image
-                        source={this.props.tabs[index].icon}
-                        style={this.props.tabs[index].style}
-                        resizeMode="contain"
-                      />
-                      <Text style={styles.text}>
-                        {this.props.tabs[index].name}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-
-                </Fragment>
-              )
-              : (
-                (
-                  <View
-                    key={Math.random().toString()}
-                    style={styles.tab}
-                  >
-                    <TouchableOpacity
-                      disabled={isFocused}
-                      onPress={this.onPressTabBarHandler.bind(this, item)}
-                      style={styles.tabContainer}
-                    >
-                      <Image
-                        source={this.props.tabs[index].icon}
-                        style={this.props.tabs[index].style}
-                        resizeMode="contain"
-                      />
-                      <Text style={styles.text}>
-                        {this.props.tabs[index].name}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                )
-              )
-          })
-        } */}
+          <View
+            key={Math.random().toString()}
+            style={styles.tab}
+          >
+            <TouchableOpacity
+              disabled={state.index === 4}
+              onPress={this.onPressTabBarHandler.bind(this,  state.routes[4])}
+              style={styles.tabContainer}
+            >
+              <Image
+               source={state.index === 4 ? ImageRepository.tabBarMycontactsActive  : ImageRepository.tabBarContacts}
+                style={styles.tabImage}
+                resizeMode="contain"
+              />
+              <Text style={state.index === 4 ? styles.activeText  : styles.text}>
+                Мои записи
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </ImageBackground>
       </View>
     )
   }
@@ -234,15 +180,14 @@ export class CustomTabbar extends PureComponent<IProps, IState>{
 
 const styles = styleSheetCreate({
   mainContainer: style.view({
-    borderTopLeftRadius: windowWidth * 0.1,
-    borderTopRightRadius: windowWidth * 0.1,
-    // backgroundColor: 'red',
-    height: windowWidth * 0.2,
-    backgroundColor: Color.linen,
+    // height: windowWidth * 0.2,
+    // backgroundColor: Color.linen,
+    // backgroundColor: Color.white,
   }),
   container: style.view({
     flexDirection: 'row',
     height: windowWidth * 0.15,
+    width: '100%',
     marginTop: windowWidth * 0.03,
   }),
   tabContainer: style.view({
@@ -253,7 +198,7 @@ const styles = styleSheetCreate({
   tab: style.view({
     flex: 1,
     marginTop: windowWidth * 0.0375,
-    height: windowWidth * 0.12,
+    // height: windowWidth * 0.12,
     alignItems: 'center',
     justifyContent: 'center',
   }),
@@ -268,20 +213,17 @@ const styles = styleSheetCreate({
   text: style.text({
     color: Color.philippineGray,
     fontSize: windowWidth * 0.022,
-    // fontFamily: fonts.geometriaMedium,
   }),
   addButton: style.view({
-    marginTop: -windowWidth * 0.05,
+    marginTop: -windowWidth * 0.08,
     paddingHorizontal: windowWidth * 0.025,
-    // backgroundColor: Color.transparent,
-    height: windowWidth * 0.16,
     borderRadius: windowWidth * 0.15,
     justifyContent: 'center',
     alignItems: 'center',
   }),
   addImageButton: style.image({
-    width: windowWidth * 0.12,
-    height: windowWidth * 0.138,
+    width: windowWidth * 0.2,
+    height: windowWidth * 0.2,
   }),
 })
 

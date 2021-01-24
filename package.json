@@ -17,6 +17,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@gorhom/bottom-sheet": "^2",
     "@react-native-community/async-storage": "^1.11.0",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/bottom-tabs": "^5.11.6",
@@ -39,7 +40,9 @@
     "react-native-reanimated": "^1.9.0",
     "react-native-safe-area-context": "^3.0.7",
     "react-native-screens": "^2.9.0",
+    "react-native-svg": "^12.1.0",
     "react-redux": "^7.2.0",
+    "reanimated-bottom-sheet": "^1.0.0-alpha.22",
     "redux": "^4.0.5",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
@@ -52,6 +55,7 @@
     "@babel/plugin-proposal-decorators": "^7.10.3",
     "@babel/runtime": "^7.10.3",
     "@types/jest": "^24.0.24",
+    "@types/lodash": "^4.14.168",
     "@types/react-native": "^0.62.0",
     "@types/react-native-orientation": "^5.0.1",
     "@types/react-redux": "^7.1.9",

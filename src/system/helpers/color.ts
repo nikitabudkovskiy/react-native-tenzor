@@ -6,6 +6,7 @@ export enum Color {
     gray = "rgba(0, 0, 0, 0.4)",
     anitFlashWhite = "#EFF2F8",
     gray100 = "rgba(0, 0, 0, 0.1)",
+    gray200 = "rgba(0, 0, 0, 0.2)",
     pastaAndCheese = "#FFC289",
     frostySky = "#00C2FF",
     gray600 = "rgba(0, 0, 0, 0.6)",
