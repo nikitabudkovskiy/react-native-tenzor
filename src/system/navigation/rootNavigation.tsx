@@ -10,6 +10,7 @@ import { Masters } from 'app/module/masters/view/Masters'
 import { MyNotes } from 'app/module/myNotes/view/MyNotes'
 import { NoteDetails } from 'app/module/myNotes/view/NoteDetails'
 import { AppointmentType } from 'app/module/appointments/view/AppointmentType'
+import { TimeSelect } from 'app/module/appointments/view/TimeSelect'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { CustomTabbar } from 'app/system/navigation/CustomTabbar'
 import { SelectService } from 'app/module/appointments/view/SelectService'
@@ -79,12 +80,13 @@ export const RootNavigator = (): JSX.Element => {
     <Stack.Navigator headerMode="none">
       {/* <Stack.Screen name={ListPages.MainPage} component={TabNavigator} /> */}
       {/* <Stack.Screen name={ListPages.ChooseCity} component={ChooseCity} /> */}
-      <Stack.Screen name={ListPages.NoteDetails} component={NoteDetails} />
+      {/* <Stack.Screen name={ListPages.NoteDetails} component={NoteDetails} /> */}
       {/* <Stack.Screen name={ListPages.EnterPhoneNumber} component={EnterPhoneNumberSingIn} />
       <Stack.Screen name={ListPages.PasswordSingIn} component={PasswordSingIn} />
       <Stack.Screen name={ListPages.AppointmentType} component={AppointmentType} />  */}
       {/* <Stack.Screen name={ListPages.RegistrationContacts} component={RegistrationContacts} /> */}
       {/* <Stack.Screen name={ListPages.SelectService} component={SelectService} /> */}
+      <Stack.Screen name={ListPages.TimeSelect} component={TimeSelect} />
     </Stack.Navigator>
   )
 }

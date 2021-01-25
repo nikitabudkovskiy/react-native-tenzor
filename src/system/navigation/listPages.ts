@@ -11,5 +11,6 @@ export class ListPages {
   static readonly SelectService = 'SelectService'
   static readonly MyNotes = 'MyNotes'
   static readonly NoteDetails = 'NoteDetails'
+  static readonly TimeSelect = 'TimeSelect'
   
 }
