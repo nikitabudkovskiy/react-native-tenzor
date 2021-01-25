@@ -4,9 +4,8 @@ import {
   Text,
   ScrollView,
   Image,
-  TouchableOpacity,
   ImageURISource,
-  TextInput
+  TouchableOpacity,
 } from 'react-native'
 import {
   styleSheetCreate,
@@ -16,10 +15,13 @@ import {
   windowWidth,
   ImageRepository,
   styleSheetFlatten,
+  isLongDevices,
 } from 'app/system/helpers'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { ListPages } from 'app/system/navigation'
 
 interface IProps {
-
+  navigation: StackNavigationProp<any>
 }
 
 interface IState {
@@ -38,7 +40,22 @@ interface INote {
 }
 
 export class MyNotes extends PureComponent<IProps, IState>{
+
+  
+  goToNoteDetailsHandler = (): void => {
+    this.props.navigation.push(ListPages.NoteDetails)
+  }
+
   render() {
+
+    console.log(this.props)
+
+    const container = styleSheetFlatten([
+      styles.container,
+      {
+        paddingTop: isLongDevices ? windowWidth * 0.1 : windowWidth * 0.08,
+      }
+    ])
 
     const cancelStatusFlatten = styleSheetFlatten([
       styles.statusContainer,
@@ -53,7 +70,7 @@ export class MyNotes extends PureComponent<IProps, IState>{
       styles.statusContainer,
       {
         backgroundColor: Color.fauxLime,
-        width: windowWidth * 0.22,
+        width: windowWidth * 0.23,
         height: windowWidth * 0.05
       }
     ])
@@ -65,14 +82,12 @@ export class MyNotes extends PureComponent<IProps, IState>{
       }
     ])
 
-
-
     return (
-      <View style={styles.container}>
+      <View style={container}>
         <ScrollView
-        scrollEnabled
-        bounces={false}
-        showsVerticalScrollIndicator={false}
+          scrollEnabled
+          bounces={false}
+          showsVerticalScrollIndicator={false}
         >
           <Text style={styles.headerTitle}>
             Мои записи
@@ -81,7 +96,11 @@ export class MyNotes extends PureComponent<IProps, IState>{
             {
               noteList.map(items => {
                 return (
-                  <View style={styles.noteContainer}>
+                  <TouchableOpacity 
+                    onPress={this.goToNoteDetailsHandler}
+                    style={styles.noteContainer}
+                    key={Math.random().toString()}
+                  >
                     <View style={styles.noteTitleContainer}>
                       <Text style={styles.noteTimeTitle}>
                         {items.date}
@@ -139,7 +158,7 @@ export class MyNotes extends PureComponent<IProps, IState>{
                       </Text>
                       </View>
                     </View>
-                  </View>
+                  </TouchableOpacity>
                 )
               })
             }
@@ -154,7 +173,7 @@ const styles = styleSheetCreate({
   headerTitle: style.text({
     fontSize: windowWidth * 0.05,
     fontFamily: fonts.robotoBold,
-    paddingTop: windowWidth * 0.037
+    paddingTop: windowWidth * 0.037,
   }),
   noteContent: style.view({
     alignItems: 'center',
@@ -162,12 +181,13 @@ const styles = styleSheetCreate({
   }),
   container: style.view({
     paddingHorizontal: windowWidth * 0.021,
+    paddingBottom: windowWidth * 0.02,
   }),
   noteTitle: style.view({
     alignItems: 'center'
   }),
   statusContainer: style.view({
-    width: windowWidth * 0.194,
+    paddingHorizontal: windowWidth * 0.02,
     height: windowWidth * 0.048,
     backgroundColor: Color.gray50,
     alignItems: 'center',
@@ -260,6 +280,36 @@ const noteList: INote[] = [
   {
     date: '22 янв в 12:30',
     status: 'Отменена',
+    image: ImageRepository.masterOne,
+    hairDresserName: 'Королева Мария Алексеевна',
+    address: 'пер. Широкий, 53 (ТРК Сигма)',
+    noteNumber: '1276543',
+    time: 30,
+    price: 630,
+  },
+  {
+    date: '22 янв в 12:30',
+    status: 'Завершена',
+    image: ImageRepository.masterOne,
+    hairDresserName: 'Королева Мария Алексеевна',
+    address: 'пер. Широкий, 53 (ТРК Сигма)',
+    noteNumber: '1276543',
+    time: 30,
+    price: 630,
+  },
+  {
+    date: '22 янв в 12:30',
+    status: 'Завершена',
+    image: ImageRepository.masterOne,
+    hairDresserName: 'Королева Мария Алексеевна',
+    address: 'пер. Широкий, 53 (ТРК Сигма)',
+    noteNumber: '1276543',
+    time: 30,
+    price: 630,
+  },
+  {
+    date: '22 янв в 12:30',
+    status: 'Завершена',
     image: ImageRepository.masterOne,
     hairDresserName: 'Королева Мария Алексеевна',
     address: 'пер. Широкий, 53 (ТРК Сигма)',
