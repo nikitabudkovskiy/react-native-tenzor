@@ -41,7 +41,7 @@ export class Masters extends PureComponent<IProps, IState> {
     searchValue: '',
   }
 
-  searchMaster = (searchValue: string):void => {
+  searchMasterHandler = (searchValue: string):void => {
     this.setState({ searchValue })
   }
 
@@ -77,7 +77,7 @@ export class Masters extends PureComponent<IProps, IState> {
               style={styles.masterInput}
               placeholder="Введите имя мастера"
               placeholderTextColor={Color.gray}
-              onChangeText={this.searchMaster}
+              onChangeText={this.searchMasterHandler}
               value={this.state.searchValue}
             />
           </View>

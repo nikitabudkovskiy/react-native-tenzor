@@ -56,11 +56,11 @@ export class MainPage extends PureComponent<IProps, IState> {
     })
   }
 
-  changeCity = () => {
+  changeCityHandler = () => {
     this.props.navigation.navigate('ChooseCity')
   }
 
-  goToLoginPage = () => {
+  goToLoginPageHandler = () => {
     this.props.navigation.navigate('EnterPhoneNumberSingIn')
   }
 
@@ -238,7 +238,7 @@ export class MainPage extends PureComponent<IProps, IState> {
                 <View style={styles.cardContent}>
                   <View style={styles.loginRequestContainer}>
                     <Image
-                      source={ImageRepository.userNonLogin}
+                      source={ImageRepository.mainPageNonLogin}
                       style={styles.loginRequestProfile}
                     />
                     <Text style={styles.loginRequestDescription}>
@@ -247,7 +247,7 @@ export class MainPage extends PureComponent<IProps, IState> {
                     <CommonButton
                       title='ВОЙТИ'
                       styleButton={styles.loginButton}
-                      onPress={this.goToLoginPage}
+                      onPress={this.goToLoginPageHandler}
                     />
                   </View>
                 </View>
@@ -291,7 +291,7 @@ export class MainPage extends PureComponent<IProps, IState> {
               ? (
                 <View style={styles.menuContainer}>
                   <TouchableOpacity
-                    onPress={this.changeCity}
+                    onPress={this.changeCityHandler}
                     style={styles.changeLocation}
                   >
                     <Image
@@ -323,7 +323,7 @@ export class MainPage extends PureComponent<IProps, IState> {
               ) : (
                 <View style={styles.menuContainer}>
                   <TouchableOpacity
-                    onPress={this.changeCity}
+                    onPress={this.changeCityHandler}
                     style={styles.changeLocation}
                   >
                     <Image

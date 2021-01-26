@@ -58,11 +58,11 @@ export class NoteDetails extends PureComponent<IProps, IState>{
     this.setState({ inputIsCorrect: !!this.state.yourOpinion })
   }
 
-  openCancelRecordModal = (): void => {
+  openCancelRecordModalHandler = (): void => {
     this.setState({ isModalShow: true })
   }
 
-  hideCancelRecordModal = (): void => {
+  hideCancelRecordModalHandler = (): void => {
     this.setState({ isModalShow: false })
   }
 
@@ -147,7 +147,7 @@ export class NoteDetails extends PureComponent<IProps, IState>{
               title='Отменить запись'
               styleButton={styles.cancelButton}
               styleText={styles.cancelTitle}
-              onPress={this.openCancelRecordModal}
+              onPress={this.openCancelRecordModalHandler}
             />
             <CommonButton
               title='Запись отменена'
@@ -273,7 +273,7 @@ export class NoteDetails extends PureComponent<IProps, IState>{
 
 
         <Modal 
-          onBackdropPress={this.hideCancelRecordModal} 
+          onBackdropPress={this.hideCancelRecordModalHandler} 
           isVisible={this.state.isModalShow}
         >
           <View style={styles.modalContainer}>
@@ -288,12 +288,12 @@ export class NoteDetails extends PureComponent<IProps, IState>{
                 title='Нет'
                 styleButton={styles.modalNoButton}
                 styleText={styles.modalNoButtonTitle}
-                onPress={this.hideCancelRecordModal}
+                onPress={this.hideCancelRecordModalHandler}
               />
               <CommonButton
                 title='Да'
                 styleButton={styles.modalYesButton}
-                onPress={this.hideCancelRecordModal}
+                onPress={this.hideCancelRecordModalHandler}
               />
             </View>
           </View>

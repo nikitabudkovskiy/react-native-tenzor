@@ -62,7 +62,7 @@ export class RegistrationContacts extends PureComponent<IProps, IState> {
     this.setState({ genderSelected: sex })
   }
 
-  checkBirthDate = ():void => {
+  checkBirthDateHandler = ():void => {
     if (!this.state.isInputTouched) {
       this.setState({ isInputTouched: true })
     }
@@ -72,7 +72,7 @@ export class RegistrationContacts extends PureComponent<IProps, IState> {
     })
   }
 
-  checkName = ():void => {
+  checkNameHandler = ():void => {
     if (!this.state.isInputTouched) {
       this.setState({ isInputTouched: true })
     }
@@ -81,7 +81,7 @@ export class RegistrationContacts extends PureComponent<IProps, IState> {
     })
   }
 
-  checkTermsOfUse = ():void => {
+  checkTermsOfUseHandler = ():void => {
     this.setState({ 
       termsOfUseChecked: !this.state.termsOfUseChecked 
     })
@@ -135,7 +135,7 @@ export class RegistrationContacts extends PureComponent<IProps, IState> {
             label='Ваше имя'
             containerStyle={styles.inputContainer}
             onChangeText={this.handleNameInput}
-            onBlur={this.checkName}
+            onBlur={this.checkNameHandler}
             inputStyle={nameInputFlatten}
           />
           <View style={birthDateInputFlatten}>
@@ -152,7 +152,7 @@ export class RegistrationContacts extends PureComponent<IProps, IState> {
               onChangeText={this.handleChangeBirthDate}
               style={styles.birthDateInput}
               placeholder='ДД.ММ.ГГГГ'
-              onBlur={this.checkBirthDate}
+              onBlur={this.checkBirthDateHandler}
             />
           </View>
         </View>
@@ -196,7 +196,7 @@ export class RegistrationContacts extends PureComponent<IProps, IState> {
         <View style={styles.termsOfUseContainer}>
           <TouchableOpacity
             style={styles.checkBox}
-            onPress={this.checkTermsOfUse}
+            onPress={this.checkTermsOfUseHandler}
           >
             {
               this.state.termsOfUseChecked == true?

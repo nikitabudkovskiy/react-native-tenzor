@@ -61,7 +61,7 @@ export class EnterPhoneNumberSingIn extends PureComponent<IProps, IState> {
     this.setState({ phoneNumber })
   }
 
-  goToNextPassword = (): void => {
+  goToNextPasswordHandler = (): void => {
     this.props.navigation.push(ListPages.PasswordSingIn)
   }
 
@@ -100,7 +100,7 @@ export class EnterPhoneNumberSingIn extends PureComponent<IProps, IState> {
           title='ДАЛЕЕ'
           styleButton={continueButton}
           disabled={!(this.state.phoneNumber.length === 18)}
-          onPress={this.goToNextPassword}
+          onPress={this.goToNextPasswordHandler}
          />
       </KeyboardAwareScrollView>
     )

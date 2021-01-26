@@ -43,7 +43,7 @@ export class SelectService extends PureComponent<IProps, IState>{
     aniamtedHeightServiceList: new Animated.Value(0)
   }
 
-  openServiceList = (): void => {
+  openServiceListHandler = (): void => {
     Animated.timing(this.state.aniamtedHeightServiceList, {
       toValue: 1,
       duration: 500,
@@ -52,7 +52,7 @@ export class SelectService extends PureComponent<IProps, IState>{
       .start()
   }
 
-  closeServiceList = (): void => {
+  closeServiceListHandler = (): void => {
     Animated.timing(this.state.aniamtedHeightServiceList, {
       toValue: 0,
       duration: 500,
@@ -61,12 +61,12 @@ export class SelectService extends PureComponent<IProps, IState>{
       .start()
   }
 
-  toggleServiceList = ():void => {
+  toggleServiceListHandler = ():void => {
     if (this.state.isServiceListOpen) {
-      this.setState({ isServiceListOpen: false }, this.closeServiceList)
+      this.setState({ isServiceListOpen: false }, this.closeServiceListHandler)
     }
     else {
-      this.setState({ isServiceListOpen: true }, this.openServiceList)
+      this.setState({ isServiceListOpen: true }, this.openServiceListHandler)
     }
   }
 
@@ -118,7 +118,7 @@ export class SelectService extends PureComponent<IProps, IState>{
         </View>
         <View style={serviceContentFlatten}>
           <TouchableOpacity
-            onPress={this.toggleServiceList}
+            onPress={this.toggleServiceListHandler}
             style={styles.serviceContainer}
           >
             <Text style={styles.serviceTitle}>

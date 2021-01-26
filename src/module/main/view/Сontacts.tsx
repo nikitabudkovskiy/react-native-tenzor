@@ -89,10 +89,13 @@ export class Сontacts extends PureComponent<IProps, IState> {
             listContacts.map((item, index) => {
               return (
                 <View 
-                key={Math.random().toString()}
-                style={listContacts.length - 1 !== index ? styles.listContactsTextContainer : styles.listContactsTextContainerWithoutBorderBottom}>
+                  key={Math.random().toString()}
+                  style={listContacts.length - 1 !== index ? styles.listContactsTextContainer : styles.listContactsTextContainerWithoutBorderBottom}>
                   <Text style={styles.listContactsText}>
                     {item}
+                  </Text>
+                  <Text style={styles.phoneNumber}>
+                    +7 925 123 45 67
                   </Text>
                 </View>
               )
@@ -170,11 +173,17 @@ const styles = styleSheetCreate({
   }),
   listContactsText: style.text({
     fontFamily: fonts.robotoRegular,
-    fontSize: windowWidth * 0.035,
+    fontSize: windowWidth * 0.04,
   }),  
   listContactsActiveText: style.text({
     fontFamily: fonts.robotoBold,
     fontSize: windowWidth * 0.035,
+  }),  
+  phoneNumber: style.text({
+    fontFamily: fonts.robotoRegular,
+    fontSize: windowWidth * 0.04,
+    color: Color.gray,
+    paddingTop: windowWidth * 0.03
   }),  
   signSalonButton: style.view({
     marginHorizontal: windowWidth * 0.04,

@@ -40,6 +40,9 @@ export class ImageRepository {
 
   static readonly contactsArrowBack = require('assets/images/contacts/arrowBack.png')
   static readonly contactsCurrentLocation = require('assets/images/contacts/currentLocation.png')
+  static readonly contactsPhone = require('assets/images/contacts/phone.png')
+  static readonly contactsVk = require('assets/images/contacts/vk.png')
+  static readonly contactsInsta = require('assets/images/contacts/insta.png')
 
 
 }

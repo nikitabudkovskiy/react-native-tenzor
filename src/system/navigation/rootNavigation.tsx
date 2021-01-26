@@ -1,7 +1,7 @@
 import React, { ComponentType } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { ListPages  } from 'app/system/navigation'
-// import { ChooseCity } from 'app/module/main/view/ChooseCity'
+import { ChooseCity } from 'app/module/main/view/ChooseCity'
 // import { EnterPhoneNumberSingIn } from 'app/module/login/view/EnterPhoneNumberSingIn'
 // import { PasswordSingIn } from 'app/module/login/view/PasswordSingIn'
 // import { RegistrationContacts } from 'app/module/registration/view/RegistrationContacts'
@@ -90,7 +90,7 @@ export const RootNavigator = (): JSX.Element => {
   return (
     <Stack.Navigator headerMode="none">
       <Stack.Screen name={ListPages.MainPage} component={TabNavigator} />
-      {/* <Stack.Screen name={ListPages.ChooseCity} component={ChooseCity} /> */}
+      <Stack.Screen name={ListPages.ChooseCity} component={ChooseCity} />
       {/* <Stack.Screen name={ListPages.EnterPhoneNumber} component={EnterPhoneNumberSingIn} />
       <Stack.Screen name={ListPages.PasswordSingIn} component={PasswordSingIn} />
       <Stack.Screen name={ListPages.AppointmentType} component={AppointmentType} />  */}
