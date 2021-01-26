@@ -44,14 +44,14 @@ export class AppointmentType extends PureComponent<IProps, IState>{
           <TouchableOpacity style={styles.appointmentTypeContainer}>
             <Image
             style={styles.sign} 
-            source={ImageRepository.sign}
+            source={ImageRepository.mainPageSign}
             />
             <Text style={styles.appointmentDescription}>
               Записаться на услугу
             </Text>
             <Image
             style={styles.arrowRight} 
-            source={ImageRepository.arrowRight}
+            source={ImageRepository.mainPageArrowRight}
             />
           </TouchableOpacity>
         </View>
@@ -59,14 +59,14 @@ export class AppointmentType extends PureComponent<IProps, IState>{
           <TouchableOpacity style={styles.appointmentTypeContainer}>
             <Image
             style={styles.sign} 
-            source={ImageRepository.recordingMaster}
+            source={ImageRepository.mainPageRecordingMaster}
             />
             <Text style={styles.appointmentDescription}>
               Запись к специалисту
             </Text>
             <Image
             style={styles.arrowRight} 
-            source={ImageRepository.arrowRight}
+            source={ImageRepository.mainPageArrowRight}
             />
           </TouchableOpacity>
         </View>
@@ -74,14 +74,14 @@ export class AppointmentType extends PureComponent<IProps, IState>{
           <TouchableOpacity style={styles.appointmentTypeContainer}>
             <Image
             style={styles.sign} 
-            source={ImageRepository.solariumAppointment}
+            source={ImageRepository.mainPageSolariumAppointment}
             />
             <Text style={styles.appointmentDescription}>
               Записаться в солярий
             </Text>
             <Image
             style={styles.arrowRight} 
-            source={ImageRepository.arrowRight}
+            source={ImageRepository.mainPageArrowRight}
             />
           </TouchableOpacity>
         </View>

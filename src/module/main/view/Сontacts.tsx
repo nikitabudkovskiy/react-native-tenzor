@@ -88,7 +88,9 @@ export class Сontacts extends PureComponent<IProps, IState> {
           {
             listContacts.map((item, index) => {
               return (
-                <View style={listContacts.length - 1 !== index ? styles.listContactsTextContainer : styles.listContactsTextContainerWithoutBorderBottom}>
+                <View 
+                key={Math.random().toString()}
+                style={listContacts.length - 1 !== index ? styles.listContactsTextContainer : styles.listContactsTextContainerWithoutBorderBottom}>
                   <Text style={styles.listContactsText}>
                     {item}
                   </Text>

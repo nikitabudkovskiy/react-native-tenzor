@@ -201,7 +201,7 @@ export class RegistrationContacts extends PureComponent<IProps, IState> {
             {
               this.state.termsOfUseChecked == true?
               <Image 
-                source={ImageRepository.contactsCheckMark}
+                source={ImageRepository.mainPageContactsCheckMark}
                 style={styles.contactsCheckMark}
               />
               : (

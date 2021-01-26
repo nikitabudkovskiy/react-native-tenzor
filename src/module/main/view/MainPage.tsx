@@ -86,7 +86,7 @@ export class MainPage extends PureComponent<IProps, IState> {
         >
           <View style={logoContainer}>
             <Image
-              source={ImageRepository.logo}
+              source={ImageRepository.mainPageLogo}
               style={styles.logo}
               resizeMode="contain"
             />
@@ -257,7 +257,7 @@ export class MainPage extends PureComponent<IProps, IState> {
           <View style={styles.appointments}>
             <View style={styles.serviceAppointment}>
               <Image
-                source={ImageRepository.sign}
+                source={ImageRepository.mainPageSign}
                 style={styles.sign}
                 // resizeMode="contain"
               />
@@ -267,7 +267,7 @@ export class MainPage extends PureComponent<IProps, IState> {
             </View>
             <View style={styles.serviceAppointment}>
               <Image
-                source={ImageRepository.recordingMaster}
+                source={ImageRepository.mainPageRecordingMaster}
                 style={styles.sign}
                 // resizeMode="contain"
               />
@@ -277,7 +277,7 @@ export class MainPage extends PureComponent<IProps, IState> {
             </View>
             <View style={styles.serviceAppointment}>
               <Image
-                source={ImageRepository.solariumAppointment}
+                source={ImageRepository.mainPageSolariumAppointment}
                 style={styles.sign}
                 // resizeMode="contain"
               />
@@ -295,27 +295,27 @@ export class MainPage extends PureComponent<IProps, IState> {
                     style={styles.changeLocation}
                   >
                     <Image
-                      source={ImageRepository.changeLocation}
+                      source={ImageRepository.mainPageChangeLocation}
                       style={styles.changeCity}
                     />
                     <Text style={styles.changeLocationTitle}>
                       Изменить город
                     </Text>
                     <Image
-                      source={ImageRepository.arrowRight}
+                      source={ImageRepository.mainPageArrowRight}
                       style={styles.arrowRight}
                     />
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.exitContainer}>
                     <Image
-                      source={ImageRepository.exit}
+                      source={ImageRepository.mainPageExit}
                       style={styles.exit}
                     />
                     <Text style={styles.exitTitle}>
                       Выход
                     </Text>
                     <Image
-                      source={ImageRepository.arrowRight}
+                      source={ImageRepository.mainPageArrowRight}
                       style={styles.arrowRight}
                     />
                   </TouchableOpacity>
@@ -327,14 +327,14 @@ export class MainPage extends PureComponent<IProps, IState> {
                     style={styles.changeLocation}
                   >
                     <Image
-                      source={ImageRepository.changeLocation}
+                      source={ImageRepository.mainPageChangeLocation}
                       style={styles.changeCity}
                     />
                     <Text style={styles.changeLocationTitle}>
                       Изменить город
                     </Text>
                     <Image
-                      source={ImageRepository.arrowRight}
+                      source={ImageRepository.mainPageArrowRight}
                       style={styles.arrowRight}
                     />
                   </TouchableOpacity>
@@ -347,7 +347,7 @@ export class MainPage extends PureComponent<IProps, IState> {
                       Адреса салонов
                     </Text>
                     <Image
-                      source={ImageRepository.arrowRight}
+                      source={ImageRepository.mainPageArrowRight}
                       style={styles.arrowRight}
                     />
                   </TouchableOpacity>
