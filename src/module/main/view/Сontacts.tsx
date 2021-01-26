@@ -71,10 +71,6 @@ const listContacts: IContactsList[] = [
 
 export class Сontacts extends PureComponent<IProps, IState> {
 
-  state = {
-
-  }
-
   goBackHandler = (): void => {
     if (this.props.navigation.canGoBack()) {
       this.props.navigation.goBack()
