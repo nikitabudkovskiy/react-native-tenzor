@@ -18,6 +18,11 @@ import { CustomTabbar } from 'app/system/navigation/CustomTabbar'
 // import { ImageStyle, ImageURISource } from 'react-native'
 // import { ImageRepository, windowWidth } from '../helpers'
 import { Сontacts } from 'app/module/main/view/Сontacts'
+// import { EnterPhoneNumberSingIn } from 'app/module/login/view/EnterPhoneNumberSingIn'
+// import { PasswordSingIn } from 'app/module/login/view/PasswordSingIn'
+// import { RegistrationContacts } from 'app/module/registration/view/RegistrationContacts'
+// import { EnterPhoneNumberSingInRegistration } from 'app/module/login/view/EnterPhoneNumberSingInRegistration'
+// import { PasswordRegistration } from 'app/module/login/view/PasswordRegistration'
 
 export interface IListTabBar {
   name: string
@@ -36,7 +41,6 @@ const MyNotesStack = () => {
     </Stack.Navigator>
   )
 }
-
 
 export const listTabBar: Array<IListTabBar> = [
   {
@@ -90,12 +94,12 @@ export const RootNavigator = (): JSX.Element => {
   return (
     <Stack.Navigator headerMode="none">
       <Stack.Screen name={ListPages.MainPage} component={TabNavigator} />
-      {/* <Stack.Screen name={ListPages.ChooseCity} component={ChooseCity} /> */}
-      {/* <Stack.Screen name={ListPages.EnterPhoneNumber} component={EnterPhoneNumberSingIn} />
+      {/* <Stack.Screen name={ListPages.ChooseCity} component={ChooseCity} />
+      <Stack.Screen name={ListPages.EnterPhoneNumber} component={PasswordSingIn} />
       <Stack.Screen name={ListPages.PasswordSingIn} component={PasswordSingIn} />
-      <Stack.Screen name={ListPages.AppointmentType} component={AppointmentType} />  */}
-      {/* <Stack.Screen name={ListPages.RegistrationContacts} component={RegistrationContacts} /> */}
-      {/* <Stack.Screen name={ListPages.SelectService} component={SelectService} /> */}
+       <Stack.Screen name={ListPages.AppointmentType} component={AppointmentType} />  
+       <Stack.Screen name={ListPages.RegistrationContacts} component={RegistrationContacts} />
+      <Stack.Screen name={ListPages.SelectService} component={SelectService} />  */}
       <Stack.Screen name={ListPages.TimeSelect} component={TimeSelect} />
     </Stack.Navigator>
   )

@@ -17,6 +17,7 @@ import {
   keyboardShowEvent,
   keyboardHideEvent,
   styleSheetFlatten,
+  isLongDevices,
 } from 'app/system/helpers'
 import {
   CodeField,
@@ -97,6 +98,14 @@ export const PasswordSingIn = ({ navigation }: IProps) => {
         : windowWidth * 0.06
     }
   ])
+
+  const backArrowButton = styleSheetFlatten([
+    styles.backArrowButton,
+    {
+      marginTop: isLongDevices ? windowWidth * 0.09 : windowWidth * 0.03,
+    }
+  ])
+
   return (
     <ScrollView
       keyboardShouldPersistTaps="handled"
@@ -107,7 +116,7 @@ export const PasswordSingIn = ({ navigation }: IProps) => {
       <TouchableOpacity
         onPress={goBackHandler}
         hitSlop={{ left: 15, right: 15, top: 15, bottom: 15 }}
-        style={styles.backArrowButton}
+        style={backArrowButton}
       >
         <Image
           source={ImageRepository.contactsArrowBack}
