@@ -78,7 +78,7 @@ export const PasswordSingIn = ({ navigation }: IProps) => {
 
   }, [timeSendingCode])
 
-  const goBackHandler = () => {
+  const goBackHandler = ():void => {
     navigation.goBack()
   }
 

@@ -61,7 +61,7 @@ export class SelectService extends PureComponent<IProps, IState>{
       .start()
   }
 
-  toggleServiceList = () => {
+  toggleServiceList = ():void => {
     if (this.state.isServiceListOpen) {
       this.setState({ isServiceListOpen: false }, this.closeServiceList)
     }

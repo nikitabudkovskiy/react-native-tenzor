@@ -46,15 +46,15 @@ export class RegistrationContacts extends PureComponent<IProps, IState> {
     isInputTouched: false,
   }
 
-  handleChangeBirthDate = (birthDate: string) => {
+  handleChangeBirthDate = (birthDate: string):void => {
     this.setState({ birthDate })
   }
 
-  handleNameInput = (name: string) => {
+  handleNameInput = (name: string):void => {
     this.setState({ name })
   }
 
-  handleSelectedGender = (sex: string) => {
+  handleSelectedGender = (sex: string):void => {
     if (this.state.genderSelected === sex) {
       this.setState({ genderSelected: '' })
       return
@@ -62,7 +62,7 @@ export class RegistrationContacts extends PureComponent<IProps, IState> {
     this.setState({ genderSelected: sex })
   }
 
-  checkBirthDate = () => {
+  checkBirthDate = ():void => {
     if (!this.state.isInputTouched) {
       this.setState({ isInputTouched: true })
     }
@@ -72,7 +72,7 @@ export class RegistrationContacts extends PureComponent<IProps, IState> {
     })
   }
 
-  checkName = () => {
+  checkName = ():void => {
     if (!this.state.isInputTouched) {
       this.setState({ isInputTouched: true })
     }
@@ -81,7 +81,7 @@ export class RegistrationContacts extends PureComponent<IProps, IState> {
     })
   }
 
-  checkTermsOfUse = () => {
+  checkTermsOfUse = ():void => {
     this.setState({ 
       termsOfUseChecked: !this.state.termsOfUseChecked 
     })

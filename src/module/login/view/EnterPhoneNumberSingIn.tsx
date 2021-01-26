@@ -57,7 +57,7 @@ export class EnterPhoneNumberSingIn extends PureComponent<IProps, IState> {
     // Keyboard.removeAllListeners(keyboardHideEvent)
   }
 
-  handleChangeText = (phoneNumber: string) => {
+  handleChangeText = (phoneNumber: string):void => {
     this.setState({ phoneNumber })
   }
 

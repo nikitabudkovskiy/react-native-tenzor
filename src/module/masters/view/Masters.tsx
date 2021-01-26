@@ -41,7 +41,7 @@ export class Masters extends PureComponent<IProps, IState> {
     searchValue: '',
   }
 
-  searchMaster = (searchValue: string) => {
+  searchMaster = (searchValue: string):void => {
     this.setState({ searchValue })
   }
 
