@@ -6,6 +6,7 @@ import {
   ScrollView,
   Text,
   Linking,
+  Alert,
 } from 'react-native'
 import {
   styleSheetCreate,
@@ -78,10 +79,14 @@ export class Сontacts extends PureComponent<IProps, IState> {
   }
 
   makeCallHandler = (phoneNumber: string): void => {
-    platform.isAndroid
+    try {
+      platform.isAndroid
       ? Linking.openURL('tel:${' + phoneNumber + '}')
       : Linking.openURL('telprompt:${' + phoneNumber + '}')
 
+    } catch {
+      Alert.alert('Ошибка', 'Проверьте наличие приложения для звонков')
+    }
   }
 
   render(): JSX.Element {
