@@ -1,19 +1,21 @@
 import React, { PureComponent } from 'react'
-import { 
-  View, 
-  TouchableOpacity, 
-  Image, 
-  ScrollView, 
-  Text, 
+import {
+  View,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+  Text,
+  Linking,
 } from 'react-native'
-import { 
-  styleSheetCreate, 
-  style, 
-  windowWidth, 
-  windowHeight, 
+import {
+  styleSheetCreate,
+  style,
+  windowWidth,
+  windowHeight,
   ImageRepository,
   Color,
   fonts,
+  platform
 } from 'app/system/helpers'
 import MapView from 'react-native-maps'
 import { CommonButton } from 'app/module/global/view'
@@ -27,13 +29,44 @@ interface IState {
 
 }
 
-const listContacts = [
-  'пер. Широкий, 53 (ТРК Сигма)',
-  'ул. Красная 154',
-  'ул. 30 лет Победы, 19А',
-  'ул. Московская, 43',
-  'ул. Узкая, 54',
-  'ул. Максима Горького, 78',
+interface IContactsList {
+  address: string
+  phoneNumber: string
+  isVkLink: boolean
+
+}
+
+const listContacts: IContactsList[] = [
+  {
+    address: 'пер. Широкий, 53 (ТРК Сигма)',
+    phoneNumber: '+7 925 123 45 67',
+    isVkLink: true
+  },
+  {
+    address: 'ул. Красная 154',
+    phoneNumber: '+7 925 123 45 68',
+    isVkLink: false
+  },
+  {
+    address: 'ул. 30 лет Победы, 19А',
+    phoneNumber: '+7 925 123 45 69',
+    isVkLink: true
+  },
+  {
+    address: 'ул. Московская, 43',
+    phoneNumber: '+7 925 123 45 70',
+    isVkLink: true
+  },
+  {
+    address: 'ул. Узкая, 54',
+    phoneNumber: '+7 925 123 45 71',
+    isVkLink: true
+  },
+  {
+    address: 'ул. Максима Горького, 78',
+    phoneNumber: '+7 925 123 45 72',
+    isVkLink: true
+  }
 ]
 
 export class Сontacts extends PureComponent<IProps, IState> {
@@ -48,37 +81,44 @@ export class Сontacts extends PureComponent<IProps, IState> {
     }
   }
 
+  makeCallHandler = (phoneNumber: string): void => {
+    platform.isAndroid
+      ? Linking.openURL('tel:${' + phoneNumber + '}')
+      : Linking.openURL('telprompt:${' + phoneNumber + '}')
+
+  }
+
   render(): JSX.Element {
 
     return (
       <View style={styles.container}>
         <View style={styles.mapContainer}>
-        <MapView
-          initialRegion={{
-            latitude: 37.78825,
-            longitude: -122.4324,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-          style={styles.map}
-        />
-        <TouchableOpacity
-          style={styles.arrowBackButton}
-          onPress={this.goBackHandler}
-        >
-          <Image 
-            source={ImageRepository.contactsArrowBack} 
-            style={styles.arrowBackImage}
+          <MapView
+            initialRegion={{
+              latitude: 37.78825,
+              longitude: -122.4324,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+            style={styles.map}
           />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.currentLocationButton}
-        >
-          <Image 
-            source={ImageRepository.contactsCurrentLocation} 
-            style={styles.currentLocationImage}
-          />
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.arrowBackButton}
+            onPress={this.goBackHandler}
+          >
+            <Image
+              source={ImageRepository.contactsArrowBack}
+              style={styles.arrowBackImage}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.currentLocationButton}
+          >
+            <Image
+              source={ImageRepository.contactsCurrentLocation}
+              style={styles.currentLocationImage}
+            />
+          </TouchableOpacity>
         </View>
         <ScrollView
           style={styles.listContacts}
@@ -88,22 +128,47 @@ export class Сontacts extends PureComponent<IProps, IState> {
           {
             listContacts.map((item, index) => {
               return (
-                <View 
+                <View
                   key={Math.random().toString()}
                   style={listContacts.length - 1 !== index ? styles.listContactsTextContainer : styles.listContactsTextContainerWithoutBorderBottom}>
                   <Text style={styles.listContactsText}>
-                    {item}
+                    {item.address}
                   </Text>
-                  <Text style={styles.phoneNumber}>
-                    +7 925 123 45 67
-                  </Text>
+                  <View style={styles.listContactsDescription}>
+                    <Text style={styles.phoneNumber}>
+                      {item.phoneNumber}
+                    </Text>
+                    <View style={styles.socialsContainer}>
+                      <TouchableOpacity
+                        onPress={this.makeCallHandler.bind(this, item.phoneNumber)}
+                      >
+                        <Image
+                          style={styles.soicals}
+                          source={ImageRepository.contactsPhone}
+                        />
+                      </TouchableOpacity>
+                      {
+                        item.isVkLink ? (
+                          <Image
+                            style={styles.soicals}
+                            source={ImageRepository.contactsVk}
+                          />
+                        ) : null
+                      }
+
+                      <Image
+                        style={styles.soicals}
+                        source={ImageRepository.contactsInsta}
+                      />
+                    </View>
+                  </View>
                 </View>
               )
             })
           }
-          <CommonButton 
+          <CommonButton
             styleButton={styles.signSalonButton}
-            title="Записаться в салон" 
+            title="Записаться в салон"
           />
         </ScrollView>
       </View>
@@ -174,18 +239,30 @@ const styles = styleSheetCreate({
   listContactsText: style.text({
     fontFamily: fonts.robotoRegular,
     fontSize: windowWidth * 0.04,
-  }),  
+  }),
   listContactsActiveText: style.text({
     fontFamily: fonts.robotoBold,
     fontSize: windowWidth * 0.035,
-  }),  
+  }),
   phoneNumber: style.text({
     fontFamily: fonts.robotoRegular,
     fontSize: windowWidth * 0.04,
     color: Color.gray,
     paddingTop: windowWidth * 0.03
-  }),  
+  }),
   signSalonButton: style.view({
     marginHorizontal: windowWidth * 0.04,
   }),
+  listContactsDescription: style.view({
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  }),
+  socialsContainer: style.view({
+    flexDirection: 'row',
+  }),
+  soicals: style.image({
+    width: windowWidth * 0.085,
+    height: windowWidth * 0.085,
+    marginLeft: windowWidth * 0.021,
+  })
 })
