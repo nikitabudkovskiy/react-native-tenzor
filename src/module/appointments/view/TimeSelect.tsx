@@ -14,10 +14,7 @@ import {
   windowWidth,
   ImageRepository,
   styleSheetFlatten,
-  platform,
-  isLongDevices,
 } from 'app/system/helpers'
-import { listLocalization } from 'app/system/localization/listLocalization'
 import { CommonButton } from 'app/module/global/view/CommonButton'
 
 interface IProps {
