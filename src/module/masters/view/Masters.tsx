@@ -20,7 +20,6 @@ import {
   windowHeight,
 } from 'app/system/helpers'
 import { StringHelper } from 'app/system/helpers/stringHelper'
-import { CommonModal } from 'app/module/global/view/CommonModal'
 import { isEmpty } from 'lodash'
 
 interface IProps {

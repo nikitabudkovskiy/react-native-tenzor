@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Image, ImageBackground, View, } from 'react-native'
+import { ImageBackground, View, } from 'react-native'
 import {
   styleSheetCreate,
   style,

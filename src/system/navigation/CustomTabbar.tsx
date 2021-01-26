@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   Image,
-  Animated,
   ImageBackground,
 } from 'react-native'
 import {
@@ -12,12 +11,10 @@ import {
   style,
   windowWidth,
   Color,
-  fonts,
   styleSheetFlatten,
   isLongDevices,
   ImageRepository,
 } from 'app/system/helpers'
-import { ListPages } from './listPages'
 // import { IListTabBar, ITabInformation } from 'app/interfaces';
 
 interface IRoutes {

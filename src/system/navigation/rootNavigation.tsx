@@ -1,11 +1,11 @@
 import React, { ComponentType } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { ListPages  } from 'app/system/navigation'
-import { ChooseCity } from 'app/module/main/view/ChooseCity'
-import { EnterPhoneNumberSingIn } from 'app/module/login/view/EnterPhoneNumberSingIn'
-import { PasswordSingIn } from 'app/module/login/view/PasswordSingIn'
+// import { ChooseCity } from 'app/module/main/view/ChooseCity'
+// import { EnterPhoneNumberSingIn } from 'app/module/login/view/EnterPhoneNumberSingIn'
+// import { PasswordSingIn } from 'app/module/login/view/PasswordSingIn'
+// import { RegistrationContacts } from 'app/module/registration/view/RegistrationContacts'
 import { MainPage } from 'app/module/main/view/MainPage'
-import { RegistrationContacts } from 'app/module/registration/view/RegistrationContacts'
 import { Masters } from 'app/module/masters/view/Masters'
 import { MyNotes } from 'app/module/myNotes/view/MyNotes'
 import { NoteDetails } from 'app/module/myNotes/view/NoteDetails'
@@ -13,10 +13,10 @@ import { AppointmentType } from 'app/module/appointments/view/AppointmentType'
 import { TimeSelect } from 'app/module/appointments/view/TimeSelect'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { CustomTabbar } from 'app/system/navigation/CustomTabbar'
-import { SelectService } from 'app/module/appointments/view/SelectService'
+// import { SelectService } from 'app/module/appointments/view/SelectService'
 
-import { ImageStyle, ImageURISource } from 'react-native'
-import { ImageRepository, windowWidth } from '../helpers'
+// import { ImageStyle, ImageURISource } from 'react-native'
+// import { ImageRepository, windowWidth } from '../helpers'
 import { Сontacts } from 'app/module/main/view/Сontacts'
 
 export interface IListTabBar {
@@ -89,11 +89,11 @@ const TabNavigator = () => {
 export const RootNavigator = (): JSX.Element => {
   return (
     <Stack.Navigator headerMode="none">
-      {/* <Stack.Screen name={ListPages.MainPage} component={TabNavigator} /> */}
+      <Stack.Screen name={ListPages.MainPage} component={TabNavigator} />
       {/* <Stack.Screen name={ListPages.ChooseCity} component={ChooseCity} /> */}
-      <Stack.Screen name={ListPages.EnterPhoneNumber} component={EnterPhoneNumberSingIn} />
+      {/* <Stack.Screen name={ListPages.EnterPhoneNumber} component={EnterPhoneNumberSingIn} />
       <Stack.Screen name={ListPages.PasswordSingIn} component={PasswordSingIn} />
-      <Stack.Screen name={ListPages.AppointmentType} component={AppointmentType} /> 
+      <Stack.Screen name={ListPages.AppointmentType} component={AppointmentType} />  */}
       {/* <Stack.Screen name={ListPages.RegistrationContacts} component={RegistrationContacts} /> */}
       {/* <Stack.Screen name={ListPages.SelectService} component={SelectService} /> */}
       <Stack.Screen name={ListPages.TimeSelect} component={TimeSelect} />
