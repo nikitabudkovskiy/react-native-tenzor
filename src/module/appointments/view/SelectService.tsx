@@ -14,7 +14,6 @@ import {
   Color,
   windowWidth,
   ImageRepository,
-  isLongDevices,
   styleSheetFlatten,
 } from 'app/system/helpers'
 import { CommonButton } from 'app/module/global/view'

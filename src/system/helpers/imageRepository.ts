@@ -23,6 +23,7 @@ export class ImageRepository {
 
   static readonly userNonLogin = require('assets/images/main/userNonLogin.png')
 
+
   static readonly mainPageAddress = require('assets/images/main/mainPageAddress.png')
 
   static readonly tabBar = require('assets/images/tabBar/tabbar.png')

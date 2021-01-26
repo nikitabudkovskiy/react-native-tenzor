@@ -24,11 +24,11 @@ export class Loader extends PureComponent<IProps, IState>{
         style={styles.container}
       >
         <View style={styles.darkeningСontent}>
-          <Image
-            source={ImageRepository.loaderBackground}
+          {/* <Image
+            source={ImageRepository.loaderLogo}
             style={styles.image}
             resizeMode="contain"
-          />
+          /> */}
         </View>
       </ImageBackground>
     )

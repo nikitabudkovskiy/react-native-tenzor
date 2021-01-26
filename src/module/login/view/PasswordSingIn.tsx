@@ -110,7 +110,7 @@ export const PasswordSingIn = ({ navigation }: IProps) => {
         style={styles.backArrowButton}
       >
         <Image
-          source={ImageRepository.signInBackArrow}
+          source={ImageRepository.contactsArrowBack}
           style={styles.backArrow}
         />
       </TouchableOpacity>
@@ -230,8 +230,9 @@ const styles = styleSheetCreate({
     color: Color.black,
   }),
   backArrowButton: style.view({
-    marginTop: windowWidth * 0.12,
+    paddingTop: windowWidth * 0.04,
     alignSelf: 'flex-start',
+    marginLeft: windowWidth * - 0.05
   }),
   backArrow: style.image({
     width: windowWidth * 0.04,

@@ -25,7 +25,7 @@ interface IState {
 export class App extends PureComponent<IProps, IState>{
   private readonly store: Store
   private readonly persistor: Persistor
-  // private navigatorRef: any
+  private navigatorRef: any
 
   constructor(props: IProps) {
     super(props)
