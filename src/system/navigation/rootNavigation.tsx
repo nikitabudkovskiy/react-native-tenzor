@@ -17,6 +17,7 @@ import { SelectService } from 'app/module/appointments/view/SelectService'
 
 import { ImageStyle, ImageURISource } from 'react-native'
 import { ImageRepository, windowWidth } from '../helpers'
+import { Сontacts } from 'app/module/main/view/Сontacts'
 
 export interface IListTabBar {
   name: string
@@ -60,8 +61,8 @@ export const listTabBar: Array<IListTabBar> = [
   },
   {
     name: 'Контакты',
-    component: EnterPhoneNumberSingIn,
-    routeName: 'EnterPhoneNumberSingIn',
+    component: Сontacts,
+    routeName: 'Сontacts',
   },
 ]
 

@@ -38,4 +38,9 @@ export class ImageRepository {
 
   static readonly selectServiceArrowBottom = require('assets/images/appointments/selectServiceArrowBottom.png')
   static readonly selectServiceNotChecked = require('assets/images/appointments/selectServiceNotChecked.png')
+
+  static readonly contactsArrowBack = require('assets/images/contacts/arrowBack.png')
+  static readonly contactsCurrentLocation = require('assets/images/contacts/currentLocation.png')
+
+
 }
