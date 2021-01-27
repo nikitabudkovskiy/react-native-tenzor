@@ -18,9 +18,10 @@ import {
   fonts,
   platform
 } from 'app/system/helpers'
-import MapView from 'react-native-maps'
+import MapView, { Marker } from 'react-native-maps'
 import { CommonButton } from 'app/module/global/view'
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
+import Tooltip from 'react-native-walkthrough-tooltip'
 
 interface IProps {
   navigation: BottomTabNavigationProp<any>
@@ -72,18 +73,25 @@ const listContacts: IContactsList[] = [
 
 export class Сontacts extends PureComponent<IProps, IState> {
 
+  state = {
+    isVisible: false,
+  }
+
   goBackHandler = (): void => {
     if (this.props.navigation.canGoBack()) {
       this.props.navigation.goBack()
     }
   }
 
-  makeCallHandler = (phoneNumber: string): void => {
+  makeCallHandler = async (phoneNumber: string): Promise<void> => {
+    let openUrl = ''
+    if (platform.isAndroid) {
+      openUrl = `tel:${phoneNumber}`
+    } else {
+      openUrl = `telprompt:${phoneNumber}`
+    }
     try {
-      platform.isAndroid
-      ? Linking.openURL('tel:${' + phoneNumber + '}')
-      : Linking.openURL('telprompt:${' + phoneNumber + '}')
-
+      await Linking.openURL(openUrl)
     } catch {
       Alert.alert('Ошибка', 'Проверьте наличие приложения для звонков')
     }
@@ -96,13 +104,54 @@ export class Сontacts extends PureComponent<IProps, IState> {
         <View style={styles.mapContainer}>
           <MapView
             initialRegion={{
-              latitude: 37.78825,
-              longitude: -122.4324,
+              latitude: 48.784627,
+              longitude: 44.807354,
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
             style={styles.map}
-          />
+            zoomEnabled={false}
+          >
+            <Marker coordinate={{
+              latitude: 48.784627,
+              longitude: 44.807354,
+            }}>
+              <View style={{ }}>
+                {/* {
+                  <View style={{ position: 'absolute', width: windowWidth * 0.2}}>
+                    <Text>
+                      ул. Красная 154
+                    </Text>
+                    <Text>
+                      С 10:00 до 22:00
+                    </Text>
+                    <CommonButton title="Выбрать" /> 
+                  </View>
+                } */}
+                {/* <Tooltip
+                  isVisible={true}
+                  content={<Text>Check this out!</Text>}
+                  placement="top"
+                  onClose={() => this.setState({ isVisible: false })}
+                >
+                </Tooltip> */}
+                <TouchableOpacity onPress={() => this.setState({ isVisible: true })}>
+                  <Image
+                    source={ImageRepository.contactsCustomMarker}
+                    style={{ width: windowWidth * 0.08, height: windowWidth * 0.1 }}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              </View>
+
+
+            </Marker>
+            {/* {
+              markers.map(item => {
+                <Marker coordinate={item} />
+              })
+            } */}
+          </MapView>
           <TouchableOpacity
             style={styles.arrowBackButton}
             onPress={this.goBackHandler}
@@ -126,6 +175,7 @@ export class Сontacts extends PureComponent<IProps, IState> {
           bounces={false}
           showsVerticalScrollIndicator={false}
         >
+          
           {
             listContacts.map((item, index) => {
               return (
