@@ -7,6 +7,7 @@ import {
   Text,
   Linking,
   Alert,
+  TouchableOpacityComponent,
 } from 'react-native'
 import {
   styleSheetCreate,
@@ -18,17 +19,17 @@ import {
   fonts,
   platform
 } from 'app/system/helpers'
-import MapView, { Marker } from 'react-native-maps'
+import MapView, { Callout, CalloutSubview, Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import { CommonButton } from 'app/module/global/view'
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
-import Tooltip from 'react-native-walkthrough-tooltip'
+import Modal from 'react-native-modal'
 
 interface IProps {
   navigation: BottomTabNavigationProp<any>
 }
 
 interface IState {
-
+  isVisible: boolean
 }
 
 interface IContactsList {
@@ -97,12 +98,19 @@ export class Сontacts extends PureComponent<IProps, IState> {
     }
   }
 
+  onPressMarkerHandler = (): void => {
+    console.log('test')
+    this.setState({ isVisible: true })
+  }
+
   render(): JSX.Element {
 
+    console.log('render', this.state.isVisible)
     return (
       <View style={styles.container}>
         <View style={styles.mapContainer}>
           <MapView
+          showsUserLocation={true}
             initialRegion={{
               latitude: 48.784627,
               longitude: 44.807354,
@@ -115,34 +123,35 @@ export class Сontacts extends PureComponent<IProps, IState> {
             <Marker coordinate={{
               latitude: 48.784627,
               longitude: 44.807354,
-            }}>
-              <View style={{ }}>
-                {/* {
-                  <View style={{ position: 'absolute', width: windowWidth * 0.2}}>
-                    <Text>
-                      ул. Красная 154
-                    </Text>
-                    <Text>
-                      С 10:00 до 22:00
-                    </Text>
-                    <CommonButton title="Выбрать" /> 
-                  </View>
-                } */}
-                {/* <Tooltip
-                  isVisible={true}
-                  content={<Text>Check this out!</Text>}
-                  placement="top"
-                  onClose={() => this.setState({ isVisible: false })}
-                >
-                </Tooltip> */}
-                <TouchableOpacity onPress={() => this.setState({ isVisible: true })}>
-                  <Image
+            }}
+            // width={windowWidth * 0.04}
+            // height={windowWidth * 0.04}
+            image={ImageRepository.contactsCustomMarker}
+            // style={{ width: windowWidth * 0.04, height: windowWidth * 0.04 }}
+            >
+              {/* <View> */}
+              <Callout tooltip>
+              <CalloutSubview  onPress= {this.onPressMarkerHandler}>
+              <TouchableOpacity>
+          <View>
+            <Text>Lost</Text>
+          </View>
+        </TouchableOpacity>     
+              </CalloutSubview>
+      </Callout>
+              {/* </View> */}
+
+          
+
+  
+                {/* <TouchableOpacity style={{ position: 'absolute' }} onPress={this.onPressMarkerHandler}> */}
+                  {/* <Image
                     source={ImageRepository.contactsCustomMarker}
                     style={{ width: windowWidth * 0.08, height: windowWidth * 0.1 }}
                     resizeMode="contain"
-                  />
-                </TouchableOpacity>
-              </View>
+                  /> */}
+                {/* </TouchableOpacity> */}
+
 
 
             </Marker>
