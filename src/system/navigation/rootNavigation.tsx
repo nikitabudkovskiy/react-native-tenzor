@@ -1,6 +1,6 @@
 import React, { ComponentType } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { ListPages  } from 'app/system/navigation'
+import { ListPages } from 'app/system/navigation'
 import { ChooseCity } from 'app/module/main/view/ChooseCity'
 // import { EnterPhoneNumberSingIn } from 'app/module/login/view/EnterPhoneNumberSingIn'
 // import { PasswordSingIn } from 'app/module/login/view/PasswordSingIn'
@@ -23,6 +23,7 @@ import { Сontacts } from 'app/module/main/view/Сontacts'
 // import { RegistrationContacts } from 'app/module/registration/view/RegistrationContacts'
 // import { EnterPhoneNumberSingInRegistration } from 'app/module/login/view/EnterPhoneNumberSingInRegistration'
 // import { PasswordRegistration } from 'app/module/login/view/PasswordRegistration'
+import { Host } from 'react-native-portalize'
 
 export interface IListTabBar {
   name: string
@@ -72,10 +73,11 @@ export const listTabBar: Array<IListTabBar> = [
 
 const TabNavigator = () => {
   return (
-    <Tab.Navigator 
-      tabBar={props => <CustomTabbar  tabs={listTabBar} {...props} />} 
-    >
-      {
+    <Host>
+      <Tab.Navigator
+        tabBar={props => <CustomTabbar tabs={listTabBar} {...props} />}
+      >
+        {
           listTabBar.map((item, index) => {
             return (
               <Tab.Screen
@@ -86,7 +88,8 @@ const TabNavigator = () => {
             )
           })
         }
-    </Tab.Navigator>
+      </Tab.Navigator>
+    </Host>
   )
 }
 

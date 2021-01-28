@@ -18,4 +18,5 @@ export enum Color {
     fauxLime = '#20C845',
     gray700  = "rgba(0, 0, 0, 0.7)",
     alizarinCrimson  = "rgba(227, 47, 54, 0.9)",
+    candyAppleRed  = "#F40F00",
 }
