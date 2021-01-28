@@ -21,6 +21,7 @@ export class ImageRepository {
   static readonly masterArrowRight = require('assets/images/masters/masterArrowRight.png')
   static readonly masterArrowLeft = require('assets/images/masters/masterArrowLeft.png')
   static readonly masterTwo = require('assets/images/masters/masterTwo.png')
+  static readonly masterSearch = require('assets/images/masters/search.png')
 
   static readonly mainPageAddress = require('assets/images/main/mainPageAddress.png')
 

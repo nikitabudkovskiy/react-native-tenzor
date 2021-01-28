@@ -177,6 +177,7 @@ export class CustomTabbar extends PureComponent<IProps, IState>{
 
 const styles = styleSheetCreate({
   mainContainer: style.view({
+    backgroundColor: Color.transparent,
     // height: windowWidth * 0.2,
     // backgroundColor: Color.linen,
     // backgroundColor: Color.white,
