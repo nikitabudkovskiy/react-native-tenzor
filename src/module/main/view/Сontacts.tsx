@@ -110,7 +110,7 @@ export class Сontacts extends PureComponent<IProps, IState> {
       <View style={styles.container}>
         <View style={styles.mapContainer}>
           <MapView
-          showsUserLocation={true}
+            showsUserLocation={true}
             initialRegion={{
               latitude: 48.784627,
               longitude: 44.807354,
@@ -124,42 +124,23 @@ export class Сontacts extends PureComponent<IProps, IState> {
               latitude: 48.784627,
               longitude: 44.807354,
             }}
-            // width={windowWidth * 0.04}
-            // height={windowWidth * 0.04}
-            image={ImageRepository.contactsCustomMarker}
-            // style={{ width: windowWidth * 0.04, height: windowWidth * 0.04 }}
+              image={ImageRepository.contactsCustomMarker}
             >
-              {/* <View> */}
               <Callout tooltip>
-              <CalloutSubview  onPress= {this.onPressMarkerHandler}>
-              <TouchableOpacity>
-          <View>
-            <Text>Lost</Text>
-          </View>
-        </TouchableOpacity>     
-              </CalloutSubview>
-      </Callout>
-              {/* </View> */}
-
-          
-
-  
-                {/* <TouchableOpacity style={{ position: 'absolute' }} onPress={this.onPressMarkerHandler}> */}
-                  {/* <Image
-                    source={ImageRepository.contactsCustomMarker}
-                    style={{ width: windowWidth * 0.08, height: windowWidth * 0.1 }}
-                    resizeMode="contain"
-                  /> */}
-                {/* </TouchableOpacity> */}
-
-
-
+                <CalloutSubview onPress={this.onPressMarkerHandler}>
+                    <View style={styles.markerTooltip}>
+                      <Text style={styles.markerTooltipAddress}>
+                        ул. Красная 154
+                      </Text>
+                      <Text style={styles.markerTooltipTime}>
+                        С 10:00 до 22:00
+                      </Text>
+                      <CommonButton title="Выбрать" />
+                    </View>
+                </CalloutSubview>
+              </Callout>
             </Marker>
-            {/* {
-              markers.map(item => {
-                <Marker coordinate={item} />
-              })
-            } */}
+
           </MapView>
           <TouchableOpacity
             style={styles.arrowBackButton}
@@ -184,7 +165,7 @@ export class Сontacts extends PureComponent<IProps, IState> {
           bounces={false}
           showsVerticalScrollIndicator={false}
         >
-          
+
           {
             listContacts.map((item, index) => {
               return (
@@ -324,5 +305,21 @@ const styles = styleSheetCreate({
     width: windowWidth * 0.085,
     height: windowWidth * 0.085,
     marginLeft: windowWidth * 0.021,
-  })
+  }),
+  markerTooltip: style.view({
+    padding: windowWidth * 0.03,
+    backgroundColor: Color.white,
+    borderRadius: windowWidth * 0.025,
+  }),
+  markerTooltipAddress: style.text({
+    marginBottom: windowWidth * 0.02,
+    color: Color.chineseBlack,
+    fontSize: windowWidth * 0.036,
+  }),
+  markerTooltipTime: style.text({
+    marginBottom: windowWidth * 0.02,
+    color: Color.gray600,
+    fontSize: windowWidth * 0.03,
+    textAlign: 'center',
+  }),
 })

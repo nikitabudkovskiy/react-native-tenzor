@@ -105,7 +105,6 @@ export class MainPage extends PureComponent<IProps, IState> {
     return (
       <View style={styles.content}>
         <ScrollView
-          scrollEnabled
           bounces={false}
           showsVerticalScrollIndicator={false}
         >
@@ -121,8 +120,6 @@ export class MainPage extends PureComponent<IProps, IState> {
             contentContainerStyle={styles.container}
             showsHorizontalScrollIndicator={false}
             decelerationRate="normal"
-            // pagingEnabled
-            scrollEnabled
             onScroll={this.onPromotionScrollHandler}
           >
             <View style={styles.promotionSlidesContainer}>
@@ -196,7 +193,6 @@ export class MainPage extends PureComponent<IProps, IState> {
                     showsHorizontalScrollIndicator={false}
                     decelerationRate="normal"
                     // pagingEnabled
-                    scrollEnabled
                     onScroll={this.onBonusesScrollHandler}
                   >
                     <View style={styles.bonusesSlidesContainer}>

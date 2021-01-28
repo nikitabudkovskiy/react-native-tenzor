@@ -15,13 +15,13 @@ import {
   ImageRepository,
   styleSheetFlatten,
   isLongDevices,
-  windowHeight,
 } from 'app/system/helpers'
 import { CommonButton, CommonInput } from 'app/module/global/view'
 import { StackNavigationProp } from '@react-navigation/stack'
 import Modal from 'react-native-modal'
-import BottomSheet from 'reanimated-bottom-sheet'
 import Svg, { Path } from 'react-native-svg'
+import { Modalize } from 'react-native-modalize'
+import { Portal } from 'react-native-portalize'
 
 interface IProps {
   navigation: StackNavigationProp<any>
@@ -37,7 +37,7 @@ interface IState {
 const masterAssessment = [1, 2, 3, 4, 5]
 
 export class NoteDetails extends PureComponent<IProps, IState>{
-  refBottomSheet: any
+  refModalize: any
 
   state = {
     isModalShow: false,
@@ -67,16 +67,14 @@ export class NoteDetails extends PureComponent<IProps, IState>{
   }
 
   openBottomSheetHandler = (masterAssessment: number): void => {
-    this.setState({ masterAssessment }, () =>  this.refBottomSheet.snapTo(0))
+    this.setState({ masterAssessment }, () =>  this.refModalize.open())
   }
 
-  closeBottomSheetHandler = (): void => {
-    this.refBottomSheet.snapTo(1)
+  openMasterAssessmentBottomHandler = (): void => {
+    this.refModalize.open()
   }
 
-  refBottomSheetHandler = (ref: any): void => {
-    this.refBottomSheet = ref
-  }
+  refModalizeHandler = (ref: any) => this.refModalize = ref
 
   goBackHandler = (): void => {
     if (this.props.navigation.canGoBack()) {
@@ -299,15 +297,13 @@ export class NoteDetails extends PureComponent<IProps, IState>{
           </View>
         </Modal>
 
-        <BottomSheet
-          ref={this.refBottomSheetHandler}
-          initialSnap={1}
-          snapPoints={[windowHeight * 0.45, -100]}
-          renderHeader={this.renderBottomSheetHeader}
-          enabledInnerScrolling={false}
-          renderContent={() => {
-            return (
-              <View style={styles.bottomSheetContent}>
+        <Portal>
+          <Modalize
+            ref={this.refModalizeHandler}
+            childrenStyle={styles.bottomSheetChildren}
+            modalHeight={windowWidth * 1.1}
+          >
+             <View style={styles.bottomSheetContent}>
               <Text style={styles.bottomSheetText}>
                 Удовлетварительно
               </Text>
@@ -349,9 +345,8 @@ export class NoteDetails extends PureComponent<IProps, IState>{
                 styleButton={styles.bottomSheetSendButton}
               />
             </View>
-            )
-          }}
-        />
+          </Modalize>
+        </Portal>
       </View>
     )
   }
@@ -532,7 +527,7 @@ const styles = styleSheetCreate({
     fontSize: windowWidth * 0.058,
     textAlign: 'center',
     fontFamily: fonts.robotoBold,
-    marginTop: windowWidth * 0.04,
+    marginTop: windowWidth * 0.08,
   }),
   bottomSheetYourMark: style.text({
     color: Color.gray,
