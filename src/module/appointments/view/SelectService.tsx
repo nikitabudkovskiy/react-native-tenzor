@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Animated,
   ImageURISource,
+  ScrollView,
 } from 'react-native'
 import {
   styleSheetCreate,
@@ -15,11 +16,15 @@ import {
   windowWidth,
   ImageRepository,
   styleSheetFlatten,
+  isLongDevices,
+  hitSlop,
 } from 'app/system/helpers'
 import { CommonButton } from 'app/module/global/view'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { ListPages } from 'app/system/navigation'
 
 interface IProps {
-
+  navigation: StackNavigationProp<any>
 }
 
 interface IState {
@@ -38,9 +43,20 @@ const serviceListItemHight = windowWidth * 5
 const serviceListHight = serviceListItemHight
 
 export class SelectService extends PureComponent<IProps, IState>{
+
   state = {
     isServiceListOpen: false,
     aniamtedHeightServiceList: new Animated.Value(0)
+  }
+
+  goBackHandler = (): void => {
+    if (this.props.navigation.canGoBack()) {
+      this.props.navigation.goBack()
+    }
+  }
+
+  goToChooseMasterHandler = (): void => {
+    this.props.navigation.push(ListPages.ChooseMaster)
   }
 
   openServiceListHandler = (): void => {
@@ -71,6 +87,13 @@ export class SelectService extends PureComponent<IProps, IState>{
   }
 
   render() {
+
+    const container = styleSheetFlatten([
+      styles.container,
+      {
+        paddingTop: isLongDevices ? windowWidth * 0.1 : windowWidth * 0.08,
+      }
+    ])
 
     const servicePoints = styleSheetFlatten([
       styles.serviceList,
@@ -104,9 +127,13 @@ export class SelectService extends PureComponent<IProps, IState>{
     ])
 
     return (
-      <View style={styles.container}>
+      <View style={container}>
+
         <View style={styles.selectServiceContainer}>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={this.goBackHandler}
+            hitSlop={hitSlop}
+          >
             <Image
               source={ImageRepository.masterArrowLeft}
               style={styles.masterArrowLeft}
@@ -116,6 +143,8 @@ export class SelectService extends PureComponent<IProps, IState>{
             Выберите услугу
           </Text>
         </View>
+
+        <ScrollView style={styles.scrollViewContainer}>
         <View style={serviceContentFlatten}>
           <TouchableOpacity
             onPress={this.toggleServiceListHandler}
@@ -164,6 +193,8 @@ export class SelectService extends PureComponent<IProps, IState>{
             </View>
           </Animated.View>
         </View>
+        </ScrollView>
+
         <View style={styles.serviceCalculationsContainer}>
           <View style={styles.serviceCalculations}>
             <Text style={styles.serviceCalculationsTitle}>
@@ -172,9 +203,11 @@ export class SelectService extends PureComponent<IProps, IState>{
             <CommonButton
               title='Далее'
               styleButton={styles.continue}
+              onPress={this.goToChooseMasterHandler}
             />
           </View>
         </View>
+
       </View>
     )
   }
@@ -185,13 +218,15 @@ const styles = styleSheetCreate({
     backgroundColor: Color.white,
     flex: 1
   }),
+  scrollViewContainer: style.view({
+ 
+  }),
   serviceContainer: style.view({
     paddingHorizontal: windowWidth * 0.021,
     flexDirection: 'row',
     height: windowWidth * 0.06,
     alignItems: 'center',
-    marginTop: windowWidth * 0.04
-    // backgroundColor: 'green'
+    marginTop: windowWidth * 0.04,
   }),
   serviceAmountContainer: style.view({
     width: windowWidth * 0.042,
@@ -218,22 +253,20 @@ const styles = styleSheetCreate({
   }),
   serviceList: style.view({
     overflow: 'hidden',
-    // backgroundColor: 'red',
     paddingHorizontal: windowWidth * 0.021,
   }),
   serviceItemContainer: style.view({
-    height: windowWidth * 0.178,
     paddingHorizontal: windowWidth * 0.021,
+    paddingVertical: windowWidth * 0.02,
     backgroundColor: Color.white,
-    marginTop: windowWidth * 0.005,
+    marginTop: windowWidth * 0.015,
     borderRadius: windowWidth * 0.032,
     justifyContent: 'space-evenly'
   }),
   serviceItemTitleContainer: style.view({
     flexDirection: 'row',
-    height: windowWidth * 0.064,
     alignItems: 'center',
-    paddingTop: windowWidth * 0.021
+    paddingTop: windowWidth * 0.021,
   }),
   serviceCheck: style.image({
     width: windowWidth * 0.041,
@@ -243,7 +276,8 @@ const styles = styleSheetCreate({
   }),
   serviceItemTitle: style.text({
     fontSize: windowWidth * 0.04,
-    fontFamily: fonts.robotoRegular
+    fontFamily: fonts.robotoRegular,
+
   }),
   serivceItemDescriptionTime: style.text({
     fontSize: windowWidth * 0.04,
@@ -260,7 +294,7 @@ const styles = styleSheetCreate({
     backgroundColor: Color.white,
     marginHorizontal: windowWidth * 0.021,
     borderRadius: windowWidth * 0.032,
-    paddingTop: windowWidth * 0.05
+    marginTop: windowWidth * 0.05
   }),
   servicePointsContainer: style.view({
     paddingVertical: windowWidth * 0.04
@@ -268,9 +302,8 @@ const styles = styleSheetCreate({
   serviceCalculationsContainer: style.view({
     width: windowWidth,
     height: windowWidth * 0.216,
-    position: 'absolute',
-    bottom: 0,
-    borderTopWidth: windowWidth * 0.001
+    borderTopWidth: windowWidth * 0.001,
+    marginBottom: windowWidth * 0.06,
   }),
   serviceCalculations: style.view({
     alignItems: 'center',

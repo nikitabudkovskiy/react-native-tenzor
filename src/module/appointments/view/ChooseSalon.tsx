@@ -7,7 +7,6 @@ import {
   Text,
   Linking,
   Alert,
-  TouchableOpacityComponent,
 } from 'react-native'
 import {
   styleSheetCreate,
@@ -21,69 +20,47 @@ import {
 } from 'app/system/helpers'
 import MapView, { Callout, CalloutSubview, Marker } from 'react-native-maps'
 import { CommonButton } from 'app/module/global/view'
-import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
-import { Modalize } from 'react-native-modalize'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { ListPages } from 'app/system/navigation'
 
 interface IProps {
-  navigation: BottomTabNavigationProp<any>
+  navigation: StackNavigationProp<any>
 }
 
 interface IState {
   isVisible: boolean
-  isScreenFocus: boolean
+  selectedSalon: string
 }
 
-interface IContactsList {
-  address: string
-  phoneNumber: string
-  isVkLink: boolean
-}
-
-const listContacts: IContactsList[] = [
-  {
-    address: 'пер. Широкий, 53 (ТРК Сигма)',
-    phoneNumber: '+7 925 123 45 67',
-    isVkLink: true
-  },
-  {
-    address: 'ул. Красная 154',
-    phoneNumber: '+7 925 123 45 68',
-    isVkLink: false
-  },
-  {
-    address: 'ул. 30 лет Победы, 19А',
-    phoneNumber: '+7 925 123 45 69',
-    isVkLink: true
-  },
-  {
-    address: 'ул. Московская, 43',
-    phoneNumber: '+7 925 123 45 70',
-    isVkLink: true
-  },
-  {
-    address: 'ул. Узкая, 54',
-    phoneNumber: '+7 925 123 45 71',
-    isVkLink: true
-  },
-  {
-    address: 'ул. Максима Горького, 78',
-    phoneNumber: '+7 925 123 45 72',
-    isVkLink: true
-  }
+const listAddress = [
+  'пер. Широкий, 53 (ТРК Сигма)',
+  'ул. Красная 154',
+  'ул. 30 лет Победы, 19А',
+  'ул. Московская, 43',
+  'ул. Узкая, 54',
+  'ул. Максима Горького, 78',
 ]
 
-export class Сontacts extends PureComponent<IProps, IState> {
+export class ChooseSalon extends PureComponent<IProps, IState> {
   refModalize: any
 
   state = {
     isVisible: false,
-    isScreenFocus: false,
+    selectedSalon: '',
   }
 
   goBackHandler = (): void => {
     if (this.props.navigation.canGoBack()) {
       this.props.navigation.goBack()
     }
+  }
+
+  changeSelectedSalon = (salon: string): void => {
+    if (this.state.selectedSalon === salon) {
+      this.setState({ selectedSalon: '' })
+      return
+    }
+    this.setState({ selectedSalon: salon })
   }
 
   makeCallHandler = async (phoneNumber: string): Promise<void> => {
@@ -98,6 +75,10 @@ export class Сontacts extends PureComponent<IProps, IState> {
     } catch {
       Alert.alert('Ошибка', 'Проверьте наличие приложения для звонков')
     }
+  }
+
+  goToSelectServiceHandler = (): void => {
+    this.props.navigation.push(ListPages.SelectService)
   }
 
   onPressMarkerHandler = (): void => {
@@ -138,14 +119,14 @@ export class Сontacts extends PureComponent<IProps, IState> {
                     <Text style={styles.markerTooltipTime}>
                       С 10:00 до 22:00
                       </Text>
-                    {/* <CommonButton title="Выбрать" /> */}
+                    <CommonButton title="Выбрать" />
                   </View>
                 </CalloutSubview>
               </Callout>
             </Marker>
 
           </MapView>
-          {/* <TouchableOpacity
+          <TouchableOpacity
             style={styles.arrowBackButton}
             onPress={this.goBackHandler}
           >
@@ -153,7 +134,7 @@ export class Сontacts extends PureComponent<IProps, IState> {
               source={ImageRepository.contactsArrowBack}
               style={styles.arrowBackImage}
             />
-          </TouchableOpacity> */}
+          </TouchableOpacity>
           <TouchableOpacity
             style={styles.currentLocationButton}
           >
@@ -163,66 +144,52 @@ export class Сontacts extends PureComponent<IProps, IState> {
             />
           </TouchableOpacity>
         </View>
-        {/* <Portal> */}
-          <Modalize 
-            ref={this.refModalizeHandler}
-            alwaysOpen={windowHeight * 0.5}
-            panGestureEnabled={false}
+        <View>
+          <ScrollView
+            style={styles.listAddress}
+            bounces={false}
+            showsVerticalScrollIndicator={false}
           >
-            <View>
-              <ScrollView
-                style={styles.listContacts}
-                bounces={false}
-                showsVerticalScrollIndicator={false}
-              >
-                {
-                  listContacts.map((item, index) => {
-                    return (
-                      <View
-                        key={Math.random().toString()}
-                        style={listContacts.length - 1 !== index ? styles.listContactsTextContainer : styles.listContactsTextContainerWithoutBorderBottom}>
-                        <Text style={styles.listContactsText}>
-                          {item.address}
-                        </Text>
-                        <View style={styles.listContactsDescription}>
-                          <Text style={styles.phoneNumber}>
-                            {item.phoneNumber}
-                          </Text>
-                          <View style={styles.socialsContainer}>
-                            <TouchableOpacity
-                              onPress={this.makeCallHandler.bind(this, item.phoneNumber)}
-                            >
-                              <Image
-                                style={styles.soicals}
-                                source={ImageRepository.contactsPhone}
-                              />
-                            </TouchableOpacity>
-                            {
-                              item.isVkLink ? (
-                                <Image
-                                  style={styles.soicals}
-                                  source={ImageRepository.contactsVk}
-                                />
-                              ) : null
-                            }
+            {
+              listAddress.map((item) => {
+                return (
+                  <View
+                    key={Math.random().toString()}
+                    style={styles.listAddressCard}
+                  >
+                    <TouchableOpacity
+                      style={styles.listAddressCardContainer}
+                      onPress={this.changeSelectedSalon.bind(this, item)}
+                    >
+                      <Text style={this.state.selectedSalon === item ? styles.listAddressCardActiveText : styles.listAddressCardText}>
+                        {item}
+                      </Text>
+                      {
+                        this.state.selectedSalon === item 
+                          ? (
                             <Image
-                              style={styles.soicals}
-                              source={ImageRepository.contactsInsta}
-                            />
-                          </View>
-                        </View>
-                      </View>
-                    )
-                  })
-                }
-              </ScrollView>
-              {/* <CommonButton
-                styleButton={styles.signSalonButton}
-                title="Записаться в салон"
-              /> */}
-            </View>
-          </Modalize>
-        {/* </Portal> */}
+                            source={ImageRepository.globalOrangeCheckMark}
+                            style={styles.orangeCheckMark}
+                            resizeMode="contain"
+                          />
+                          )
+                          : null
+                      }
+                    </TouchableOpacity>
+
+
+                  </View>
+                )
+              })
+            }
+          </ScrollView>
+          <CommonButton
+            disabled={!this.state.selectedSalon}
+            styleButton={styles.signSalonButton}
+            title="Далее"
+            onPress={this.goToSelectServiceHandler}
+          />
+        </View>
       </View>
     )
   }
@@ -238,7 +205,7 @@ const styles = styleSheetCreate({
   }),
   map: style.view({
     width: windowWidth,
-    height: windowHeight * 0.39,
+    height: windowHeight * 0.55,
   }),
   arrowBackButton: style.view({
     width: windowWidth * 0.08,
@@ -273,29 +240,35 @@ const styles = styleSheetCreate({
     marginRight: windowWidth * 0.01,
     marginTop: windowWidth * 0.01,
   }),
-  listContacts: style.view({
-    height: windowHeight * 0.48,
-    // borderTopLeftRadius: windowWidth * 0.05,
-    // borderTopRightRadius: windowWidth * 0.05,
-    backgroundColor: Color.white,
+  orangeCheckMark: style.image({
+    width: windowWidth * 0.04,
+    height: windowWidth * 0.04,
   }),
-  listContactsTextContainer: style.view({
+  listAddress: style.view({
+    height: windowHeight * 0.36,
+    borderTopLeftRadius: windowWidth * 0.04,
+    borderTopRightRadius: windowWidth * 0.04,
+    paddingHorizontal: windowWidth * 0.04,
+  }),
+  listAddressCard: style.view({
+
+  }),
+  listAddressCardContainer: style.view({
     paddingVertical: windowWidth * 0.036,
     paddingHorizontal: windowWidth * 0.04,
     borderBottomColor: Color.gray50,
     borderBottomWidth: windowWidth * 0.0025,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   }),
-  listContactsTextContainerWithoutBorderBottom: style.view({
-    paddingVertical: windowWidth * 0.036,
-    paddingHorizontal: windowWidth * 0.04,
-  }),
-  listContactsText: style.text({
+  listAddressCardText: style.text({
     fontFamily: fonts.robotoRegular,
     fontSize: windowWidth * 0.04,
   }),
-  listContactsActiveText: style.text({
+  listAddressCardActiveText: style.text({
     fontFamily: fonts.robotoBold,
-    fontSize: windowWidth * 0.035,
+    fontSize: windowWidth * 0.04,
   }),
   phoneNumber: style.text({
     fontFamily: fonts.robotoRegular,
@@ -305,7 +278,7 @@ const styles = styleSheetCreate({
   }),
   signSalonButton: style.view({
     marginHorizontal: windowWidth * 0.04,
-    marginTop: windowWidth * 0.05,
+    marginTop: windowWidth * 0.02,
   }),
   listContactsDescription: style.view({
     flexDirection: 'row',

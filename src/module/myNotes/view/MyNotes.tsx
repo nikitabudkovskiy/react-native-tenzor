@@ -129,7 +129,6 @@ export class MyNotes extends PureComponent<IProps, IState>{
                             )
 
                       }
-
                     </View>
                     <View style={styles.noteDescriptionConteiner}>
                       <Image
@@ -170,6 +169,11 @@ export class MyNotes extends PureComponent<IProps, IState>{
 }
 
 const styles = styleSheetCreate({
+  container: style.view({
+    paddingHorizontal: windowWidth * 0.021,
+    backgroundColor: Color.white,
+    height: '100%',
+  }),
   headerTitle: style.text({
     fontSize: windowWidth * 0.05,
     fontFamily: fonts.robotoBold,
@@ -177,11 +181,8 @@ const styles = styleSheetCreate({
   }),
   noteContent: style.view({
     alignItems: 'center',
-    paddingTop: windowWidth * 0.058
-  }),
-  container: style.view({
-    paddingHorizontal: windowWidth * 0.021,
-    paddingBottom: windowWidth * 0.02,
+    paddingTop: windowWidth * 0.058,
+    marginBottom: windowWidth * 0.03,
   }),
   noteTitle: style.view({
     alignItems: 'center'
@@ -217,6 +218,15 @@ const styles = styleSheetCreate({
     justifyContent: 'space-evenly',
     borderRadius: windowWidth * 0.032,
     marginTop: windowWidth * 0.032,
+    shadowColor: Color.black,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    
+    elevation: 3,
   }),
   master: style.image({
     width: windowWidth * 0.1,

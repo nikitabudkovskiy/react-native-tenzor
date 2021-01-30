@@ -1,0 +1,269 @@
+import React, { PureComponent } from 'react'
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  Animated,
+  ScrollView,
+} from 'react-native'
+import {
+  styleSheetCreate,
+  style,
+  fonts,
+  Color,
+  windowWidth,
+  ImageRepository,
+  styleSheetFlatten,
+  isLongDevices,
+  windowHeight,
+  hitSlop,
+} from 'app/system/helpers'
+import { isEmpty } from 'lodash'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { CommonButton } from 'app/module/global/view'
+import { ListPages } from 'app/system/navigation'
+
+interface IProps {
+  navigation: StackNavigationProp<any>
+}
+
+interface IState {
+  searchValue: string
+  animatedMarginLeft: Animated.Value
+}
+
+const masterList: IHairDreesserItems[] = [
+  {
+    name: 'Карамова Рузанна',
+    position: 'Парикмахер',
+    image: ImageRepository.masterOne
+  },
+  {
+    name: 'Лушникова Анна',
+    position: 'Парикмахер-стилист',
+    image: ImageRepository.masterTwo
+  }
+]
+
+export class ChooseMaster extends PureComponent<IProps, IState> {
+
+  state = {
+    searchValue: '',
+    animatedMarginLeft: new Animated.Value(0)
+  }
+
+  searchMasterHandler = (searchValue: string): void => {
+    this.setState({ searchValue })
+  }
+
+  goBackHandler = (): void => {
+    if (this.props.navigation.canGoBack()) {
+      this.props.navigation.goBack()
+    }
+  }
+
+  goToTimeSelectHandler = (): void => {
+    this.props.navigation.push(ListPages.TimeSelect)
+  }
+
+  render() {
+
+    const container = styleSheetFlatten([
+      styles.container,
+      {
+        marginTop: isLongDevices ? windowWidth * 0.1 : windowWidth * 0.05
+      }
+    ])
+
+    return (
+      <View style={styles.mainContainer}>
+        <View style={container} >
+
+          <View style={styles.headerContainer}>
+            <TouchableOpacity
+              onPress={this.goBackHandler}
+              hitSlop={hitSlop}
+            >
+              <Image
+                source={ImageRepository.masterArrowLeft}
+                style={styles.masterArrowLeft}
+              />
+            </TouchableOpacity>
+            <Text style={styles.headerTitle}>
+              Наши мастера
+          </Text>
+          </View>
+
+          <ScrollView>
+            {
+              !isEmpty(masterList)
+                ? masterList.map(items => {
+                  return (
+                    <TouchableOpacity
+                      key={items.name}
+                      style={styles.hairDresserWrapper}
+                    >
+                      <View style={styles.hairDresserContainer}>
+                        <Image
+                          source={items.image}
+                          style={styles.master}
+                        />
+                        <View style={styles.hairDresserInfoContainer}>
+                          <Text style={styles.hairDresserName}>
+                            {items.name}
+                          </Text>
+                          <Text style={styles.hairDresserPosition}>
+                            {items.position}
+                          </Text>
+                          <View style={styles.starContainer}>
+                            {
+                              [1, 2, 3, 4, 5].map(item => {
+                                return (
+                                  <Image
+                                    key={item}
+                                    source={ImageRepository.masterStar}
+                                    style={styles.masterStar}
+                                  />
+                                )
+                              })
+                            }
+                          </View>
+                        </View>
+                      </View>
+                      <Image
+                        source={ImageRepository.globalGrayCheckMark}
+                        style={styles.grayCheckMark}
+                        resizeMode="contain"
+                      />
+                    </TouchableOpacity>
+                  )
+                })
+                : (
+                  <View style={styles.nothingFound}>
+                    <Text style={styles.nothingFoundText}>
+                      Ничего не найдено
+                </Text>
+                  </View>
+                )
+            }
+          </ScrollView>
+
+          <View style={styles.masterCalculationsContainer}>
+            <View style={styles.masterCalculations}>
+              <Text style={styles.masterCalculationsTitle}>
+                Услуг: 3 на 600 ₽ / 90 мин
+              </Text>
+              <CommonButton
+                title='Далее'
+                styleButton={styles.masterContinue}
+                styleText={styles.masterContinueText}
+                onPress={this.goToTimeSelectHandler}
+              />
+            </View>
+          </View>
+
+        </View>
+      </View>
+    )
+  }
+}
+
+const styles = styleSheetCreate({
+  mainContainer: style.view({
+    backgroundColor: Color.white,
+    flex: 1,
+  }),
+  container: style.view({
+    alignItems: 'center',
+    flex: 1,
+    paddingHorizontal: windowWidth * 0.04,
+  }),
+  headerContainer: style.view({
+    flexDirection: 'row',
+    width: windowWidth,
+    alignItems: 'center',
+    paddingHorizontal: windowWidth * 0.035,
+    marginTop: windowWidth * 0.037,
+  }),
+  headerTitle: style.text({
+    fontSize: windowWidth * 0.05,
+    fontFamily: fonts.robotoBold,
+    paddingLeft: windowWidth * 0.085,
+  }),
+  hairDresserWrapper: style.view({
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: windowWidth * 0.914,
+    marginTop: windowWidth * 0.064,
+    justifyContent: 'space-between',
+  }),
+  hairDresserContainer: style.view({
+    flexDirection: 'row',
+    alignItems: 'center',
+  }),
+  master: style.image({
+    width: windowWidth * 0.16,
+    height: windowWidth * 0.16,
+  }),
+  masterStar: style.image({
+    width: windowWidth * 0.0395,
+    height: windowWidth * 0.0426,
+    marginRight: windowWidth * 0.007
+  }),
+  hairDresserName: style.text({
+    fontFamily: fonts.robotoBold,
+    fontSize: windowWidth * 0.04,
+  }),
+  hairDresserPosition: style.text({
+    fontFamily: fonts.robotoRegular,
+    fontSize: windowWidth * 0.04,
+  }),
+  hairDresserInfoContainer: style.view({
+    paddingLeft: windowWidth * 0.053
+  }),
+  grayCheckMark: style.image({
+    width: windowWidth * 0.04,
+    height: windowWidth * 0.04,
+  }),
+  starContainer: style.view({
+    flexDirection: 'row'
+  }),
+  masterArrowLeft: style.image({
+    width: windowWidth * 0.064,
+    height: windowWidth * 0.064,
+  }),
+  nothingFound: style.view({
+    width: '100%',
+    height: windowHeight * 0.9,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }),
+  nothingFoundText: style.text({
+    fontFamily: fonts.robotoBold,
+    fontSize: windowWidth * 0.05,
+  }),
+
+  masterCalculationsContainer: style.view({
+    width: windowWidth,
+    height: windowWidth * 0.216,
+    borderTopWidth: windowWidth * 0.001,
+    marginBottom: windowWidth * 0.06,
+  }),
+  masterCalculations: style.view({
+    alignItems: 'center',
+  }),
+  masterContinue: style.view({
+    width: windowWidth * 0.914,
+    backgroundColor: Color.anitFlashWhite,
+  }),
+  masterContinueText: style.text({
+    color: Color.black,
+  }),
+  masterCalculationsTitle: style.text({
+    fontSize: windowWidth * 0.04,
+    fontFamily: fonts.robotoRegular,
+    paddingVertical: windowWidth * 0.021
+  }),
+})
+

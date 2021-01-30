@@ -1,4 +1,7 @@
 export class ImageRepository {
+  static readonly globalOrangeCheckMark = require('../../../assets/images/global/orangeCheckMark.png')
+  static readonly globalGrayCheckMark= require('../../../assets/images/global/grayCheckMark.png')
+
   static readonly loaderBackground = require('../../../assets/images/loader/background.png')
   static readonly chooseCityCheck = require('assets/images/chooseCity/icon.png')
   static readonly mainPageLogo = require('assets/images/main/logo.png')
@@ -8,9 +11,7 @@ export class ImageRepository {
   static readonly mainPageChangeLocation = require('assets/images/main/changeLocation.png')
   static readonly mainPageExit = require('assets/images/main/exit.png')
   static readonly mainPageArrowRight = require('assets/images/main/arrowRight.png')
-  // static readonly mainPageProfile = require('assets/images/main/profile.png')
-  // static readonly mainPageContacts = require('assets/images/main/contacts.png')
-  // static readonly mainPagemenu = require('assets/images/main/menu.png')
+
   static readonly disabledRecordingMaster = require('assets/images/main/disableRecordingMaster.png')
   static readonly disabledSign = require('assets/images/main/disableSign.png')
   static readonly mainPageContactsCheckMark = require('assets/images/main/contactsCheckMark.png')

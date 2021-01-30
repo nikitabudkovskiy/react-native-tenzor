@@ -27,6 +27,7 @@ import {
 } from 'react-native-confirmation-code-field'
 import { useState, useEffect, useRef, } from 'react'
 import { StackNavigationProp } from '@react-navigation/stack'
+import { ListPages } from 'app/system/navigation'
 
 const CELL_COUNT = 6
 
@@ -88,6 +89,10 @@ export const PasswordRegistration = ({ navigation }: IProps) => {
     intervalId.current = setInterval(() => {
       setTimeSendingCode(timeSendingCode => timeSendingCode - 1)
     }, 1000)
+  }
+
+  const goToRegistrationContacts = (): void => {
+    navigation.navigate(ListPages.RegistrationContacts)
   }
 
   const forgetPasswordButton = styleSheetFlatten([
@@ -156,6 +161,7 @@ export const PasswordRegistration = ({ navigation }: IProps) => {
       <TouchableOpacity
         style={forgetPasswordButton}
         onPress={forgotPasswordHandler}
+        onLongPress={goToRegistrationContacts}
         disabled={isUserForgotPassword}
       >
         {

@@ -1,10 +1,12 @@
 export class ListPages {
-  static readonly EnterPhoneNumber = 'EnterPhoneNumberSingIn'
   static readonly ChooseCity = 'ChooseCity'
+  static readonly ChooseMaster = 'ChooseMaster'
+  static readonly EnterPhoneNumberSingIn = 'EnterPhoneNumberSingIn'
   static readonly PasswordSingIn = 'PasswordSingIn'
   static readonly EnterPhoneNumberSingInRegistration = 'EnterPhoneNumberSingInRegistration'
   static readonly PasswordRegistration = 'PasswordRegistration'
   static readonly MainPage = 'MainPage'
+  static readonly MainTab = 'MainTab'
   static readonly RegistrationContacts = 'RegistrationContacts'
   static readonly Masters = 'Masters'
   static readonly AppointmentType = 'AppointmentType'
@@ -14,5 +16,6 @@ export class ListPages {
   static readonly NoteDetails = 'NoteDetails'
   static readonly TimeSelect = 'TimeSelect'
   static readonly Сontacts = 'Сontacts'
-  
+  static readonly ChooseSalon = 'ChooseSalon'
+ 
 }

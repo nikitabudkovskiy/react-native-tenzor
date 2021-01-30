@@ -11,16 +11,18 @@ import {
   ImageRepository,
 } from 'app/system/helpers'
 import { CommonButton } from 'app/module/global/view'
-
+import { StackNavigationProp } from '@react-navigation/stack'
+import { ListPages } from 'app/system/navigation'
 
 interface IProps {
-
+  navigation: StackNavigationProp<any>
 }
 
 interface IState {
   selectedСity: string
 }
 
+const list = ['Ижевск', 'Абакан', 'Адлер']
 
 export class ChooseCity extends PureComponent<IProps, IState> {
 
@@ -36,13 +38,11 @@ export class ChooseCity extends PureComponent<IProps, IState> {
     this.setState({ selectedСity })
   }
 
-  handleSheetChanges = (index: number) => {
-    console.log('handleSheetChanges', index)
+  goToMainTabBarHandler = (): void => {
+    this.props.navigation.replace(ListPages.MainTab)
   }
-
+  
   render(): JSX.Element {
-
-    const list = ['Ижевск', 'Абакан', 'Адлер']
 
     const mainContainer = styleSheetFlatten([
       styles.mainContainer,
@@ -50,8 +50,6 @@ export class ChooseCity extends PureComponent<IProps, IState> {
         paddingTop: isLongDevices ? windowWidth * 0.1 : windowWidth * 0.08,
       }
     ])
-
-
 
     return (
       <View style={mainContainer}>
@@ -101,6 +99,7 @@ export class ChooseCity extends PureComponent<IProps, IState> {
             disabled={!this.state.selectedСity}
             title="Выбрать город"
             styleButton={styles.chooseCity}
+            onPress={this.goToMainTabBarHandler}
           />
         </ScrollView>
       </View>

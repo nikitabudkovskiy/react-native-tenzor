@@ -170,6 +170,7 @@ export class CustomTabbar extends PureComponent<IProps, IState>{
             </TouchableOpacity>
           </View>
         </ImageBackground>
+        <View style={styles.bottomFiller} />
       </View>
     )
   }
@@ -177,10 +178,7 @@ export class CustomTabbar extends PureComponent<IProps, IState>{
 
 const styles = styleSheetCreate({
   mainContainer: style.view({
-    backgroundColor: Color.transparent,
-    // height: windowWidth * 0.2,
-    // backgroundColor: Color.linen,
-    // backgroundColor: Color.white,
+    backgroundColor: Color.white,
   }),
   container: style.view({
     flexDirection: 'row',
@@ -222,6 +220,11 @@ const styles = styleSheetCreate({
   addImageButton: style.image({
     width: windowWidth * 0.2,
     height: windowWidth * 0.2,
+  }),
+  bottomFiller: style.view({
+    flex: 1, 
+    backgroundColor: Color.linen,
+    marginTop: -windowWidth * 0.01,
   }),
 })
 

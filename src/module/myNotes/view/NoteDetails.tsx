@@ -354,7 +354,8 @@ export class NoteDetails extends PureComponent<IProps, IState>{
 
 const styles = styleSheetCreate({
   container: style.view({
-    height: '100%'
+    height: '100%',
+    backgroundColor: Color.white,
   }),
   contentContainer: style.view({
     paddingHorizontal: windowWidth * 0.042,

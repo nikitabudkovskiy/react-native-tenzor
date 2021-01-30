@@ -22,6 +22,7 @@ import { CommonButton } from 'app/module/global/view'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { Modalize } from 'react-native-modalize'
 import { Portal } from 'react-native-portalize'
+import { ListPages } from 'app/system/navigation'
 
 interface IProps {
   navigation: StackNavigationProp<any>
@@ -30,7 +31,7 @@ interface IProps {
 interface IState {
   activeDot: number
   bonusActiveDot: number
-  loginStatus: boolean
+  isUserLogin: boolean
 }
 
 const action = [
@@ -54,7 +55,19 @@ export class MainPage extends PureComponent<IProps, IState> {
   state = {
     activeDot: 0,
     bonusActiveDot: 0,
-    loginStatus: false,
+    isUserLogin: false,
+  }
+
+  onChangeLoginStatusHandler = (): void => {
+    this.setState({ isUserLogin: !this.state.isUserLogin })
+  }
+
+  goToLoginPageHandler = (): void => {
+    this.props.navigation.replace(ListPages.EnterPhoneNumberSingIn)
+  }
+
+  goToRegistraionPageHandler = (): void => {
+    this.props.navigation.replace(ListPages.EnterPhoneNumberSingInRegistration)
   }
 
   openSupportServiceHandler = (): void => {
@@ -81,10 +94,6 @@ export class MainPage extends PureComponent<IProps, IState> {
 
   changeCityHandler = () => {
     this.props.navigation.navigate('ChooseCity')
-  }
-
-  goToLoginPageHandler = () => {
-    this.props.navigation.navigate('EnterPhoneNumberSingIn')
   }
 
   refModalizeHandler = (ref: any) => this.refModalize = ref
@@ -164,7 +173,7 @@ export class MainPage extends PureComponent<IProps, IState> {
           </View>
 
           {
-            !this.state.loginStatus
+            this.state.isUserLogin
               ? (
                 <View>
                   <View style={styles.cardContent}>
@@ -192,7 +201,6 @@ export class MainPage extends PureComponent<IProps, IState> {
                     contentContainerStyle={styles.bonusesContainer}
                     showsHorizontalScrollIndicator={false}
                     decelerationRate="normal"
-                    // pagingEnabled
                     onScroll={this.onBonusesScrollHandler}
                   >
                     <View style={styles.bonusesSlidesContainer}>
@@ -262,6 +270,7 @@ export class MainPage extends PureComponent<IProps, IState> {
                       title='ВОЙТИ'
                       styleButton={styles.loginButton}
                       onPress={this.goToLoginPageHandler}
+                      onLongPress={this.goToRegistraionPageHandler}
                     />
                   </View>
                 </View>
@@ -301,7 +310,7 @@ export class MainPage extends PureComponent<IProps, IState> {
             </View>
           </View>
           {
-            this.state.loginStatus
+            this.state.isUserLogin
               ? (
                 <View style={styles.menuContainer}>
                   <TouchableOpacity
@@ -320,7 +329,10 @@ export class MainPage extends PureComponent<IProps, IState> {
                       style={styles.arrowRight}
                     />
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.exitContainer}>
+                  <TouchableOpacity
+                    onPress={this.onChangeLoginStatusHandler}
+                    style={styles.exitContainer}
+                  >
                     <Image
                       source={ImageRepository.mainPageExit}
                       style={styles.exit}
@@ -352,7 +364,10 @@ export class MainPage extends PureComponent<IProps, IState> {
                       style={styles.arrowRight}
                     />
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.exitContainer}>
+                  <TouchableOpacity
+                    onPress={this.onChangeLoginStatusHandler}
+                    style={styles.exitContainer}
+                  >
                     <Image
                       source={ImageRepository.mainPageAddress}
                       style={styles.mainPageAddress}
@@ -393,7 +408,7 @@ export class MainPage extends PureComponent<IProps, IState> {
             <Text style={styles.bottomSheetSubtitle}>
               Тут какой-то дополнительный текст по акции. Можно написать в каких салонах действует и т.п.
             </Text>
-            <CommonButton 
+            <CommonButton
               title="Завершить"
             />
           </Modalize>
@@ -405,7 +420,8 @@ export class MainPage extends PureComponent<IProps, IState> {
 
 const styles = styleSheetCreate({
   content: style.view({
-    // paddingBottom: windowWidth * 0.04,
+    backgroundColor: Color.white,
+    height: '100%',
   }),
   container: style.view({
     width: windowWidth * 2.436,
@@ -611,15 +627,21 @@ const styles = styleSheetCreate({
     fontFamily: fonts.robotoRegular
   }),
   cardBarcode: style.view({
-    // backgroundColor: 'red',
     paddingTop: windowWidth * 0.03,
-    // width: '92%',
   }),
   cardContainer: style.view({
     alignItems: 'center',
     backgroundColor: Color.white,
     marginTop: windowWidth * 0.05,
     borderRadius: windowWidth * 0.05,
+    shadowColor: Color.black,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   }),
   barCodeNumber: style.text({
     fontSize: windowWidth * 0.058,

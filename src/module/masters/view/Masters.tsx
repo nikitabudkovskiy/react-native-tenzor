@@ -204,7 +204,7 @@ export class Masters extends PureComponent<IProps, IState> {
 
 const styles = styleSheetCreate({
   mainContainer: style.view({
-
+    backgroundColor: Color.white,
   }),
   container: style.view({
     alignItems: 'center',
