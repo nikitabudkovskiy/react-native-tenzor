@@ -2,10 +2,10 @@ import React, { ComponentType } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { ListPages  } from 'app/system/navigation'
 import { ChooseCity } from 'app/module/main/view/ChooseCity'
-// import { EnterPhoneNumberSingIn } from 'app/module/login/view/EnterPhoneNumberSingIn'
-// import { PasswordSingIn } from 'app/module/login/view/PasswordSingIn'
-// import { RegistrationContacts } from 'app/module/registration/view/RegistrationContacts'
+import { EnterPhoneNumberSingIn } from 'app/module/login/view/EnterPhoneNumberSingIn'
+import { PasswordSingIn } from 'app/module/login/view/PasswordSingIn'
 import { MainPage } from 'app/module/main/view/MainPage'
+import { RegistrationContacts } from 'app/module/registration/view/RegistrationContacts'
 import { Masters } from 'app/module/masters/view/Masters'
 import { MyNotes } from 'app/module/myNotes/view/MyNotes'
 import { NoteDetails } from 'app/module/myNotes/view/NoteDetails'
@@ -41,6 +41,7 @@ const MyNotesStack = () => {
     </Stack.Navigator>
   )
 }
+
 
 export const listTabBar: Array<IListTabBar> = [
   {
@@ -94,12 +95,12 @@ export const RootNavigator = (): JSX.Element => {
   return (
     <Stack.Navigator headerMode="none">
       <Stack.Screen name={ListPages.MainPage} component={TabNavigator} />
-      {/* <Stack.Screen name={ListPages.ChooseCity} component={ChooseCity} />
-      <Stack.Screen name={ListPages.EnterPhoneNumber} component={PasswordSingIn} />
+      {/* <Stack.Screen name={ListPages.ChooseCity} component={ChooseCity} /> */}
+      {/* <Stack.Screen name={ListPages.EnterPhoneNumber} component={EnterPhoneNumberSingIn} />
       <Stack.Screen name={ListPages.PasswordSingIn} component={PasswordSingIn} />
-       <Stack.Screen name={ListPages.AppointmentType} component={AppointmentType} />  
-       <Stack.Screen name={ListPages.RegistrationContacts} component={RegistrationContacts} />
-      <Stack.Screen name={ListPages.SelectService} component={SelectService} />  */}
+      <Stack.Screen name={ListPages.AppointmentType} component={AppointmentType} />  */}
+      {/* <Stack.Screen name={ListPages.RegistrationContacts} component={RegistrationContacts} /> */}
+      {/* <Stack.Screen name={ListPages.SelectService} component={SelectService} /> */}
       <Stack.Screen name={ListPages.TimeSelect} component={TimeSelect} />
     </Stack.Navigator>
   )
