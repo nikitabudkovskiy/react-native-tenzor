@@ -17,6 +17,7 @@ import { TextInputMask } from 'react-native-masked-text'
 import { CommonButton } from 'app/module/global/view/CommonButton'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { StackNavigationProp } from '@react-navigation/stack'
+import { ListPages } from 'app/system/navigation'
 
 interface IState {
   phoneNumber: string
@@ -51,17 +52,12 @@ export class EnterPhoneNumberSingInRegistration extends PureComponent<IProps, IS
     })
   }
 
-  componentWillUnmount(): void {
-    // Keyboard.removeAllListeners(keyboardShowEvent)
-    // Keyboard.removeAllListeners(keyboardHideEvent)
-  }
-
   handleChangeText = (phoneNumber: string) => {
     this.setState({ phoneNumber })
   }
 
   goToNextPasswordHandler = (): void => {
-    // this.props.navigation.push(ListPages.SingInPassword)
+    this.props.navigation.push(ListPages.PasswordRegistration)
   }
 
   render() {

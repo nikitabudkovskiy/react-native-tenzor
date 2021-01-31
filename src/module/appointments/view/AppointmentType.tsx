@@ -15,9 +15,11 @@ import {
   isLongDevices,
   styleSheetFlatten,
 } from 'app/system/helpers'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { ListPages } from 'app/system/navigation'
 
 interface IProps {
-
+  navigation: StackNavigationProp<any>
 }
 
 interface IState {
@@ -25,6 +27,10 @@ interface IState {
 }
 
 export class AppointmentType extends PureComponent<IProps, IState>{
+
+  goToChooseSalonHandler = (): void => {
+    this.props.navigation.push(ListPages.ChooseSalon)
+  }
 
   render() {
 
@@ -41,7 +47,10 @@ export class AppointmentType extends PureComponent<IProps, IState>{
           Выберите тип записи
         </Text>
         <View>
-          <TouchableOpacity style={styles.appointmentTypeContainer}>
+          <TouchableOpacity
+            onPress={this.goToChooseSalonHandler}
+             style={styles.appointmentTypeContainer}
+            >
             <Image
             style={styles.sign} 
             source={ImageRepository.mainPageSign}
@@ -56,7 +65,10 @@ export class AppointmentType extends PureComponent<IProps, IState>{
           </TouchableOpacity>
         </View>
         <View>
-          <TouchableOpacity style={styles.appointmentTypeContainer}>
+          <TouchableOpacity 
+            onPress={this.goToChooseSalonHandler} 
+            style={styles.appointmentTypeContainer}
+          >
             <Image
             style={styles.sign} 
             source={ImageRepository.mainPageRecordingMaster}
@@ -71,7 +83,10 @@ export class AppointmentType extends PureComponent<IProps, IState>{
           </TouchableOpacity>
         </View>
         <View>
-          <TouchableOpacity style={styles.appointmentTypeContainer}>
+          <TouchableOpacity 
+            onPress={this.goToChooseSalonHandler}
+            style={styles.appointmentTypeContainer}
+          >
             <Image
             style={styles.sign} 
             source={ImageRepository.mainPageSolariumAppointment}

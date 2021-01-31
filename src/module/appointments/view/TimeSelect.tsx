@@ -14,6 +14,7 @@ import {
   windowWidth,
   ImageRepository,
   styleSheetFlatten,
+  isLongDevices,
 } from 'app/system/helpers'
 import { CommonButton } from 'app/module/global/view/CommonButton'
 
@@ -39,6 +40,14 @@ interface ITime {
 
 export class TimeSelect extends PureComponent<IProps, IState> {
   render() {
+
+    const container = styleSheetFlatten([
+      styles.container,
+      {
+        marginTop: isLongDevices ? windowWidth * 0.1 : windowWidth * 0.05
+      }
+    ])
+
     const dateContainerFlatten = styleSheetFlatten([
       styles.dateContainer,
       {
@@ -63,16 +72,17 @@ export class TimeSelect extends PureComponent<IProps, IState> {
     const timeContainerFlatten = styleSheetFlatten([
       styles.timeContainer,
       {
-        opacity: 0.5
+        opacity: 0.5,
       }
     ])
 
     return (
-      <View style={styles.container}>
+      <View style={styles.mainContainer}>
         <ScrollView
           scrollEnabled
           bounces={false}
           showsVerticalScrollIndicator={false}
+          style={container}
         >
           <View style={styles.dateTimeContainer}>
             <TouchableOpacity>
@@ -90,8 +100,6 @@ export class TimeSelect extends PureComponent<IProps, IState> {
             contentContainerStyle={styles.dateContent}
             showsHorizontalScrollIndicator={false}
             decelerationRate="normal"
-            // pagingEnabled
-            scrollEnabled
           >
             {
               dateTimeList.map(item => {
@@ -176,6 +184,13 @@ export class TimeSelect extends PureComponent<IProps, IState> {
 }
 
 const styles = styleSheetCreate({
+  mainContainer: style.view({
+    flex: 1,
+    backgroundColor: Color.white
+  }),
+  container: style.view({
+
+  }),
   dateTimeContainer: style.view({
     flexDirection: 'row',
     alignItems: 'center',
@@ -251,16 +266,13 @@ const styles = styleSheetCreate({
     width: windowWidth,
     height: windowWidth * 0.216,
     alignItems: 'center',
-    justifyContent: 'space-evenly'
+    justifyContent: 'space-evenly',
+    marginBottom: windowWidth * 0.06,
   }),
   calculationsTitle: style.text({
     fontSize: windowWidth * 0.04,
     fontFamily: fonts.robotoRegular
   }),
-  container: style.view({
-    height: '100%',
-    backgroundColor: Color.white
-  })
 })
 
 const dateTimeList: IDateTime[] = [

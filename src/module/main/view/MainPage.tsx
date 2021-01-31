@@ -20,6 +20,9 @@ import {
 import Barcode from "react-native-barcode-builder"
 import { CommonButton } from 'app/module/global/view'
 import { StackNavigationProp } from '@react-navigation/stack'
+import { Modalize } from 'react-native-modalize'
+import { Portal } from 'react-native-portalize'
+import { ListPages } from 'app/system/navigation'
 
 interface IProps {
   navigation: StackNavigationProp<any>
@@ -28,14 +31,47 @@ interface IProps {
 interface IState {
   activeDot: number
   bonusActiveDot: number
-  loginStatus: boolean
+  isUserLogin: boolean
 }
 
+const action = [
+  {
+    title: 'Акция',
+    subTitle: 'До 20 января Креативнаяж' + '\n' + 'стрижка по цене обычной',
+  },
+  {
+    title: 'Акция',
+    subTitle: 'До 20 января Креативнаяж' + '\n' + 'стрижка по цене обычной',
+  },
+  {
+    title: 'Акция',
+    subTitle: 'До 20 января Креативнаяж' + '\n' + 'стрижка по цене обычной',
+  },
+]
+
 export class MainPage extends PureComponent<IProps, IState> {
+  refModalize: any
+
   state = {
     activeDot: 0,
     bonusActiveDot: 0,
-    loginStatus: false,
+    isUserLogin: false,
+  }
+
+  onChangeLoginStatusHandler = (): void => {
+    this.setState({ isUserLogin: !this.state.isUserLogin })
+  }
+
+  goToLoginPageHandler = (): void => {
+    this.props.navigation.replace(ListPages.EnterPhoneNumberSingIn)
+  }
+
+  goToRegistraionPageHandler = (): void => {
+    this.props.navigation.replace(ListPages.EnterPhoneNumberSingInRegistration)
+  }
+
+  openSupportServiceHandler = (): void => {
+    this.refModalize.open()
   }
 
   onPromotionScrollHandler = (event: any): void => {
@@ -60,9 +96,7 @@ export class MainPage extends PureComponent<IProps, IState> {
     this.props.navigation.navigate('ChooseCity')
   }
 
-  goToLoginPageHandler = () => {
-    this.props.navigation.navigate('EnterPhoneNumberSingIn')
-  }
+  refModalizeHandler = (ref: any) => this.refModalize = ref
 
   render() {
 
@@ -80,7 +114,6 @@ export class MainPage extends PureComponent<IProps, IState> {
     return (
       <View style={styles.content}>
         <ScrollView
-          scrollEnabled
           bounces={false}
           showsVerticalScrollIndicator={false}
         >
@@ -96,41 +129,32 @@ export class MainPage extends PureComponent<IProps, IState> {
             contentContainerStyle={styles.container}
             showsHorizontalScrollIndicator={false}
             decelerationRate="normal"
-            // pagingEnabled
-            scrollEnabled
             onScroll={this.onPromotionScrollHandler}
           >
             <View style={styles.promotionSlidesContainer}>
-              <View style={styles.slides}>
-                <View style={styles.slideOne}>
-                  <Text style={styles.slideOneTitle}>
-                    Акция!
-                </Text>
-                  <Text style={styles.slideOneDescription}>
-                    До 20 января Креативная {'\n'}стрижка по цене обычной
-                </Text>
-                </View>
-              </View>
-              <View style={styles.slides}>
-                <View style={styles.slideOne}>
-                  <Text style={styles.slideOneTitle}>
-                    Акция!
-                </Text>
-                  <Text style={styles.slideOneDescription}>
-                    До 20 января Креативная {'\n'}стрижка по цене обычной
-                </Text>
-                </View>
-              </View>
-              <View style={styles.slides}>
-                <View style={styles.slideOne}>
-                  <Text style={styles.slideOneTitle}>
-                    Акция!
-                </Text>
-                  <Text style={styles.slideOneDescription}>
-                    До 20 января Креативная {'\n'}стрижка по цене обычной
-                </Text>
-                </View>
-              </View>
+              {
+                action.map(item => {
+                  return (
+                    <View
+                      style={styles.slides}
+                      key={Math.random().toString()}
+                    >
+                      <TouchableOpacity
+                        key={Math.random().toString()}
+                        style={styles.slideOne}
+                        onPress={this.openSupportServiceHandler}
+                      >
+                        <Text style={styles.slideOneTitle}>
+                          {item.title}
+                        </Text>
+                        <Text style={styles.slideOneDescription}>
+                          {item.subTitle}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  )
+                })
+              }
             </View>
           </ScrollView>
           <View style={styles.dotConteiner}>
@@ -149,7 +173,7 @@ export class MainPage extends PureComponent<IProps, IState> {
           </View>
 
           {
-            !this.state.loginStatus
+            this.state.isUserLogin
               ? (
                 <View>
                   <View style={styles.cardContent}>
@@ -177,8 +201,6 @@ export class MainPage extends PureComponent<IProps, IState> {
                     contentContainerStyle={styles.bonusesContainer}
                     showsHorizontalScrollIndicator={false}
                     decelerationRate="normal"
-                    // pagingEnabled
-                    scrollEnabled
                     onScroll={this.onBonusesScrollHandler}
                   >
                     <View style={styles.bonusesSlidesContainer}>
@@ -248,6 +270,7 @@ export class MainPage extends PureComponent<IProps, IState> {
                       title='ВОЙТИ'
                       styleButton={styles.loginButton}
                       onPress={this.goToLoginPageHandler}
+                      onLongPress={this.goToRegistraionPageHandler}
                     />
                   </View>
                 </View>
@@ -259,7 +282,7 @@ export class MainPage extends PureComponent<IProps, IState> {
               <Image
                 source={ImageRepository.mainPageSign}
                 style={styles.sign}
-                // resizeMode="contain"
+              // resizeMode="contain"
               />
               <Text style={styles.appointmentDescription}>
                 Запись{'\n'} на услугу
@@ -269,7 +292,7 @@ export class MainPage extends PureComponent<IProps, IState> {
               <Image
                 source={ImageRepository.mainPageRecordingMaster}
                 style={styles.sign}
-                // resizeMode="contain"
+              // resizeMode="contain"
               />
               <Text style={styles.appointmentDescription}>
                 Запись{'\n'} к мастеру
@@ -279,7 +302,7 @@ export class MainPage extends PureComponent<IProps, IState> {
               <Image
                 source={ImageRepository.mainPageSolariumAppointment}
                 style={styles.sign}
-                // resizeMode="contain"
+              // resizeMode="contain"
               />
               <Text style={styles.appointmentDescription}>
                 Запись{'\n'} в солярий
@@ -287,7 +310,7 @@ export class MainPage extends PureComponent<IProps, IState> {
             </View>
           </View>
           {
-            this.state.loginStatus
+            this.state.isUserLogin
               ? (
                 <View style={styles.menuContainer}>
                   <TouchableOpacity
@@ -306,7 +329,10 @@ export class MainPage extends PureComponent<IProps, IState> {
                       style={styles.arrowRight}
                     />
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.exitContainer}>
+                  <TouchableOpacity
+                    onPress={this.onChangeLoginStatusHandler}
+                    style={styles.exitContainer}
+                  >
                     <Image
                       source={ImageRepository.mainPageExit}
                       style={styles.exit}
@@ -338,7 +364,10 @@ export class MainPage extends PureComponent<IProps, IState> {
                       style={styles.arrowRight}
                     />
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.exitContainer}>
+                  <TouchableOpacity
+                    onPress={this.onChangeLoginStatusHandler}
+                    style={styles.exitContainer}
+                  >
                     <Image
                       source={ImageRepository.mainPageAddress}
                       style={styles.mainPageAddress}
@@ -355,6 +384,35 @@ export class MainPage extends PureComponent<IProps, IState> {
               )
           }
         </ScrollView>
+
+        <Portal>
+          <Modalize
+            ref={this.refModalizeHandler}
+            childrenStyle={styles.bottomSheetChildren}
+            modalHeight={windowWidth * 1.5}
+          >
+            <View style={styles.bottomSheetBackground}>
+              <Text style={styles.bottomSheetBackgroundTitle}>
+                Акция!
+              </Text>
+              <Text style={styles.bottomSheetBackgroundSubtitle}>
+                До 20 января Креативная стрижка по цене обычной
+              </Text>
+            </View>
+            <Text style={styles.bottomSheetTitle}>
+              Скидка 20% на все креативные стрижки
+            </Text>
+            <Text style={styles.bottomSheetWorks}>
+              Действует до 18.10.202
+            </Text>
+            <Text style={styles.bottomSheetSubtitle}>
+              Тут какой-то дополнительный текст по акции. Можно написать в каких салонах действует и т.п.
+            </Text>
+            <CommonButton
+              title="Завершить"
+            />
+          </Modalize>
+        </Portal>
       </View>
     )
   }
@@ -362,7 +420,8 @@ export class MainPage extends PureComponent<IProps, IState> {
 
 const styles = styleSheetCreate({
   content: style.view({
-    // paddingBottom: windowWidth * 0.04,
+    backgroundColor: Color.white,
+    height: '100%',
   }),
   container: style.view({
     width: windowWidth * 2.436,
@@ -382,7 +441,6 @@ const styles = styleSheetCreate({
     flexDirection: 'row',
     paddingLeft: windowWidth * 0.043,
   }),
-
   slides: style.view({
     alignItems: 'center',
     paddingLeft: windowWidth * 0.021,
@@ -390,7 +448,7 @@ const styles = styleSheetCreate({
   slideOne: style.view({
     width: windowWidth * 0.76,
     height: windowWidth * 0.266,
-    backgroundColor: 'red',
+    backgroundColor: Color.candyAppleRed,
     paddingLeft: windowWidth * 0.042,
     paddingTop: windowWidth * 0.041,
     borderRadius: windowWidth * 0.032,
@@ -557,16 +615,6 @@ const styles = styleSheetCreate({
     width: windowWidth * 0.042,
     height: windowWidth * 0.042,
   }),
-  bottomBar: style.view({
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    height: windowWidth * 0.136,
-    backgroundColor: Color.white,
-    flexDirection: 'row',
-    paddingLeft: windowWidth * 0.0217,
-    justifyContent: 'space-evenly'
-  }),
   profileContainer: style.view({
     alignItems: 'center'
   }),
@@ -579,15 +627,21 @@ const styles = styleSheetCreate({
     fontFamily: fonts.robotoRegular
   }),
   cardBarcode: style.view({
-    // backgroundColor: 'red',
     paddingTop: windowWidth * 0.03,
-    // width: '92%',
   }),
   cardContainer: style.view({
     alignItems: 'center',
     backgroundColor: Color.white,
     marginTop: windowWidth * 0.05,
     borderRadius: windowWidth * 0.05,
+    shadowColor: Color.black,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   }),
   barCodeNumber: style.text({
     fontSize: windowWidth * 0.058,
@@ -648,5 +702,46 @@ const styles = styleSheetCreate({
     paddingRight: windowWidth * 0.42,
     fontFamily: fonts.robotoRegular,
     fontSize: windowWidth * 0.04,
+  }),
+  bottomSheetChildren: style.view({
+    paddingHorizontal: windowWidth * 0.04,
+  }),
+  bottomSheetBackground: style.view({
+    width: '100%',
+    height: windowWidth * 0.3,
+    backgroundColor: Color.candyAppleRed,
+    marginTop: windowWidth * 0.03,
+    borderRadius: windowWidth * 0.04,
+    paddingHorizontal: windowWidth * 0.05,
+  }),
+  bottomSheetBackgroundTitle: style.text({
+    fontSize: windowWidth * 0.06,
+    color: Color.white,
+    fontFamily: fonts.robotoBold,
+    marginTop: windowWidth * 0.05,
+  }),
+  bottomSheetBackgroundSubtitle: style.text({
+    fontSize: windowWidth * 0.036,
+    color: Color.white,
+    fontFamily: fonts.robotoRegular,
+    marginTop: windowWidth * 0.01,
+  }),
+  bottomSheetTitle: style.text({
+    fontFamily: fonts.robotoBold,
+    color: Color.black,
+    fontSize: windowWidth * 0.044,
+    marginTop: windowWidth * 0.04,
+  }),
+  bottomSheetWorks: style.text({
+    fontFamily: fonts.robotoRegular,
+    color: Color.candyAppleRed,
+    fontSize: windowWidth * 0.044,
+    marginTop: windowWidth * 0.04,
+  }),
+  bottomSheetSubtitle: style.text({
+    fontSize: windowWidth * 0.04,
+    fontFamily: fonts.robotoRegular,
+    marginTop: windowWidth * 0.04,
+    marginBottom: windowWidth * 0.6,
   }),
 })

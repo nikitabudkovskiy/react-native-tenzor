@@ -15,13 +15,13 @@ import {
   ImageRepository,
   styleSheetFlatten,
   isLongDevices,
-  windowHeight,
 } from 'app/system/helpers'
 import { CommonButton, CommonInput } from 'app/module/global/view'
 import { StackNavigationProp } from '@react-navigation/stack'
 import Modal from 'react-native-modal'
-import BottomSheet from 'reanimated-bottom-sheet'
 import Svg, { Path } from 'react-native-svg'
+import { Modalize } from 'react-native-modalize'
+import { Portal } from 'react-native-portalize'
 
 interface IProps {
   navigation: StackNavigationProp<any>
@@ -37,7 +37,7 @@ interface IState {
 const masterAssessment = [1, 2, 3, 4, 5]
 
 export class NoteDetails extends PureComponent<IProps, IState>{
-  refBottomSheet: any
+  refModalize: any
 
   state = {
     isModalShow: false,
@@ -67,16 +67,14 @@ export class NoteDetails extends PureComponent<IProps, IState>{
   }
 
   openBottomSheetHandler = (masterAssessment: number): void => {
-    this.setState({ masterAssessment }, () =>  this.refBottomSheet.snapTo(0))
+    this.setState({ masterAssessment }, () =>  this.refModalize.open())
   }
 
-  closeBottomSheetHandler = (): void => {
-    this.refBottomSheet.snapTo(1)
+  openMasterAssessmentBottomHandler = (): void => {
+    this.refModalize.open()
   }
 
-  refBottomSheetHandler = (ref: any): void => {
-    this.refBottomSheet = ref
-  }
+  refModalizeHandler = (ref: any) => this.refModalize = ref
 
   goBackHandler = (): void => {
     if (this.props.navigation.canGoBack()) {
@@ -121,7 +119,6 @@ export class NoteDetails extends PureComponent<IProps, IState>{
       <View style={container}>
 
         <ScrollView
-          scrollEnabled
           bounces={false}
           showsVerticalScrollIndicator={false}
           style={styles.contentContainer}
@@ -140,8 +137,8 @@ export class NoteDetails extends PureComponent<IProps, IState>{
           <View style={styles.statusContent}>
             <View style={styles.statusContainer}>
               <Text style={styles.statusTitle}>
-                Ожидает
-            </Text>
+                Ожидает подтверждения
+              </Text>
             </View>
             <CommonButton
               title='Отменить запись'
@@ -299,15 +296,13 @@ export class NoteDetails extends PureComponent<IProps, IState>{
           </View>
         </Modal>
 
-        <BottomSheet
-          ref={this.refBottomSheetHandler}
-          initialSnap={1}
-          snapPoints={[windowHeight * 0.45, -100]}
-          renderHeader={this.renderBottomSheetHeader}
-          enabledInnerScrolling={false}
-          renderContent={() => {
-            return (
-              <View style={styles.bottomSheetContent}>
+        <Portal>
+          <Modalize
+            ref={this.refModalizeHandler}
+            childrenStyle={styles.bottomSheetChildren}
+            modalHeight={windowWidth * 1.1}
+          >
+             <View style={styles.bottomSheetContent}>
               <Text style={styles.bottomSheetText}>
                 Удовлетварительно
               </Text>
@@ -349,9 +344,8 @@ export class NoteDetails extends PureComponent<IProps, IState>{
                 styleButton={styles.bottomSheetSendButton}
               />
             </View>
-            )
-          }}
-        />
+          </Modalize>
+        </Portal>
       </View>
     )
   }
@@ -359,7 +353,8 @@ export class NoteDetails extends PureComponent<IProps, IState>{
 
 const styles = styleSheetCreate({
   container: style.view({
-    height: '100%'
+    height: '100%',
+    backgroundColor: Color.white,
   }),
   contentContainer: style.view({
     paddingHorizontal: windowWidth * 0.042,
@@ -381,7 +376,7 @@ const styles = styleSheetCreate({
   statusContainer: style.view({
     width: windowWidth * 0.914,
     height: windowWidth * 0.13,
-    backgroundColor: Color.gray700,
+    backgroundColor: Color.chineseWhite,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: windowWidth * 0.032,
@@ -390,7 +385,7 @@ const styles = styleSheetCreate({
   statusTitle: style.text({
     fontFamily: fonts.robotoRegular,
     fontSize: windowWidth * 0.04,
-    color: Color.white
+    color: Color.fauxLime
   }),
   cancelButton: style.view({
     backgroundColor: Color.white,
@@ -455,7 +450,7 @@ const styles = styleSheetCreate({
     fontFamily: fonts.robotoRegular,
   }),
   finishedRecordingButton: style.view({
-    backgroundColor: Color.gray700,
+    backgroundColor: Color.fauxLime,
     marginBottom: windowWidth * 0.04,
   }),
   finishedRecordingButtonText: style.text({
@@ -532,7 +527,7 @@ const styles = styleSheetCreate({
     fontSize: windowWidth * 0.058,
     textAlign: 'center',
     fontFamily: fonts.robotoBold,
-    marginTop: windowWidth * 0.04,
+    marginTop: windowWidth * 0.08,
   }),
   bottomSheetYourMark: style.text({
     color: Color.gray,

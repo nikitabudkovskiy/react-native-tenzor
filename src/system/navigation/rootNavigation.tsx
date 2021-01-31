@@ -1,9 +1,7 @@
 import React, { ComponentType } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { ListPages  } from 'app/system/navigation'
+import { ListPages } from 'app/system/navigation'
 import { ChooseCity } from 'app/module/main/view/ChooseCity'
-import { EnterPhoneNumberSingIn } from 'app/module/login/view/EnterPhoneNumberSingIn'
-import { PasswordSingIn } from 'app/module/login/view/PasswordSingIn'
 import { MainPage } from 'app/module/main/view/MainPage'
 import { RegistrationContacts } from 'app/module/registration/view/RegistrationContacts'
 import { Masters } from 'app/module/masters/view/Masters'
@@ -13,16 +11,17 @@ import { AppointmentType } from 'app/module/appointments/view/AppointmentType'
 import { TimeSelect } from 'app/module/appointments/view/TimeSelect'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { CustomTabbar } from 'app/system/navigation/CustomTabbar'
-// import { SelectService } from 'app/module/appointments/view/SelectService'
-
-// import { ImageStyle, ImageURISource } from 'react-native'
-// import { ImageRepository, windowWidth } from '../helpers'
-import { Сontacts } from 'app/module/main/view/Сontacts'
-// import { EnterPhoneNumberSingIn } from 'app/module/login/view/EnterPhoneNumberSingIn'
-// import { PasswordSingIn } from 'app/module/login/view/PasswordSingIn'
+import { Host } from 'react-native-portalize'
+import { EnterPhoneNumberSingIn } from 'app/module/login/view/EnterPhoneNumberSingIn'
+import { PasswordSingIn } from 'app/module/login/view/PasswordSingIn'
+import { ChooseSalon } from 'app/module/appointments/view/ChooseSalon'
+import { SelectService } from 'app/module/appointments/view/SelectService'
+import { ChooseMaster } from 'app/module/appointments/view/ChooseMaster'
+import { EnterPhoneNumberSingInRegistration } from 'app/module/login/view/EnterPhoneNumberSingInRegistration'
+import { PasswordRegistration } from 'app/module/login/view/PasswordRegistration'
 // import { RegistrationContacts } from 'app/module/registration/view/RegistrationContacts'
-// import { EnterPhoneNumberSingInRegistration } from 'app/module/login/view/EnterPhoneNumberSingInRegistration'
-// import { PasswordRegistration } from 'app/module/login/view/PasswordRegistration'
+import { FinishNote } from 'app/module/myNotes/view/FinishNote'
+import { Сontacts } from 'app/module/main/view/Сontacts'
 
 export interface IListTabBar {
   name: string
@@ -71,12 +70,13 @@ export const listTabBar: Array<IListTabBar> = [
   },
 ]
 
-const TabNavigator = () => {
+const MainTabNavigator = () => {
   return (
-    <Tab.Navigator 
-      tabBar={props => <CustomTabbar  tabs={listTabBar} {...props} />} 
-    >
-      {
+    <Host>
+      <Tab.Navigator
+        tabBar={props => <CustomTabbar tabs={listTabBar} {...props} />}
+      >
+        {
           listTabBar.map((item, index) => {
             return (
               <Tab.Screen
@@ -87,21 +87,26 @@ const TabNavigator = () => {
             )
           })
         }
-    </Tab.Navigator>
+      </Tab.Navigator>
+    </Host>
   )
 }
 
 export const RootNavigator = (): JSX.Element => {
   return (
     <Stack.Navigator headerMode="none">
-      <Stack.Screen name={ListPages.MainPage} component={TabNavigator} />
-      {/* <Stack.Screen name={ListPages.ChooseCity} component={ChooseCity} /> */}
-      {/* <Stack.Screen name={ListPages.EnterPhoneNumber} component={EnterPhoneNumberSingIn} />
-      <Stack.Screen name={ListPages.PasswordSingIn} component={PasswordSingIn} />
-      <Stack.Screen name={ListPages.AppointmentType} component={AppointmentType} />  */}
-      {/* <Stack.Screen name={ListPages.RegistrationContacts} component={RegistrationContacts} /> */}
-      {/* <Stack.Screen name={ListPages.SelectService} component={SelectService} /> */}
+      <Stack.Screen name={ListPages.ChooseCity} component={ChooseCity} />
+      <Stack.Screen name={ListPages.MainTab} component={MainTabNavigator} />
+      <Stack.Screen name={ListPages.ChooseSalon} component={ChooseSalon} />
+      <Stack.Screen name={ListPages.SelectService} component={SelectService} /> 
+      <Stack.Screen name={ListPages.ChooseMaster} component={ChooseMaster} /> 
       <Stack.Screen name={ListPages.TimeSelect} component={TimeSelect} />
+      <Stack.Screen name={ListPages.EnterPhoneNumberSingIn} component={EnterPhoneNumberSingIn} />
+      <Stack.Screen name={ListPages.PasswordSingIn} component={PasswordSingIn} />
+      <Stack.Screen name={ListPages.EnterPhoneNumberSingInRegistration} component={EnterPhoneNumberSingInRegistration} />
+      <Stack.Screen name={ListPages.PasswordRegistration} component={PasswordRegistration} />
+      <Stack.Screen name={ListPages.RegistrationContacts} component={RegistrationContacts} />    
+      {/* <Stack.Screen name={ListPages.FinishNote} component={FinishNote} />     */}
     </Stack.Navigator>
   )
 }
