@@ -14,7 +14,8 @@
     "tsw": "yarn run tsc --watch",
     "renameAndroid": "chmod u=rwx ./renameReleaseAndroidApk.bash && ./renameReleaseAndroidApk.bash",
     "fixWebView": "chmod 777 removeWebView.sh && sudo ./removeWebView.sh",
-    "test": "jest"
+    "test": "jest",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^2",
@@ -50,7 +51,8 @@
     "redux-thunk": "^2.3.0",
     "typescript-fsa": "^3.0.0",
     "typescript-fsa-reducers": "^1.2.1",
-    "typescript-fsa-redux-thunk": "^2.1.9"
+    "typescript-fsa-redux-thunk": "^2.1.9",
+    "patch-package": "^6.2.2"
   },
   "devDependencies": {
     "@babel/core": "^7.10.3",

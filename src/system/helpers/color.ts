@@ -20,4 +20,5 @@ export enum Color {
     black600  = "rgba(0, 0, 0, 0.6)",
     alizarinCrimson  = "rgba(227, 47, 54, 0.9)",
     candyAppleRed  = "#F40F00",
+    chineseWhite = "#D8F1DB",
 }

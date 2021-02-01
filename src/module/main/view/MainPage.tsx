@@ -55,7 +55,7 @@ export class MainPage extends PureComponent<IProps, IState> {
   state = {
     activeDot: 0,
     bonusActiveDot: 0,
-    isUserLogin: false,
+    isUserLogin: true,
   }
 
   onChangeLoginStatusHandler = (): void => {
@@ -183,7 +183,7 @@ export class MainPage extends PureComponent<IProps, IState> {
                           background={Color.white}
                           value="3243240000000"
                           format="CODE128"
-                          width={2.7}
+                          width={windowWidth * 0.006}
                         />
                         <Text style={styles.barCodeNumber}>
                           3243240000000
@@ -278,7 +278,7 @@ export class MainPage extends PureComponent<IProps, IState> {
           }
 
           <View style={styles.appointments}>
-            <View style={styles.serviceAppointment}>
+            <TouchableOpacity style={styles.serviceAppointment}>
               <Image
                 source={ImageRepository.mainPageSign}
                 style={styles.sign}
@@ -287,8 +287,8 @@ export class MainPage extends PureComponent<IProps, IState> {
               <Text style={styles.appointmentDescription}>
                 Запись{'\n'} на услугу
               </Text>
-            </View>
-            <View style={styles.serviceAppointment}>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.serviceAppointment}>
               <Image
                 source={ImageRepository.mainPageRecordingMaster}
                 style={styles.sign}
@@ -297,8 +297,8 @@ export class MainPage extends PureComponent<IProps, IState> {
               <Text style={styles.appointmentDescription}>
                 Запись{'\n'} к мастеру
               </Text>
-            </View>
-            <View style={styles.serviceAppointment}>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.serviceAppointment}>
               <Image
                 source={ImageRepository.mainPageSolariumAppointment}
                 style={styles.sign}
@@ -307,7 +307,7 @@ export class MainPage extends PureComponent<IProps, IState> {
               <Text style={styles.appointmentDescription}>
                 Запись{'\n'} в солярий
               </Text>
-            </View>
+            </TouchableOpacity>
           </View>
           {
             this.state.isUserLogin
@@ -650,7 +650,6 @@ const styles = styleSheetCreate({
   cardDescriptionContainer: style.view({
     backgroundColor: Color.black,
     width: windowWidth * 0.9,
-    // height: windowHeight * 0.088,
     borderBottomLeftRadius: windowWidth * 0.05,
     borderBottomRightRadius: windowWidth * 0.05,
     marginTop: windowWidth * 0.04,

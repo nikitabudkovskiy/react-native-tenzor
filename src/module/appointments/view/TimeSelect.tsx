@@ -15,11 +15,12 @@ import {
   ImageRepository,
   styleSheetFlatten,
   isLongDevices,
+  hitSlop,
 } from 'app/system/helpers'
 import { CommonButton } from 'app/module/global/view/CommonButton'
 
 interface IProps {
-
+  navigation: StackNavigationProp<any>
 }
 
 interface IState {
@@ -39,6 +40,13 @@ interface ITime {
 }
 
 export class TimeSelect extends PureComponent<IProps, IState> {
+
+  goBackHandler = (): void => {
+    if (this.props.navigation.canGoBack()) {
+      this.props.navigation.goBack()
+    }
+  }
+
   render() {
 
     const container = styleSheetFlatten([
@@ -85,7 +93,10 @@ export class TimeSelect extends PureComponent<IProps, IState> {
           style={container}
         >
           <View style={styles.dateTimeContainer}>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={this.goBackHandler}
+              hitSlop={hitSlop}
+            >
               <Image
                 source={ImageRepository.masterArrowLeft}
                 style={styles.arrowLeft}

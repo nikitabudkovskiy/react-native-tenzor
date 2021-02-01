@@ -168,7 +168,7 @@ export class SelectService extends PureComponent<IProps, IState>{
               {
                 serviceList.map(items => {
                   return (
-                    <View style={styles.serviceItemContainer}>
+                    <View key={Math.random().toString()} style={styles.serviceItemContainer}>
                       <View style={styles.serviceItemTitleContainer}>
                         <Text style={styles.serviceItemTitle}>
                           {items.title}

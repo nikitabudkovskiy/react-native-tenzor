@@ -136,11 +136,11 @@ export class NoteDetails extends PureComponent<IProps, IState>{
             </Text>
           </View>
           <View style={styles.statusContent}>
-            <View style={styles.statusContainer}>
-              <Text style={styles.statusTitle}>
-                Ожидает
-            </Text>
-            </View>
+            <CommonButton
+              title='Ожидает'
+              styleButton={styles.statusContainer}
+              styleText={styles.statusTitle}
+            />
             <CommonButton
               title='Отменить запись'
               styleButton={styles.cancelButton}
@@ -377,7 +377,7 @@ const styles = styleSheetCreate({
   statusContainer: style.view({
     width: windowWidth * 0.914,
     height: windowWidth * 0.13,
-    backgroundColor: Color.gray700,
+    backgroundColor: Color.chineseWhite,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: windowWidth * 0.032,
@@ -386,13 +386,15 @@ const styles = styleSheetCreate({
   statusTitle: style.text({
     fontFamily: fonts.robotoRegular,
     fontSize: windowWidth * 0.04,
-    color: Color.white
+    color: Color.fauxLime,
+    textTransform: 'none',
   }),
   cancelButton: style.view({
     backgroundColor: Color.white,
     borderColor: Color.electricOrange,
     borderWidth: windowWidth * 0.002,
-    marginTop: windowWidth * 0.042
+    marginTop: windowWidth * 0.042,
+    height: windowWidth * 0.12,
   }),
   cancelTitle: style.text({
     color: Color.electricOrange
@@ -444,6 +446,7 @@ const styles = styleSheetCreate({
   entryСanceledButton: style.view({
     backgroundColor: Color.alizarinCrimson,
     marginVertical: windowWidth * 0.04,
+    height: windowWidth * 0.12,
   }),
   entryСanceledButtonText: style.text({
     color: Color.white,
@@ -451,8 +454,9 @@ const styles = styleSheetCreate({
     fontFamily: fonts.robotoRegular,
   }),
   finishedRecordingButton: style.view({
-    backgroundColor: Color.gray700,
+    backgroundColor: Color.fauxLime,
     marginBottom: windowWidth * 0.04,
+    height: windowWidth * 0.12,
   }),
   finishedRecordingButtonText: style.text({
     color: Color.white,
