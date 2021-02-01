@@ -150,13 +150,11 @@ export class NoteDetails extends PureComponent<IProps, IState>{
               title='Запись отменена'
               styleButton={styles.entryСanceledButton}
               styleText={styles.entryСanceledButtonText}
-              // onPress={this.openCancelRecordModal}
             />
             <CommonButton
               title='Завершена'
               styleButton={styles.finishedRecordingButton}
               styleText={styles.finishedRecordingButtonText}
-              // onPress={this.openCancelRecordModal}
             />
             <View style={{ alignItems: 'center'}}>
             <Text style={styles.bottomSheetYourMark}>
