@@ -47,4 +47,6 @@ export class ImageRepository {
   static readonly contactsInsta = require('assets/images/contacts/insta.png')
   static readonly contactsCustomMarker = require('assets/images/contacts/customMarker1.png')
 
+  static readonly finishNoteIcon = require('assets/images/myNotes/finishNoteIcon.png')
+
 }

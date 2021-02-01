@@ -119,7 +119,6 @@ export class NoteDetails extends PureComponent<IProps, IState>{
       <View style={container}>
 
         <ScrollView
-          scrollEnabled
           bounces={false}
           showsVerticalScrollIndicator={false}
           style={styles.contentContainer}

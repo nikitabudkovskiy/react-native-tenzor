@@ -71,7 +71,9 @@ export class EnterPhoneNumberSingIn extends PureComponent<IProps, IState> {
       styles.continueButton,
       {
         bottom: this.state.isKeyboardShow 
-          ? windowWidth * 0.06 + this.state.heightKeybord 
+          // ? windowWidth * 0.06 + this.state.heightKeybord 
+          // : windowWidth * 0.06
+          ? this.state.heightKeybord  - windowWidth * 0.6
           : windowWidth * 0.06
       }
     ])

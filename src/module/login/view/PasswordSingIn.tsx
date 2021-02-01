@@ -94,8 +94,10 @@ export const PasswordSingIn = ({ navigation }: IProps) => {
     styles.forgetPasswordButton,
     {
       bottom: isKeyboardShow
-        ? windowWidth * 0.06 + heightKeybord
-        : windowWidth * 0.06
+        // ? windowWidth * 0.06 + heightKeybord
+        // : windowWidth * 0.06
+        ? windowWidth * 0.05  
+        : windowWidth * 0.08
     }
   ])
 

@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { ListPages } from 'app/system/navigation'
 import { ChooseCity } from 'app/module/main/view/ChooseCity'
 import { MainPage } from 'app/module/main/view/MainPage'
+import { RegistrationContacts } from 'app/module/registration/view/RegistrationContacts'
 import { Masters } from 'app/module/masters/view/Masters'
 import { MyNotes } from 'app/module/myNotes/view/MyNotes'
 import { NoteDetails } from 'app/module/myNotes/view/NoteDetails'
@@ -18,7 +19,8 @@ import { SelectService } from 'app/module/appointments/view/SelectService'
 import { ChooseMaster } from 'app/module/appointments/view/ChooseMaster'
 import { EnterPhoneNumberSingInRegistration } from 'app/module/login/view/EnterPhoneNumberSingInRegistration'
 import { PasswordRegistration } from 'app/module/login/view/PasswordRegistration'
-import { RegistrationContacts } from 'app/module/registration/view/RegistrationContacts'
+// import { RegistrationContacts } from 'app/module/registration/view/RegistrationContacts'
+import { FinishNote } from 'app/module/myNotes/view/FinishNote'
 import { Сontacts } from 'app/module/main/view/Сontacts'
 
 export interface IListTabBar {
@@ -38,6 +40,7 @@ const MyNotesStack = () => {
     </Stack.Navigator>
   )
 }
+
 
 export const listTabBar: Array<IListTabBar> = [
   {
@@ -103,6 +106,7 @@ export const RootNavigator = (): JSX.Element => {
       <Stack.Screen name={ListPages.EnterPhoneNumberSingInRegistration} component={EnterPhoneNumberSingInRegistration} />
       <Stack.Screen name={ListPages.PasswordRegistration} component={PasswordRegistration} />
       <Stack.Screen name={ListPages.RegistrationContacts} component={RegistrationContacts} />    
+      {/* <Stack.Screen name={ListPages.FinishNote} component={FinishNote} />     */}
     </Stack.Navigator>
   )
 }
