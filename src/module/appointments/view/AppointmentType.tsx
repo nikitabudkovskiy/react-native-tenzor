@@ -109,7 +109,7 @@ const styles = styleSheetCreate({
   container: style.view({
     height: '100%',
     paddingHorizontal: windowWidth * 0.0426,
-    backgroundColor: Color.white
+    backgroundColor: Color.white,
   }),
   appointmentTypeContainer: style.view({
     flexDirection: 'row',

@@ -6,7 +6,7 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
-    "clean": "(cd andoroid && ./gradlew clean)",
+    "clean": "(cd android && ./gradlew clean)",
     "release": "(cd android && ./gradlew app:assembleRelease) && yarn renameAndroid",
     "all": "yarn install && (cd ios && pod install)",
     "podinstall": "(cd ios && pod install)",

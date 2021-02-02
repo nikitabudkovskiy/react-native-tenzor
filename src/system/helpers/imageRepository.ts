@@ -3,7 +3,9 @@ export class ImageRepository {
   static readonly globalGrayCheckMark= require('../../../assets/images/global/grayCheckMark.png')
 
   static readonly loaderBackground = require('../../../assets/images/loader/background.png')
+  static readonly loaderLogo = require('../../../assets/images/loader/logo.png')
   static readonly chooseCityCheck = require('assets/images/chooseCity/icon.png')
+
   static readonly mainPageLogo = require('assets/images/main/logo.png')
   static readonly mainPageSign = require('assets/images/main/signService.png')
   static readonly mainPageRecordingMaster = require('assets/images/main/recordingMaster.png')

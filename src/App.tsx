@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { AppState, AppStateStatus, YellowBox, StatusBar } from 'react-native'
+import { AppState, AppStateStatus, YellowBox, StatusBar, View } from 'react-native'
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native'
 import { RootNavigator } from 'app/system/navigation/rootNavigation'
 import { Provider } from 'react-redux'
@@ -74,7 +74,8 @@ export class App extends PureComponent<IProps, IState>{
 
   render(): JSX.Element {
     return (
-     <PersistGate
+      // <View style={{ backgroundColor: 'red', flex: 1}}>
+         <PersistGate
        loading={this.renderLoader()}
        persistor={this.persistor}
      >
@@ -84,6 +85,7 @@ export class App extends PureComponent<IProps, IState>{
           </NavigationContainer>
         </Provider>
      </PersistGate>
+      // </View>
     )
   }
 }

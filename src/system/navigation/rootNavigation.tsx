@@ -22,6 +22,8 @@ import { PasswordRegistration } from 'app/module/login/view/PasswordRegistration
 // import { RegistrationContacts } from 'app/module/registration/view/RegistrationContacts'
 import { FinishNote } from 'app/module/myNotes/view/FinishNote'
 import { Сontacts } from 'app/module/main/view/Сontacts'
+import { View } from 'react-native'
+import { Color, windowWidth } from '../helpers'
 
 export interface IListTabBar {
   name: string
@@ -83,6 +85,8 @@ const MainTabNavigator = () => {
                 key={index.toString()}
                 name={item.routeName}
                 component={item.component}
+                
+                
               />
             )
           })

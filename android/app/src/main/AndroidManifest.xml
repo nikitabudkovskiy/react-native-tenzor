@@ -11,6 +11,10 @@
       android:allowBackup="false"
       android:theme="@style/AppTheme"
       android:usesCleartextTraffic="true">
+      <meta-data
+      android:name="com.google.android.geo.API_KEY"
+      android:value="AIzaSyAkEGIQqJxyVg3l5lyX3pcgUHoq3TY_PTA"
+    />
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
@@ -23,8 +27,6 @@
         </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+      <uses-library android:name="org.apache.http.legacy" android:required="false"/>
     </application>
-    <meta-data
-      android:name="com.google.android.geo.API_KEY"
-      android:value="fa8301f7f888b3fe"/>
 </manifest>

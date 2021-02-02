@@ -1,3 +1,5 @@
+import { windowWidth } from './dimensions'
+
 export enum EPlatformName { 
   android = 'android',
   ios = 'ios'
@@ -14,3 +16,5 @@ export enum EStatusBarStyle {
 }
 
 export const baseUrl = ''
+
+export const HEIGHT_TABBAR = windowWidth * 0.15

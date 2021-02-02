@@ -14,6 +14,7 @@ import {
   styleSheetFlatten,
   isLongDevices,
   ImageRepository,
+  HEIGHT_TABBAR,
 } from 'app/system/helpers'
 // import { IListTabBar, ITabInformation } from 'app/interfaces';
 
@@ -76,7 +77,7 @@ export class CustomTabbar extends PureComponent<IProps, IState>{
     ])
 
     return (
-      <View style={mainContainer}>
+        <View style={mainContainer}>
         <ImageBackground source={ImageRepository.tabBar} style={styles.container}> 
           <View
             key={Math.random().toString()}
@@ -178,13 +179,21 @@ export class CustomTabbar extends PureComponent<IProps, IState>{
 
 const styles = styleSheetCreate({
   mainContainer: style.view({
-    backgroundColor: Color.white,
+    backgroundColor: 'transparent',
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: HEIGHT_TABBAR,
+    // marginTop: windowWidth * 0.2,
+    // marginTop: windowWidth * 0.15,
   }),
   container: style.view({
     flexDirection: 'row',
-    height: windowWidth * 0.15,
+    height: HEIGHT_TABBAR,
     width: '100%',
     marginTop: windowWidth * 0.03,
+    // backgroundColor: Color.transparent,
   }),
   tabContainer: style.view({
     alignItems: 'center',
