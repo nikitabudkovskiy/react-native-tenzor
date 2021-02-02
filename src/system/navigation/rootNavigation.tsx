@@ -99,7 +99,7 @@ const MainTabNavigator = () => {
 export const RootNavigator = (): JSX.Element => {
   return (
     <Stack.Navigator headerMode="none">
-      {/* <Stack.Screen name={ListPages.ChooseCity} component={ChooseCity} /> */}
+      <Stack.Screen name={ListPages.ChooseCity} component={ChooseCity} />
       <Stack.Screen name={ListPages.MainTab} component={MainTabNavigator} />
       <Stack.Screen name={ListPages.ChooseSalon} component={ChooseSalon} />
       <Stack.Screen name={ListPages.SelectService} component={SelectService} /> 
