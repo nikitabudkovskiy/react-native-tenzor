@@ -216,6 +216,7 @@ export class Сontacts extends PureComponent<IProps, IState> {
                     )
                   })
                 }
+                <View style={{height: windowWidth * 0.2}} />
               </ScrollView>
               {/* <CommonButton
                 styleButton={styles.signSalonButton}
