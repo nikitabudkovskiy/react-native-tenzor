@@ -173,6 +173,7 @@ const styles = styleSheetCreate({
     paddingHorizontal: windowWidth * 0.021,
     backgroundColor: Color.white,
     height: '100%',
+    paddingBottom: windowWidth * 0.26
   }),
   headerTitle: style.text({
     fontSize: windowWidth * 0.05,
