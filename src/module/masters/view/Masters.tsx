@@ -48,7 +48,7 @@ export class Masters extends PureComponent<IProps, IState> {
     animatedMarginLeft: new Animated.Value(0)
   }
 
-  searchMasterHandler = (searchValue: string):void => {
+  searchMasterHandler = (searchValue: string): void => {
     this.setState({ searchValue })
   }
 
@@ -100,7 +100,6 @@ export class Masters extends PureComponent<IProps, IState> {
         }),
       }
     ])
-
 
     const masterList = drawerList
       .filter(items => StringHelper.search(items.name, this.state.searchValue))
