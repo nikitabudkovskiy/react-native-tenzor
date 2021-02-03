@@ -129,7 +129,7 @@ export class Сontacts extends PureComponent<IProps, IState> {
             }}
               image={ImageRepository.contactsCustomMarker}
             >
-              <Callout tooltip>
+              {/* <Callout tooltip>
                 <CalloutSubview onPress={this.onPressMarkerHandler}>
                   <View style={styles.markerTooltip}>
                     <Text style={styles.markerTooltipAddress}>
@@ -138,10 +138,11 @@ export class Сontacts extends PureComponent<IProps, IState> {
                     <Text style={styles.markerTooltipTime}>
                       С 10:00 до 22:00
                       </Text>
-                    {/* <CommonButton title="Выбрать" /> */}
+                  
                   </View>
                 </CalloutSubview>
-              </Callout>
+              </Callout> */}
+              
             </Marker>
 
           </MapView>
@@ -238,7 +239,7 @@ const styles = styleSheetCreate({
   }),
   map: style.view({
     width: windowWidth,
-    height: windowHeight * 0.39,
+    height: windowHeight * 0.5,
   }),
   arrowBackButton: style.view({
     width: windowWidth * 0.08,

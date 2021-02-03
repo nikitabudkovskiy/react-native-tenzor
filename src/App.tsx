@@ -35,7 +35,7 @@ export class App extends PureComponent<IProps, IState>{
   }
 
   state = {
-    appStatus: AppState.currentState, 
+    appStatus: AppState.currentState,
   }
 
   componentDidMount(): void {
@@ -51,8 +51,8 @@ export class App extends PureComponent<IProps, IState>{
   }
 
   handleAppStateChange = (nextAppStatus: AppStateStatus): void => {
-    if (this.state.appStatus.match(/inactive|background/) && nextAppStatus === 'active' ) {
-     
+    if (this.state.appStatus.match(/inactive|background/) && nextAppStatus === 'active') {
+
     }
     this.setState({ appStatus: nextAppStatus })
   }
@@ -74,18 +74,16 @@ export class App extends PureComponent<IProps, IState>{
 
   render(): JSX.Element {
     return (
-      // <View style={{ backgroundColor: 'red', flex: 1}}>
-         <PersistGate
-       loading={this.renderLoader()}
-       persistor={this.persistor}
-     >
+      <PersistGate
+        loading={this.renderLoader()}
+        persistor={this.persistor}
+      >
         <Provider store={this.store}>
           <NavigationContainer ref={this.setNavigatorRef}>
             <RootNavigator />
           </NavigationContainer>
         </Provider>
-     </PersistGate>
-      // </View>
+      </PersistGate>
     )
   }
 }

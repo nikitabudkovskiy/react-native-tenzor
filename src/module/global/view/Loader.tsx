@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { ImageBackground, View, } from 'react-native'
+import { ImageBackground, View, Image, } from 'react-native'
 import {
   styleSheetCreate,
   style,
@@ -24,11 +24,11 @@ export class Loader extends PureComponent<IProps, IState>{
         style={styles.container}
       >
         <View style={styles.darkeningСontent}>
-          {/* <Image
+          <Image
             source={ImageRepository.loaderLogo}
             style={styles.image}
             resizeMode="contain"
-          /> */}
+          />
         </View>
       </ImageBackground>
     )

@@ -12,6 +12,7 @@ import {
   keyboardShowEvent,
   keyboardHideEvent,
   styleSheetFlatten,
+  platform,
 } from 'app/system/helpers'
 import { TextInputMask } from 'react-native-masked-text'
 import { CommonButton } from 'app/module/global/view/CommonButton'
@@ -71,9 +72,9 @@ export class EnterPhoneNumberSingIn extends PureComponent<IProps, IState> {
       styles.continueButton,
       {
         bottom: this.state.isKeyboardShow 
-          // ? windowWidth * 0.06 + this.state.heightKeybord 
-          // : windowWidth * 0.06
-          ? this.state.heightKeybord  - windowWidth * 0.6
+          ? platform.isAndroid 
+            ? windowWidth * 0.06  
+            : windowWidth * 0.06 + this.state.heightKeybord 
           : windowWidth * 0.06
       }
     ])

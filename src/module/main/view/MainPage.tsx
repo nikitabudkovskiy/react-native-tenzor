@@ -422,7 +422,7 @@ const styles = styleSheetCreate({
   content: style.view({
     backgroundColor: Color.white,
     height: '100%',
-    paddingBottom: windowWidth * 0.26
+    paddingBottom: windowWidth * 0.2,
   }),
   container: style.view({
     width: windowWidth * 2.436,

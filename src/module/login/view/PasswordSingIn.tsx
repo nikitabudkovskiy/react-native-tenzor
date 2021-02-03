@@ -18,6 +18,7 @@ import {
   keyboardHideEvent,
   styleSheetFlatten,
   isLongDevices,
+  platform,
 } from 'app/system/helpers'
 import {
   CodeField,
@@ -93,11 +94,11 @@ export const PasswordSingIn = ({ navigation }: IProps) => {
   const forgetPasswordButton = styleSheetFlatten([
     styles.forgetPasswordButton,
     {
-      bottom: isKeyboardShow
-        // ? windowWidth * 0.06 + heightKeybord
-        // : windowWidth * 0.06
-        ? windowWidth * 0.05  
-        : windowWidth * 0.08
+      bottom: isKeyboardShow 
+        ? platform.isAndroid 
+          ? windowWidth * 0.06  
+          : windowWidth * 0.06 + heightKeybord 
+        : windowWidth * 0.06
     }
   ])
 

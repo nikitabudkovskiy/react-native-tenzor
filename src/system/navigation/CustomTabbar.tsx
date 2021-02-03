@@ -109,7 +109,7 @@ export class CustomTabbar extends PureComponent<IProps, IState>{
               style={styles.tabContainer}
             >
               <Image
-               source={state.index === 1 ? ImageRepository.tabBarProfileActive  : ImageRepository.tabBarProfile}
+               source={state.index === 1 ? ImageRepository.tabBarMastersActive  : ImageRepository.tabBarMasters}
                style={styles.tabImage}
                 resizeMode="contain"
               />
