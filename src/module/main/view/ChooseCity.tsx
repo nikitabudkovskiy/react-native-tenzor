@@ -13,26 +13,81 @@ import {
 import { CommonButton } from 'app/module/global/view'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { ListPages } from 'app/system/navigation'
+import { connectStore, IApplicationState } from 'app/system/store'
+import { ThunkDispatch } from 'redux-thunk'
+import { Loader } from 'app/module/global/view/Loader'
+import { mainAsyncActions } from '../store/mainAsyncActions'
+import { IMainState } from '../store/mainState'
+import { isEmpty } from 'lodash'
 
 interface IProps {
   navigation: StackNavigationProp<any>
 }
 
+interface IDispatchProps {
+  // appSettings(data: IAppSettingsRequest): Promise<void>
+  getTowns(): Promise<void>
+}
+
 interface IState {
-  selectedСity: string
+  selectedСity: ITown
+  // appStateStatus: boolean
+  // appStateDisableText: string
+  // appCashBackStatus: boolean
+  // appPromocodeStatus: boolean
+  // appReferalStatus: boolean
+  // appVerApi: string
+}
+
+interface IStateProps {
+  towns: ITown[]
+  isLoading: boolean
+  error: boolean
+}
+
+interface ITown {
+  title: string
+  id: Number
 }
 
 const list = ['Ижевск', 'Абакан', 'Адлер']
 
-export class ChooseCity extends PureComponent<IProps, IState> {
+@connectStore(
+  (state: IApplicationState): IStateProps => ({
+    isLoading: state.main.isLoading,
+    error: state.main.error,
+    towns: state.main.towns,
+  }),
+  (dispatch: ThunkDispatch<IMainState, void, any>): IDispatchProps => ({
+    async getTowns() {
+      await dispatch(mainAsyncActions.getTowns())
+    }
+  })
+)
+
+export class ChooseCity extends PureComponent<IProps & IState & IDispatchProps & IStateProps> {
 
   state = {
-    selectedСity: '',
+    selectedСity: {
+      id: -1,
+      title: '',
+    },
   }
 
-  onChangeCityHandler = (selectedСity: string): void => {
-    if (this.state.selectedСity === selectedСity) {
-      this.setState({ selectedСity: '' })
+  async componentDidMount() {
+    await this.props.getTowns()
+
+    console.log(this.props.towns)
+  }
+
+  onChangeCityHandler = (selectedСity: ITown): void => {
+    if (this.state.selectedСity.id === selectedСity.id) {
+      this.setState({
+        selectedСity: {
+          id: -1,
+          title: '',
+        }
+      })
       return
     }
     this.setState({ selectedСity })
@@ -41,8 +96,14 @@ export class ChooseCity extends PureComponent<IProps, IState> {
   goToMainTabBarHandler = (): void => {
     this.props.navigation.replace(ListPages.MainTab)
   }
-  
+
   render(): JSX.Element {
+
+    if (this.props.isLoading) {
+      return (
+        <Loader />
+      )
+    }
 
     const mainContainer = styleSheetFlatten([
       styles.mainContainer,
@@ -62,7 +123,7 @@ export class ChooseCity extends PureComponent<IProps, IState> {
             Выберите город
           </Text>
           {
-            list.map((item, index) => {
+            !isEmpty(this.props.towns) && this.props.towns.map((item: ITown, index) => {
               return (
                 <View key={Math.random().toString()}>
                   <TouchableOpacity
@@ -70,10 +131,11 @@ export class ChooseCity extends PureComponent<IProps, IState> {
                     onPress={this.onChangeCityHandler.bind(this, item)}
                   >
                     <Text>
-                      {item}
+                      {item.title}
                     </Text>
                     {
-                      this.state.selectedСity === item
+                      
+                      this.state.selectedСity.id === item.id
                         ? (
                           <Image
                             source={ImageRepository.chooseCityCheck}
@@ -140,5 +202,5 @@ const styles = styleSheetCreate({
     marginBottom: windowWidth * 0.1,
     marginTop: windowWidth * 0.02,
   }),
- 
+
 })

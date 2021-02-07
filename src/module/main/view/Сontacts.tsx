@@ -7,7 +7,6 @@ import {
   Text,
   Linking,
   Alert,
-  TouchableOpacityComponent,
 } from 'react-native'
 import {
   styleSheetCreate,
@@ -19,8 +18,7 @@ import {
   fonts,
   platform
 } from 'app/system/helpers'
-import MapView, { Callout, CalloutSubview, Marker } from 'react-native-maps'
-import { CommonButton } from 'app/module/global/view'
+import MapView, { Marker } from 'react-native-maps'
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
 import { Modalize } from 'react-native-modalize'
 

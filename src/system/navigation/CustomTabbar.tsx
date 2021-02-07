@@ -14,7 +14,6 @@ import {
   styleSheetFlatten,
   isLongDevices,
   ImageRepository,
-  HEIGHT_TABBAR,
 } from 'app/system/helpers'
 // import { IListTabBar, ITabInformation } from 'app/interfaces';
 

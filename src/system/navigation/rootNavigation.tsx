@@ -20,10 +20,10 @@ import { ChooseMaster } from 'app/module/appointments/view/ChooseMaster'
 import { EnterPhoneNumberSingInRegistration } from 'app/module/login/view/EnterPhoneNumberSingInRegistration'
 import { PasswordRegistration } from 'app/module/login/view/PasswordRegistration'
 // import { RegistrationContacts } from 'app/module/registration/view/RegistrationContacts'
-import { FinishNote } from 'app/module/myNotes/view/FinishNote'
+// import { FinishNote } from 'app/module/myNotes/view/FinishNote'
 import { Сontacts } from 'app/module/main/view/Сontacts'
-import { View } from 'react-native'
-import { Color, windowWidth } from '../helpers'
+// import { View } from 'react-native'
+// import { Color, windowWidth } from '../helpers'
 
 export interface IListTabBar {
   name: string
