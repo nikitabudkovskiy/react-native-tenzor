@@ -95,13 +95,13 @@ export class ChooseCity extends PureComponent<IProps, IState> {
               )
             })
           }
+        </ScrollView>
           <CommonButton
             disabled={!this.state.selectedСity}
             title="Выбрать город"
             styleButton={styles.chooseCity}
             onPress={this.goToMainTabBarHandler}
           />
-        </ScrollView>
       </View>
     )
   }
@@ -113,6 +113,7 @@ const styles = styleSheetCreate({
   }),
   container: style.view({
     paddingHorizontal: windowWidth * 0.04,
+    flex: 1,
   }),
   title: style.text({
     fontFamily: fonts.robotoBold,
@@ -139,6 +140,7 @@ const styles = styleSheetCreate({
   chooseCity: style.view({
     marginBottom: windowWidth * 0.1,
     marginTop: windowWidth * 0.02,
+    marginHorizontal: windowWidth * 0.04,
   }),
  
 })
