@@ -14,16 +14,3 @@ export function townsRequest(params: ITownsRequest): Promise<ITownsResponce> {
     )
 }
 
-export function smsRequest(params: ISmsAuthorisationRequest): Promise<ISmsAuthorisationResponce> {
-    return ApiService.post(
-        'http://localmodx.appsj.su/sms.json',
-        { params }
-    )
-}
-
-export function authorisationRequest(params: IAuthorisationRequest): Promise<IAuthorisationResponce> {
-    return ApiService.post(
-        'http://localmodx.appsj.su/authorization.json',
-        { params }
-    )
-}

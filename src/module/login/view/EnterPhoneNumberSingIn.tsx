@@ -19,6 +19,18 @@ import { CommonButton } from 'app/module/global/view/CommonButton'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { ListPages } from 'app/system/navigation'
 import { StackNavigationProp } from '@react-navigation/stack'
+import { connectStore } from 'app/system/store/connectStore'
+import { IApplicationState } from 'app/system/store/applicationState'
+import { MainAsynсActions } from 'app/module/main/store/mainAsyncActions'
+import { ThunkDispatch } from 'redux-thunk'
+
+interface IStateProps {
+
+}
+
+interface IDispatchProps {
+  getRequestSmsOnNumber(data: IGetRequestSmsNumberRequest): Promise<void>
+}
 
 interface IState {
   phoneNumber: string
@@ -30,10 +42,21 @@ interface IProps {
   navigation: StackNavigationProp<any>
 }
 
-export class EnterPhoneNumberSingIn extends PureComponent<IProps, IState> {
+@connectStore(
+  (state: IApplicationState): IStateProps => ({
+    isLoading: state.main.isLoading,
+    error: state.main.error,
+  }),
+  (dispatch: ThunkDispatch<IApplicationState, void, any>): IDispatchProps => ({
+    async getRequestSmsOnNumber(data) {
+      await dispatch(MainAsynсActions.getRequestSmsOnNumber(data))
+    },
+  })
+)
+export class EnterPhoneNumberSingIn extends PureComponent<IStateProps & IDispatchProps & IProps, IState> {
 
   state = {
-    phoneNumber: '',
+    phoneNumber: '+79251234567',
     isKeyboardShow: false,
     heightKeybord: 0,
   }
@@ -62,7 +85,13 @@ export class EnterPhoneNumberSingIn extends PureComponent<IProps, IState> {
     this.setState({ phoneNumber })
   }
 
-  goToNextPasswordHandler = (): void => {
+  goToNextPasswordHandler = async (): Promise<void> => {
+    // const phoneOnlyNumbers = this.state.phoneNumber.replace(/[^+\d]/g, '')
+    // console.log('phoneOnlyNumbers', phoneOnlyNumbers)
+    // await this.props.getRequestSmsOnNumber({
+    //   phone: phoneOnlyNumbers,
+    // })
+
     this.props.navigation.push(ListPages.PasswordSingIn)
   }
 
@@ -85,7 +114,7 @@ export class EnterPhoneNumberSingIn extends PureComponent<IProps, IState> {
          keyboardShouldPersistTaps="handled"
       >
         <Text style={styles.enterPhoneTitle}>
-          Введите номер {'\n'} телефона
+          Введите номер{'\n'}телефона
         </Text> 
         <TextInputMask
           type="custom"

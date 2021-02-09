@@ -1,6 +1,6 @@
 import { ReducerBuilder, reducerWithInitialState } from "typescript-fsa-reducers";
-import { mainAsyncActions } from './mainAsyncActions'
-import { IMainState, mainIntitalState } from './mainState'
+import { IMainState, MainInitialState } from './mainState'
+import { MainAsynсActions } from './mainAsyncActions'
 
 const appSettingsStarted = (state: IMainState): IMainState => {
     return {
@@ -57,11 +57,46 @@ const appSettingsFailed = (state: IMainState): IMainState => {
     }
 }
 
-export const mainReducer: ReducerBuilder<IMainState> = reducerWithInitialState(mainIntitalState)
-    .case(mainAsyncActions.appSettings.async.started, appSettingsStarted)
-    .case(mainAsyncActions.appSettings.async.done, appSettingsDone)
-    .case(mainAsyncActions.appSettings.async.failed, appSettingsFailed)
+const getRequestSmsOnNumberStarted = (state: IMainState): IMainState => {
+  return {
+    ...state,
+    isLoading: true,
+    error: false,
+  }
+}
 
-    .case(mainAsyncActions.getTowns.async.started, getTownsStarted)
-    .case(mainAsyncActions.getTowns.async.done, getTownsDone)
-    .case(mainAsyncActions.getTowns.async.failed, getTownFailed)
+const getRequestSmsOnNumbernDone =
+  (state: IMainState, { result }: any): IMainState => {
+
+    console.log('resu', result)
+    return {
+      ...state,
+      isLoading: false,
+      error: false,
+
+    }
+  }
+
+const getRequestSmsOnNumberFailed = (state: IMainState): IMainState => {
+  return {
+    ...state,
+    isLoading: true,
+    error: false,
+  }
+}
+
+
+export const mainReducer: ReducerBuilder<IMainState> = reducerWithInitialState(MainInitialState)
+    .case(MainAsynсActions.appSettings.async.started, appSettingsStarted)
+    .case(MainAsynсActions.appSettings.async.done, appSettingsDone)
+    .case(MainAsynсActions.appSettings.async.failed, appSettingsFailed)
+
+    .case(MainAsynсActions.getTowns.async.started, getTownsStarted)
+    .case(MainAsynсActions.getTowns.async.done, getTownsDone)
+    .case(MainAsynсActions.getTowns.async.failed, getTownFailed)
+
+    .case(MainAsynсActions.getRequestSmsOnNumber.async.started, getRequestSmsOnNumberStarted)
+    .case(MainAsynсActions.getRequestSmsOnNumber.async.done, getRequestSmsOnNumbernDone)
+    .case(MainAsynсActions.getRequestSmsOnNumber.async.failed, getRequestSmsOnNumberFailed)
+
+  

@@ -16,7 +16,7 @@ import { ListPages } from 'app/system/navigation'
 import { connectStore, IApplicationState } from 'app/system/store'
 import { ThunkDispatch } from 'redux-thunk'
 import { Loader } from 'app/module/global/view/Loader'
-import { mainAsyncActions } from '../store/mainAsyncActions'
+import { MainAsynсActions } from '../store/mainAsyncActions'
 import { IMainState } from '../store/mainState'
 import { isEmpty } from 'lodash'
 
@@ -60,7 +60,7 @@ const list = ['Ижевск', 'Абакан', 'Адлер']
   }),
   (dispatch: ThunkDispatch<IMainState, void, any>): IDispatchProps => ({
     async getTowns() {
-      await dispatch(mainAsyncActions.getTowns())
+      await dispatch(MainAsynсActions.getTowns())
     }
   })
 )
@@ -157,13 +157,13 @@ export class ChooseCity extends PureComponent<IProps & IState & IDispatchProps &
               )
             })
           }
+        </ScrollView>
           <CommonButton
             disabled={!this.state.selectedСity}
             title="Выбрать город"
             styleButton={styles.chooseCity}
             onPress={this.goToMainTabBarHandler}
           />
-        </ScrollView>
       </View>
     )
   }
@@ -175,6 +175,7 @@ const styles = styleSheetCreate({
   }),
   container: style.view({
     paddingHorizontal: windowWidth * 0.04,
+    flex: 1,
   }),
   title: style.text({
     fontFamily: fonts.robotoBold,
@@ -201,6 +202,7 @@ const styles = styleSheetCreate({
   chooseCity: style.view({
     marginBottom: windowWidth * 0.1,
     marginTop: windowWidth * 0.02,
+    marginHorizontal: windowWidth * 0.04,
   }),
 
 })

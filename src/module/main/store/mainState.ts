@@ -1,13 +1,11 @@
 export interface IMainState {
-    isLoading: boolean
-    error: boolean
-    towns: ITown[]
+  isLoading: boolean
+  error: boolean
+  towns: ITown[]
 }
 
-export const mainIntitalState: IMainState = {
-    isLoading: false,
-    error: false,
-    towns: []
+export const MainInitialState: IMainState = {
+  isLoading: false,
+  error: false,
+  towns: []
 }
-
-
