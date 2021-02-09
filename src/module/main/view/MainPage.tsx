@@ -55,7 +55,7 @@ export class MainPage extends PureComponent<IProps, IState> {
   state = {
     activeDot: 0,
     bonusActiveDot: 0,
-    isUserLogin: true,
+    isUserLogin: false,
   }
 
   onChangeLoginStatusHandler = (): void => {
