@@ -28,16 +28,25 @@ import {
 } from 'react-native-confirmation-code-field'
 import { useState, useEffect, useRef, } from 'react'
 import { StackNavigationProp } from '@react-navigation/stack'
+import { RouteProp } from '@react-navigation/native'
+import { useDispatch, useSelector } from 'react-redux'
+import { MainAsynсActions } from 'app/module/main/store/mainAsyncActions'
+import { IApplicationState } from 'app/system/store'
 
-const CELL_COUNT = 6
+const CELL_COUNT = 4
 
 interface IProps {
   navigation: StackNavigationProp<any>
+  route: RouteProp<any,any>
 }
 
-export const PasswordSingIn = ({ navigation }: IProps) => {
+export const PasswordSingIn = ({ navigation, route }: IProps) => {
   let intervalId: any = useRef(null)
   const isInitialMount = useRef(true)
+  
+  const dispatch = useDispatch()
+  const error = useSelector((state: IApplicationState) => state.main.error)
+  const codeVerificationInformation = useSelector((state: IApplicationState) => state.main.codeVerificationInformation)
 
   const [IsResending, setIsResending] = useState<boolean>(false)
   const [isUserForgotPassword, setIsUserForgotPassword] = useState<boolean>(false)
@@ -51,6 +60,21 @@ export const PasswordSingIn = ({ navigation }: IProps) => {
     value,
     setValue,
   })
+
+  useEffect(() => {
+    (async () => {
+      if (value.length === CELL_COUNT) {
+        await dispatch(MainAsynсActions.getCodeVerificationSMS({
+          request_id: (route.params as any).information.request_id,
+          code: value,
+        }))
+        console.log('code', codeVerificationInformation)
+        if (!codeVerificationInformation) {
+          setValue('')
+        }
+      }
+    })()
+  }, [value])
 
   useEffect(() => {
     Keyboard.addListener(keyboardShowEvent, (event) => {
@@ -109,6 +133,10 @@ export const PasswordSingIn = ({ navigation }: IProps) => {
     }
   ])
 
+  console.log('route', route)
+
+  const information: IEnterPhoneInfromation = (route.params as any).information
+
   return (
     <ScrollView
       keyboardShouldPersistTaps="handled"
@@ -127,10 +155,10 @@ export const PasswordSingIn = ({ navigation }: IProps) => {
         />
       </TouchableOpacity>
       <Text style={styles.title}>
-        Укажите пароль для {'\n'} +7(925)123-45-67
+        Укажите пароль для {'\n'} {information.phone}
       </Text>
       <Text style={styles.description}>
-        Пароль состоит из 6 цифр
+        Пароль состоит из {CELL_COUNT} цифр
       </Text>
       <CodeField
         ref={ref}

@@ -23,9 +23,10 @@ import { connectStore } from 'app/system/store/connectStore'
 import { IApplicationState } from 'app/system/store/applicationState'
 import { MainAsynсActions } from 'app/module/main/store/mainAsyncActions'
 import { ThunkDispatch } from 'redux-thunk'
+import { isEmpty } from 'lodash'
 
-interface IStateProps {
-
+interface IStateProps extends IIsLoadingAndError {
+  requestSmsInformation: any
 }
 
 interface IDispatchProps {
@@ -42,10 +43,13 @@ interface IProps {
   navigation: StackNavigationProp<any>
 }
 
+
+
 @connectStore(
   (state: IApplicationState): IStateProps => ({
     isLoading: state.main.isLoading,
     error: state.main.error,
+    requestSmsInformation: state.main.requestSmsInformation,
   }),
   (dispatch: ThunkDispatch<IApplicationState, void, any>): IDispatchProps => ({
     async getRequestSmsOnNumber(data) {
@@ -56,7 +60,7 @@ interface IProps {
 export class EnterPhoneNumberSingIn extends PureComponent<IStateProps & IDispatchProps & IProps, IState> {
 
   state = {
-    phoneNumber: '+79251234567',
+    phoneNumber: '',
     isKeyboardShow: false,
     heightKeybord: 0,
   }
@@ -86,13 +90,21 @@ export class EnterPhoneNumberSingIn extends PureComponent<IStateProps & IDispatc
   }
 
   goToNextPasswordHandler = async (): Promise<void> => {
-    // const phoneOnlyNumbers = this.state.phoneNumber.replace(/[^+\d]/g, '')
-    // console.log('phoneOnlyNumbers', phoneOnlyNumbers)
-    // await this.props.getRequestSmsOnNumber({
-    //   phone: phoneOnlyNumbers,
-    // })
-
-    this.props.navigation.push(ListPages.PasswordSingIn)
+    const phoneOnlyNumbers = this.state.phoneNumber.replace(/[^+\d]/g, '')
+    await this.props.getRequestSmsOnNumber({
+      phone: phoneOnlyNumbers,
+    })
+    if (!isEmpty(this.props.requestSmsInformation)) {
+      this.props.navigation.push(
+        ListPages.PasswordSingIn, 
+        { 
+          information: {
+            request_id: this.props.requestSmsInformation.data[0].request_id,
+            phone: this.state.phoneNumber,
+          }
+        }
+      )
+    }
   }
 
   render() {

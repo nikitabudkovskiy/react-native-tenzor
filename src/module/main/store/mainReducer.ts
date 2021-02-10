@@ -13,11 +13,11 @@ const getRequestSmsOnNumberStarted = (state: IMainState): IMainState => {
 const getRequestSmsOnNumbernDone =
   (state: IMainState, { result }: any): IMainState => {
 
-    console.log('resu', result)
     return {
       ...state,
       isLoading: false,
       error: false,
+      requestSmsInformation: result,
 
     }
   }
@@ -25,8 +25,36 @@ const getRequestSmsOnNumbernDone =
 const getRequestSmsOnNumberFailed = (state: IMainState): IMainState => {
   return {
     ...state,
+    isLoading: false,
+    error: true,
+  }
+}
+
+const getCodeVerificationSMStarted = (state: IMainState): IMainState => {
+  return {
+    ...state,
     isLoading: true,
     error: false,
+  }
+}
+
+const getCodeVerificationSMSDone =
+  (state: IMainState, { result }: any): IMainState => {
+    console.log('res', result)
+    return {
+      ...state,
+      isLoading: false,
+      error: false,
+      codeVerificationInformation: result,
+      // requestSmsInformation: result,
+    }
+  }
+
+const getCodeVerificationSMSrFailed = (state: IMainState): IMainState => {
+  return {
+    ...state,
+    isLoading: false,
+    error: true,
   }
 }
 
@@ -34,3 +62,7 @@ export const mainReducer: ReducerBuilder<IMainState> = reducerWithInitialState(M
   .case(MainAsynсActions.getRequestSmsOnNumber.async.started, getRequestSmsOnNumberStarted)
   .case(MainAsynсActions.getRequestSmsOnNumber.async.done, getRequestSmsOnNumbernDone)
   .case(MainAsynсActions.getRequestSmsOnNumber.async.failed, getRequestSmsOnNumberFailed)
+
+  .case(MainAsynсActions.getCodeVerificationSMS.async.started, getCodeVerificationSMStarted)
+  .case(MainAsynсActions.getCodeVerificationSMS.async.done, getCodeVerificationSMSDone)
+  .case(MainAsynсActions.getCodeVerificationSMS.async.failed, getCodeVerificationSMSrFailed)

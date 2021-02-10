@@ -8,7 +8,7 @@ export class MainAsynсActions {
     MainRequest.getRequestSmsOnNumber
   )
 
-  static getCodeVerificationSMS = asyncActionCreator<IGetRequestSmsNumberRequest, IGetRequestSmsNumberResponce, Error>(
+  static getCodeVerificationSMS = asyncActionCreator<IGetCodeVerificationRequest, IGetCodeVerificationResponce, Error>(
     'MAIN/GET_CODE_VERIFICATION_SMS',
     MainRequest.getCodeVerificationSMS
   )
