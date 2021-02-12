@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux'
 import { systemReducer } from 'app/system/store/system'
-import { mainReducer } from 'app/module/main/store/mainReducer'
+import { loginReducer } from 'app/module/login/store/loginReducer'
 
 export const rootReducer = combineReducers({
   system: systemReducer,
-  main: mainReducer,
+  login: loginReducer,
 })

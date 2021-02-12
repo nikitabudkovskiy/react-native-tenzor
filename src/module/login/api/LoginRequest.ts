@@ -1,6 +1,6 @@
 import { ApiService } from 'app/system/api'
 
-export class MainRequest {
+export class LoginRequest {
 
   static getRequestSmsOnNumber = (data: IGetRequestSmsNumberRequest): Promise<IGetRequestSmsNumberResponce> => {
     return ApiService.post(

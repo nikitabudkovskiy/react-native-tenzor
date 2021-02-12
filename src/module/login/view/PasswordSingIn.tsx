@@ -30,8 +30,8 @@ import { useState, useEffect, useRef, } from 'react'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { RouteProp } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
-import { MainAsynсActions } from 'app/module/main/store/mainAsyncActions'
 import { IApplicationState } from 'app/system/store'
+import { LoginAsynсActions } from '../store/loginAsyncActions'
 
 const CELL_COUNT = 4
 
@@ -45,7 +45,7 @@ export const PasswordSingIn = ({ navigation, route }: IProps) => {
   const isInitialMount = useRef(true)
   
   const dispatch = useDispatch()
-  const error = useSelector((state: IApplicationState) => state.main.error)
+  const error = useSelector((state: IApplicationState) => state.login.error)
   const codeVerificationInformation = useSelector((state: IApplicationState) => state.main.codeVerificationInformation)
 
   const [IsResending, setIsResending] = useState<boolean>(false)
@@ -64,7 +64,7 @@ export const PasswordSingIn = ({ navigation, route }: IProps) => {
   useEffect(() => {
     (async () => {
       if (value.length === CELL_COUNT) {
-        await dispatch(MainAsynсActions.getCodeVerificationSMS({
+        await dispatch(LoginAsynсActions.getCodeVerificationSMS({
           request_id: (route.params as any).information.request_id,
           code: value,
           send_sms: 0,

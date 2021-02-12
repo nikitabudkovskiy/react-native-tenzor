@@ -1,16 +1,16 @@
 import { asyncActionCreator } from 'app/system/store/actionCreator'
-import { MainRequest } from '../api/MainRequest'
+import { LoginRequest } from '../api/LoginRequest'
 
-export class MainAsynсActions {
+export class LoginAsynсActions {
 
   static getRequestSmsOnNumber = asyncActionCreator<IGetRequestSmsNumberRequest, IGetRequestSmsNumberResponce, Error>(
-    'MAIN/GET_REQUEST_SMS_ON_NUMBER',
-    MainRequest.getRequestSmsOnNumber
+    'LOGIN/GET_REQUEST_SMS_ON_NUMBER',
+    LoginRequest.getRequestSmsOnNumber
   )
 
   static getCodeVerificationSMS = asyncActionCreator<IGetCodeVerificationRequest, IGetCodeVerificationResponce, Error>(
-    'MAIN/GET_CODE_VERIFICATION_SMS',
-    MainRequest.getCodeVerificationSMS
+    'LOGIN/GET_CODE_VERIFICATION_SMS',
+    LoginRequest.getCodeVerificationSMS
   )
 
 }

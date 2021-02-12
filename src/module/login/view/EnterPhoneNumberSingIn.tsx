@@ -21,9 +21,9 @@ import { ListPages } from 'app/system/navigation'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { connectStore } from 'app/system/store/connectStore'
 import { IApplicationState } from 'app/system/store/applicationState'
-import { MainAsynсActions } from 'app/module/main/store/mainAsyncActions'
 import { ThunkDispatch } from 'redux-thunk'
 import { isEmpty } from 'lodash'
+import { LoginAsynсActions } from '../store/loginAsyncActions'
 
 interface IStateProps extends IIsLoadingAndError {
   requestSmsInformation: any
@@ -47,13 +47,13 @@ interface IProps {
 
 @connectStore(
   (state: IApplicationState): IStateProps => ({
-    isLoading: state.main.isLoading,
-    error: state.main.error,
-    requestSmsInformation: state.main.requestSmsInformation,
+    isLoading: state.login.isLoading,
+    error: state.login.error,
+    requestSmsInformation: state.login.requestSmsInformation,
   }),
   (dispatch: ThunkDispatch<IApplicationState, void, any>): IDispatchProps => ({
     async getRequestSmsOnNumber(data) {
-      await dispatch(MainAsynсActions.getRequestSmsOnNumber(data))
+      await dispatch(LoginAsynсActions.getRequestSmsOnNumber(data))
     },
   })
 )
