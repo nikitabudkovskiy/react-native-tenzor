@@ -134,8 +134,6 @@ export const PasswordSingIn = ({ navigation, route }: IProps) => {
     }
   ])
 
-  console.log('route', route)
-
   const information: IEnterPhoneInfromation = (route.params as any).information
 
   return (

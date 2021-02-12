@@ -37,6 +37,7 @@ interface IProps {
 }
 
 export const PasswordRegistration = ({ navigation }: IProps) => {
+  
   let intervalId: any = useRef(null)
   const isInitialMount = useRef(true)
 

@@ -43,8 +43,6 @@ interface IProps {
   navigation: StackNavigationProp<any>
 }
 
-
-
 @connectStore(
   (state: IApplicationState): IStateProps => ({
     isLoading: state.login.isLoading,
@@ -81,8 +79,7 @@ export class EnterPhoneNumberSingIn extends PureComponent<IStateProps & IDispatc
   }
 
   componentWillUnmount(): void {
-    // Keyboard.removeAllListeners(keyboardShowEvent)
-    // Keyboard.removeAllListeners(keyboardHideEvent)
+
   }
 
   handleChangeText = (phoneNumber: string):void => {
