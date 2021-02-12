@@ -1,6 +1,7 @@
 import { ReducerBuilder, reducerWithInitialState } from 'typescript-fsa-reducers'
 import { MainInitialState, IMainState } from './mainState'
 import { MainAsynсActions } from './mainAsyncActions'
+import { isEmpty } from 'lodash'
 
 const getRequestSmsOnNumberStarted = (state: IMainState): IMainState => {
   return {
@@ -40,13 +41,20 @@ const getCodeVerificationSMStarted = (state: IMainState): IMainState => {
 
 const getCodeVerificationSMSDone =
   (state: IMainState, { result }: any): IMainState => {
-    console.log('res', result)
+    
+    if (isEmpty(result)) {
+      return {
+        ...state,
+        isLoading: false,
+        error: true,
+      }
+    }
+
     return {
       ...state,
       isLoading: false,
       error: false,
       codeVerificationInformation: result,
-      // requestSmsInformation: result,
     }
   }
 

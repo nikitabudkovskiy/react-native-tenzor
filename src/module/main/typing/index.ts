@@ -9,7 +9,9 @@ interface IGetRequestSmsNumberResponce {
 interface IGetCodeVerificationRequest {
   request_id: string
   code: string
+  send_sms?: 1
 }
+
 interface IGetCodeVerificationResponce {
   data: [
     {

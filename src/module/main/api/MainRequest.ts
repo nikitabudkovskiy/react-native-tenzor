@@ -4,7 +4,7 @@ export class MainRequest {
 
   static getRequestSmsOnNumber = (data: IGetRequestSmsNumberRequest): Promise<IGetRequestSmsNumberResponce> => {
     return ApiService.post(
-      'https://localmodx.appsj.su/sms.json',
+      'http://testym.appsj.su/sms.json',
       data,
       {
         headers: {
@@ -16,7 +16,7 @@ export class MainRequest {
 
   static getCodeVerificationSMS = (data: IGetCodeVerificationRequest): Promise<IGetRequestSmsNumberResponce> => {
     return ApiService.post(
-      'https://localmodx.appsj.su//authorization.json',
+      'http://testym.appsj.su/authorization.json',
       data,
       {
         headers: {

@@ -67,6 +67,7 @@ export const PasswordSingIn = ({ navigation, route }: IProps) => {
         await dispatch(MainAsynсActions.getCodeVerificationSMS({
           request_id: (route.params as any).information.request_id,
           code: value,
+          send_sms: 0,
         }))
         console.log('code', codeVerificationInformation)
         if (!codeVerificationInformation) {
