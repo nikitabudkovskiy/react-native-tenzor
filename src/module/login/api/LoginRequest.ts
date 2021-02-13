@@ -14,9 +14,21 @@ export class LoginRequest {
     )
   }
 
-  static getCodeVerificationSMS = (data: IGetCodeVerificationRequest): Promise<IGetRequestSmsNumberResponce> => {
+  static getCodeVerificationSMS = (data: IGetCodeVerificationRequest): Promise<IGetCodeVerificationResponce> => {
     return ApiService.post(
       'http://testym.appsj.su/authorization.json',
+      data,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    )
+  }
+
+  static changeUserData = (data: IChangeUserDataRequest): Promise<IChangeUserDataResponce> => {
+    return ApiService.post(
+      'http://testym.appsj.su/user-change.json',
       data,
       {
         headers: {

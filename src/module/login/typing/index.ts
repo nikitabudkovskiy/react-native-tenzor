@@ -14,7 +14,7 @@ interface IGetRequestSmsNumberResponce {
 interface IGetCodeVerificationRequest {
   request_id: string
   code: string
-  send_sms?: 1
+  send_sms?: number
 }
 
 interface IGetCodeVerificationResponce {
@@ -36,5 +36,32 @@ interface IGetCodeVerificationResponce {
       }
     }
   ]
+}
 
+interface IChangeUserDataRequest {
+  name: string
+  email: string,
+  bithday: string
+  gender: number
+}
+
+interface IChangeUserDataResponce {
+  data: [
+    {
+      token: string,
+      user: {
+        name: string
+        email: string
+        gender: string
+        phone: string
+        bonus: string
+        birthday: string
+        referal: {
+          code: string
+          my_bonus: string
+          friend_bonus: string
+        }
+      }
+    }
+  ]
 }

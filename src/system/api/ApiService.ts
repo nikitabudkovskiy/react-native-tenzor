@@ -15,11 +15,11 @@ ApiService.interceptors.response.use(
   }
 )
 
-ApiService.interceptors.request.use(function (config) {
-  console.log('conf', config)
-  // Do something before request is sent
-  return config;
-}, function (error) {
-  // Do something with request error
-  return Promise.reject(error);
-})
+// ApiService.interceptors.request.use(function (config) {
+//   console.log('conf', config)
+//   // Do something before request is sent
+//   return config;
+// }, function (error) {
+//   // Do something with request error
+//   return Promise.reject(error);
+// })

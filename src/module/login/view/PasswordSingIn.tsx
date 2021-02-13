@@ -46,7 +46,8 @@ export const PasswordSingIn = ({ navigation, route }: IProps) => {
   
   const dispatch = useDispatch()
   const error = useSelector((state: IApplicationState) => state.login.error)
-  const codeVerificationInformation = useSelector((state: IApplicationState) => state.main.codeVerificationInformation)
+  const codeVerificationInformation = 
+    useSelector((state: IApplicationState) => state.login.codeVerificationInformation)
 
   const [IsResending, setIsResending] = useState<boolean>(false)
   const [isUserForgotPassword, setIsUserForgotPassword] = useState<boolean>(false)
@@ -69,10 +70,14 @@ export const PasswordSingIn = ({ navigation, route }: IProps) => {
           code: value,
           send_sms: 0,
         }))
-        console.log('code', codeVerificationInformation)
-        if (!codeVerificationInformation) {
+        if (error) {
           setValue('')
         }
+      
+        console.log('code', codeVerificationInformation)
+        // if (!codeVerificationInformation) {
+        //   setValue('')
+        // }
       }
     })()
   }, [value])

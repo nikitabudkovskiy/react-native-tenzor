@@ -23,6 +23,25 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import { Modalize } from 'react-native-modalize'
 import { Portal } from 'react-native-portalize'
 import { ListPages } from 'app/system/navigation'
+import { connectStore } from 'app/system/store/connectStore'
+import { IApplicationState } from 'app/system/store/applicationState'
+import { ThunkDispatch } from 'redux-thunk'
+import { isEmpty } from 'lodash'
+import { LoginAction } from 'app/module/login/store/loginActions'
+import { ApiService } from 'app/system/api'
+
+interface IStateProps extends IIsLoadingAndError {
+  codeVerificationInformation: any
+  // names: IGetSearchNameResponce[]
+  // userInformation: IGetCustomersInitResponce
+}
+
+interface IDispatchProps {
+  logoutAccount(): void
+  // getSearchName(data: IGetSearchNameRequest): Promise<void>
+  // setFalseFirstRun(): void
+  // changeUserData(data: IChangeUserDataRequest): Promise<void>
+}
 
 interface IProps {
   navigation: StackNavigationProp<any>
@@ -49,7 +68,28 @@ const action = [
   },
 ]
 
-export class MainPage extends PureComponent<IProps, IState> {
+@connectStore(
+  (state: IApplicationState): IStateProps => ({
+    isLoading: state.login.isLoading,
+    error: state.login.error,
+    codeVerificationInformation: state.login.codeVerificationInformation,
+  }),
+  (dispatch: ThunkDispatch<IApplicationState, void, any>): IDispatchProps => ({
+    logoutAccount() {
+      dispatch(LoginAction.logoutAccount())
+    },
+    // async getSearchName(data) {
+    //   await dispatch(MainAsynсActions.getSearchName(data))
+    // },
+    // async changeUserData(data) {
+    //   await dispatch(MainAsynсActions.changeUserData(data))
+    // },
+    // setFalseFirstRun() {
+    //   dispatch(SystemAction.setFalseFirstRun())
+    // },
+  })
+)
+export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProps, IState> {
   refModalize: any
 
   state = {
@@ -58,8 +98,17 @@ export class MainPage extends PureComponent<IProps, IState> {
     isUserLogin: false,
   }
 
+  async componentDidMount(): Promise<void> {
+    console.log('void', this.props.codeVerificationInformation)
+    console.log(await ApiService.get(''))
+  }
+
   onChangeLoginStatusHandler = (): void => {
     this.setState({ isUserLogin: !this.state.isUserLogin })
+  }
+
+  logoutHandler = (): void => {
+    this.props.logoutAccount()
   }
 
   goToLoginPageHandler = (): void => {
@@ -173,7 +222,7 @@ export class MainPage extends PureComponent<IProps, IState> {
           </View>
 
           {
-            this.state.isUserLogin
+            !isEmpty(this.props.codeVerificationInformation)
               ? (
                 <View>
                   <View style={styles.cardContent}>
@@ -310,7 +359,7 @@ export class MainPage extends PureComponent<IProps, IState> {
             </TouchableOpacity>
           </View>
           {
-            this.state.isUserLogin
+             !isEmpty(this.props.codeVerificationInformation)
               ? (
                 <View style={styles.menuContainer}>
                   <TouchableOpacity

@@ -13,4 +13,9 @@ export class LoginAsynсActions {
     LoginRequest.getCodeVerificationSMS
   )
 
+  static changeUserData = asyncActionCreator<IChangeUserDataRequest, IChangeUserDataResponce, Error>(
+    'LOGIN/CHANGE_USER_DATA',
+    LoginRequest.changeUserData
+  )
+
 }

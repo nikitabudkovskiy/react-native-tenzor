@@ -8,7 +8,7 @@ import { rootReducer, IApplicationState, } from 'app/system/store'
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['system'],
+  whitelist: ['system', 'login'],
 }
 
 const persistedReducer = persistReducer(persistConfig,rootReducer)
