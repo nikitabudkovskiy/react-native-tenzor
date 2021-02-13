@@ -83,17 +83,3 @@ interface IGetPromotionsResponce {
   img_small: string
   url: string
 }
-
-// interface IPromotion {
-//   id: string
-//   title: string
-//   content: string
-//   date_end: number,
-//   product_id: string
-//   promocode: string
-//   type: string
-//   discount: string
-//   img_big: string
-//   img_small: string
-//   url: string
-// }

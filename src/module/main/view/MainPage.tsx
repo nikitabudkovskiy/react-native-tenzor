@@ -162,7 +162,7 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
           >
             <View style={styles.promotionSlidesContainer}>
               {
-                this.props.promotions.map((item: IGetPromotionsResponce) => {
+              !isEmpty(this.props.promotions) && this.props.promotions.map((item: IGetPromotionsResponce) => {
                   return (
                     <ImageBackground
                       source={{ uri: item.img_big }}
