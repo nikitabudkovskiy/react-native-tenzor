@@ -42,7 +42,7 @@ const getCodeVerificationSMStarted = (state: ILoginState): ILoginState => {
 
 const getCodeVerificationSMSDone =
   (state: ILoginState, { result }: any): ILoginState => {
-    
+    console.log('resilt', result)
     if (isEmpty(result)) {
       return {
         ...state,

@@ -13,6 +13,7 @@ export class ImageRepository {
   static readonly mainPageChangeLocation = require('assets/images/main/changeLocation.png')
   static readonly mainPageExit = require('assets/images/main/exit.png')
   static readonly mainPageArrowRight = require('assets/images/main/arrowRight.png')
+  static readonly mainPageHairdry = require('assets/images/main/hairdry.png')
 
   static readonly disabledRecordingMaster = require('assets/images/main/disableRecordingMaster.png')
   static readonly disabledSign = require('assets/images/main/disableSign.png')
