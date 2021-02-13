@@ -18,6 +18,7 @@ import {
   hitSlop,
 } from 'app/system/helpers'
 import { CommonButton } from 'app/module/global/view/CommonButton'
+import { StackNavigationProp } from '@react-navigation/stack'
 
 interface IProps {
   navigation: StackNavigationProp<any>

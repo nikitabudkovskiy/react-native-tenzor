@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { AppState, AppStateStatus, YellowBox, StatusBar, View } from 'react-native'
+import { AppState, AppStateStatus, YellowBox, StatusBar } from 'react-native'
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native'
 import { RootNavigator } from 'app/system/navigation/rootNavigation'
 import { Provider } from 'react-redux'

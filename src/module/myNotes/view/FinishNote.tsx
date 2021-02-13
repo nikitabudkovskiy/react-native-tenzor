@@ -14,7 +14,6 @@ import {
   windowWidth,
   ImageRepository,
   styleSheetFlatten,
-  isLongDevices,
 } from 'app/system/helpers'
 import { CommonButton, CommonInput } from 'app/module/global/view'
 import { Modalize } from 'react-native-modalize'
