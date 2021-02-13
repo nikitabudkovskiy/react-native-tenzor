@@ -20,6 +20,17 @@ import { TextInputMask } from 'react-native-masked-text'
 import { CommonInput } from 'app/module/global/view/CommonInput'
 import { CommonButton } from 'app/module/global/view/CommonButton'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { connectStore, IApplicationState } from 'app/system/store'
+import { ThunkDispatch } from 'redux-thunk'
+import { LoginAsynсActions } from 'app/module/login/store/loginAsyncActions'
+
+interface IStateProps extends IIsLoadingAndError {
+  // codeVerificationInformation: any
+}
+
+interface IDispatchProps {
+  changeUserData(data: IChangeUserDataRequest): Promise<void>
+}
 
 interface IProps {
 
@@ -35,7 +46,18 @@ interface IState {
   isInputTouched: boolean
 }
 
-export class RegistrationContacts extends PureComponent<IProps, IState> {
+@connectStore(
+  (state: IApplicationState): IStateProps => ({
+    isLoading: state.login.isLoading,
+    error: state.login.error,
+  }),
+  (dispatch: ThunkDispatch<IApplicationState, void, any>): IDispatchProps => ({
+    async changeUserData(data) {
+      await dispatch(LoginAsynсActions.changeUserData(data))
+    },
+  })
+)
+export class RegistrationContacts extends PureComponent<IStateProps & IDispatchProps & IProps, IState> {
   state = {
     birthDate: '',
     genderSelected: '',
@@ -81,9 +103,18 @@ export class RegistrationContacts extends PureComponent<IProps, IState> {
     })
   }
 
-  checkTermsOfUseHandler = ():void => {
+  checkTermsOfUseHandler = (): void => {
     this.setState({ 
       termsOfUseChecked: !this.state.termsOfUseChecked 
+    })
+  }
+
+  sendUserDataHandler = async (): Promise<void> => {
+    await this.props.changeUserData({
+      name: this.state.name,
+      email: 'this.state.email',
+      bithday: this.state.birthDate,
+      gender: this.state.genderSelected === 'male' ? 1 : 0,
     })
   }
 
@@ -221,6 +252,7 @@ export class RegistrationContacts extends PureComponent<IProps, IState> {
           <CommonButton 
             title='ЗАВЕРШИТЬ'
             styleButton={styles.fininshButton}
+            onPress={this.sendUserDataHandler}
             disabled={!((this.state.correctBirthDate && this.state.isInputTouched) && (this.state.correctName && this.state.isInputTouched))}
           />
         </View>

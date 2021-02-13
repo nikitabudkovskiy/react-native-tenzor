@@ -75,6 +75,62 @@ const logoutAccount = (state: ILoginState): ILoginState => {
   }
 }
 
+const getPromotionsStarted = (state: ILoginState): ILoginState => {
+  return {
+    ...state,
+    isLoading: true,
+    error: false,
+  }
+}
+
+const getPromotionsDone =
+  (state: ILoginState, { result }: any): ILoginState => {
+
+    return {
+      ...state,
+      isLoading: false,
+      error: false,
+      promotions: result,
+
+    }
+  }
+
+const getPromotionsFailed = (state: ILoginState): ILoginState => {
+  return {
+    ...state,
+    isLoading: false,
+    error: true,
+  }
+}
+
+const changeUserDataStarted = (state: ILoginState): ILoginState => {
+  return {
+    ...state,
+    isLoading: true,
+    error: false,
+  }
+}
+
+const changeUserDataDone =
+  (state: ILoginState, { result }: any): ILoginState => {
+
+    return {
+      ...state,
+      isLoading: false,
+      error: false,
+      // requestSmsInformation: result,
+
+    }
+  }
+
+const changeUserDataFailed = (state: ILoginState): ILoginState => {
+  return {
+    ...state,
+    isLoading: false,
+    error: true,
+  }
+}
+
 export const loginReducer: ReducerBuilder<ILoginState> = reducerWithInitialState(LoginInitialState)
   .case(LoginAsynсActions.getRequestSmsOnNumber.async.started, getRequestSmsOnNumberStarted)
   .case(LoginAsynсActions.getRequestSmsOnNumber.async.done, getRequestSmsOnNumbernDone)
@@ -83,5 +139,13 @@ export const loginReducer: ReducerBuilder<ILoginState> = reducerWithInitialState
   .case(LoginAsynсActions.getCodeVerificationSMS.async.started, getCodeVerificationSMStarted)
   .case(LoginAsynсActions.getCodeVerificationSMS.async.done, getCodeVerificationSMSDone)
   .case(LoginAsynсActions.getCodeVerificationSMS.async.failed, getCodeVerificationSMSrFailed)
+
+  .case(LoginAsynсActions.getPromotions.async.started, getPromotionsStarted)
+  .case(LoginAsynсActions.getPromotions.async.done, getPromotionsDone)
+  .case(LoginAsynсActions.getPromotions.async.failed, getPromotionsFailed)
+
+  .case(LoginAsynсActions.changeUserData.async.started, changeUserDataStarted)
+  .case(LoginAsynсActions.changeUserData.async.done, changeUserDataDone)
+  .case(LoginAsynсActions.changeUserData.async.failed, changeUserDataFailed)
 
   .case(LoginAction.logoutAccount, logoutAccount)

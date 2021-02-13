@@ -38,8 +38,16 @@ export class LoginRequest {
     )
   }
 
-
-
-
+  static getPromotions = (data: IGetPromotionsRequest): Promise<IGetPromotionsResponce> => {
+    return ApiService.post(
+      'http://testym.appsj.su/promotions.json',
+      data,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  }
 
 }

@@ -29,18 +29,16 @@ import { ThunkDispatch } from 'redux-thunk'
 import { isEmpty } from 'lodash'
 import { LoginAction } from 'app/module/login/store/loginActions'
 import { ApiService } from 'app/system/api'
+import { LoginAsynсActions } from 'app/module/login/store/loginAsyncActions'
 
 interface IStateProps extends IIsLoadingAndError {
   codeVerificationInformation: any
-  // names: IGetSearchNameResponce[]
-  // userInformation: IGetCustomersInitResponce
+  promotions: IGetPromotionsResponce[]
 }
 
 interface IDispatchProps {
   logoutAccount(): void
-  // getSearchName(data: IGetSearchNameRequest): Promise<void>
-  // setFalseFirstRun(): void
-  // changeUserData(data: IChangeUserDataRequest): Promise<void>
+  getPromotions(): Promise<void>
 }
 
 interface IProps {
@@ -73,20 +71,15 @@ const action = [
     isLoading: state.login.isLoading,
     error: state.login.error,
     codeVerificationInformation: state.login.codeVerificationInformation,
+    promotions: state.login.promotions,
   }),
   (dispatch: ThunkDispatch<IApplicationState, void, any>): IDispatchProps => ({
     logoutAccount() {
       dispatch(LoginAction.logoutAccount())
     },
-    // async getSearchName(data) {
-    //   await dispatch(MainAsynсActions.getSearchName(data))
-    // },
-    // async changeUserData(data) {
-    //   await dispatch(MainAsynсActions.changeUserData(data))
-    // },
-    // setFalseFirstRun() {
-    //   dispatch(SystemAction.setFalseFirstRun())
-    // },
+    async getPromotions() {
+      await dispatch(LoginAsynсActions.getPromotions())
+    },
   })
 )
 export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProps, IState> {
@@ -99,8 +92,19 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
   }
 
   async componentDidMount(): Promise<void> {
-    console.log('void', this.props.codeVerificationInformation)
-    console.log(await ApiService.get(''))
+    await this.props.getPromotions()
+    // console.log('void', this.props.codeVerificationInformation.token)
+    
+    // ApiService.get('http://testym.appsj.su/promotions.json',
+    //   {
+    //     headers: {
+    //       "Authorization": `Bearer ${this.props.codeVerificationInformation.token}`
+    //     }
+    //   }
+    // )
+    // .then(res => console.log('res', res))
+
+
   }
 
   onChangeLoginStatusHandler = (): void => {
@@ -182,7 +186,7 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
           >
             <View style={styles.promotionSlidesContainer}>
               {
-                action.map(item => {
+                this.props.promotions.map((item: IGetPromotionsResponce) => {
                   return (
                     <View
                       style={styles.slides}
@@ -194,10 +198,10 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
                         onPress={this.openSupportServiceHandler}
                       >
                         <Text style={styles.slideOneTitle}>
-                          {item.title}
+                          Акция
                         </Text>
                         <Text style={styles.slideOneDescription}>
-                          {item.subTitle}
+                          {item.title}
                         </Text>
                       </TouchableOpacity>
                     </View>
@@ -359,7 +363,7 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
             </TouchableOpacity>
           </View>
           {
-             !isEmpty(this.props.codeVerificationInformation)
+            !isEmpty(this.props.codeVerificationInformation)
               ? (
                 <View style={styles.menuContainer}>
                   <TouchableOpacity
@@ -474,7 +478,8 @@ const styles = styleSheetCreate({
     paddingBottom: windowWidth * 0.2,
   }),
   container: style.view({
-    width: windowWidth * 2.436,
+    // marginRight: windowWidth * 0.1,
+    // width: windowWidth * 2.436,
     height: windowWidth * 0.266,
     marginTop: windowWidth * 0.05,
   }),

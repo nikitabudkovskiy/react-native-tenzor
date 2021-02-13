@@ -3,6 +3,7 @@ export interface ILoginState {
   error: boolean
   requestSmsInformation: IGetRequestSmsNumberResponce | any
   codeVerificationInformation: IGetCodeVerificationResponce | any
+  promotions: IGetPromotionsResponce[]
 }
 
 export const LoginInitialState: ILoginState = {
@@ -10,4 +11,5 @@ export const LoginInitialState: ILoginState = {
   error: false,
   requestSmsInformation: {},
   codeVerificationInformation: {},
+  promotions: [],
 }

@@ -18,4 +18,9 @@ export class LoginAsynсActions {
     LoginRequest.changeUserData
   )
 
+  static getPromotions = asyncActionCreator<IGetPromotionsRequest, IGetPromotionsResponce, Error>(
+    'LOGIN/GET_PROMOTIONS',
+    LoginRequest.getPromotions
+  )
+
 }
