@@ -5,6 +5,7 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  ImageBackground,
 } from 'react-native'
 import {
   styleSheetCreate,
@@ -49,22 +50,8 @@ interface IState {
   activeDot: number
   bonusActiveDot: number
   isUserLogin: boolean
+  activePromotion: IGetPromotionsResponce | any
 }
-
-const action = [
-  {
-    title: 'Акция',
-    subTitle: 'До 20 января Креативнаяж' + '\n' + 'стрижка по цене обычной',
-  },
-  {
-    title: 'Акция',
-    subTitle: 'До 20 января Креативнаяж' + '\n' + 'стрижка по цене обычной',
-  },
-  {
-    title: 'Акция',
-    subTitle: 'До 20 января Креативнаяж' + '\n' + 'стрижка по цене обычной',
-  },
-]
 
 @connectStore(
   (state: IApplicationState): IStateProps => ({
@@ -89,22 +76,11 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
     activeDot: 0,
     bonusActiveDot: 0,
     isUserLogin: false,
+    activePromotion: {},
   }
 
   async componentDidMount(): Promise<void> {
     await this.props.getPromotions()
-    // console.log('void', this.props.codeVerificationInformation.token)
-    
-    // ApiService.get('http://testym.appsj.su/promotions.json',
-    //   {
-    //     headers: {
-    //       "Authorization": `Bearer ${this.props.codeVerificationInformation.token}`
-    //     }
-    //   }
-    // )
-    // .then(res => console.log('res', res))
-
-
   }
 
   onChangeLoginStatusHandler = (): void => {
@@ -123,8 +99,8 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
     this.props.navigation.replace(ListPages.EnterPhoneNumberSingInRegistration)
   }
 
-  openSupportServiceHandler = (): void => {
-    this.refModalize.open()
+  openSupportServiceHandler = (activePromotion: IGetCodeVerificationRequest): void => {
+    this.setState({  activePromotion }, () => this.refModalize.open())
   }
 
   onPromotionScrollHandler = (event: any): void => {
@@ -188,14 +164,15 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
               {
                 this.props.promotions.map((item: IGetPromotionsResponce) => {
                   return (
-                    <View
+                    <ImageBackground
+                      source={{ uri: item.img_big }}
                       style={styles.slides}
                       key={Math.random().toString()}
                     >
                       <TouchableOpacity
                         key={Math.random().toString()}
                         style={styles.slideOne}
-                        onPress={this.openSupportServiceHandler}
+                        onPress={this.openSupportServiceHandler.bind(this, item)}
                       >
                         <Text style={styles.slideOneTitle}>
                           Акция
@@ -204,7 +181,7 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
                           {item.title}
                         </Text>
                       </TouchableOpacity>
-                    </View>
+                    </ImageBackground>
                   )
                 })
               }
@@ -449,7 +426,7 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
                 Акция!
               </Text>
               <Text style={styles.bottomSheetBackgroundSubtitle}>
-                До 20 января Креативная стрижка по цене обычной
+                {this.state.activePromotion?.title}
               </Text>
             </View>
             <Text style={styles.bottomSheetTitle}>
@@ -498,15 +475,16 @@ const styles = styleSheetCreate({
   }),
   slides: style.view({
     alignItems: 'center',
-    paddingLeft: windowWidth * 0.021,
+    marginLeft: windowWidth * 0.021,
+    borderRadius: windowWidth * 0.032,
+    overflow: 'hidden',
   }),
   slideOne: style.view({
     width: windowWidth * 0.76,
     height: windowWidth * 0.266,
-    backgroundColor: Color.candyAppleRed,
     paddingLeft: windowWidth * 0.042,
     paddingTop: windowWidth * 0.041,
-    borderRadius: windowWidth * 0.032,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   }),
   bonusSlideOne: style.view({
     width: windowWidth * 0.42,
