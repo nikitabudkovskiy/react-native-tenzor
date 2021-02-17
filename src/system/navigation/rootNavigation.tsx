@@ -1,7 +1,7 @@
 import React, { ComponentType } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { ListPages } from 'app/system/navigation'
-import { ChooseCity } from 'app/module/login/view/main/view/ChooseCity'
+import { ChooseCity } from 'app/module/main/view/ChooseCity'
 import { RegistrationContacts } from 'app/module/registration/view/RegistrationContacts'
 import { Masters } from 'app/module/masters/view/Masters'
 import { MyNotes } from 'app/module/myNotes/view/MyNotes'
@@ -99,8 +99,8 @@ const MainTabNavigator = () => {
 export const RootNavigator = (): JSX.Element => {
   return (
     <Stack.Navigator headerMode="none">
-      {/* <Stack.Screen name={ListPages.ChooseCity} component={ChooseCity} /> */}
       <Stack.Screen name={ListPages.MainTab} component={MainTabNavigator} />
+      <Stack.Screen name={ListPages.ChooseCity} component={ChooseCity} />
       <Stack.Screen name={ListPages.ChooseSalon} component={ChooseSalon} />
       <Stack.Screen name={ListPages.SelectService} component={SelectService} /> 
       <Stack.Screen name={ListPages.ChooseMaster} component={ChooseMaster} /> 

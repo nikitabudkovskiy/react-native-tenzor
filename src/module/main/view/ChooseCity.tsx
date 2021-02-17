@@ -16,7 +16,7 @@ import { ListPages } from 'app/system/navigation'
 import { connectStore, IApplicationState } from 'app/system/store'
 import { ThunkDispatch } from 'redux-thunk'
 import { Loader } from 'app/module/global/view/Loader'
-import { MainAsynсActions } from '../store/mainAsyncActions'
+import { MainAsyncActions } from '../store/mainAsyncActions'
 import { IMainState } from '../store/mainState'
 import { isEmpty } from 'lodash'
 
@@ -46,8 +46,8 @@ interface IStateProps {
 }
 
 interface ITown {
-  title: string
   id: Number
+  title: string
 }
 
 const list = ['Ижевск', 'Абакан', 'Адлер']
@@ -56,11 +56,11 @@ const list = ['Ижевск', 'Абакан', 'Адлер']
   (state: IApplicationState): IStateProps => ({
     isLoading: state.main.isLoading,
     error: state.main.error,
-    towns: state.main.towns,
+    towns: state.main.townsList,
   }),
   (dispatch: ThunkDispatch<IMainState, void, any>): IDispatchProps => ({
     async getTowns() {
-      await dispatch(MainAsynсActions.getTowns())
+      await dispatch(MainAsyncActions.getTownsList())
     }
   })
 )

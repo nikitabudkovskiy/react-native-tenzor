@@ -1,16 +1,27 @@
 import { ApiService } from 'app/system/api'
 
-export function appSettingsRequest(params: IAppSettingsRequest): Promise<ISettingsInformation> {
-    return ApiService.get(
-        'http://localmodx.appsj.su/get-app-settings.json',
-        { params }
-    )
+export class MainRequest {
+    static appSettingsRequest = (params: IAppSettingsRequest): Promise<ISettingsInformation> => {
+        return ApiService.get(
+            'http://localmodx.appsj.su/get-app-settings.json',
+            { params }
+        )
+    }
+    
+    static townsRequest = (params: ITownsRequest): Promise<ITownsResponce> => {
+        return ApiService.get(
+            'http://localmodx.appsj.su/towns.json',
+            { params }
+        )
+    }
+
+    static getOrganisations = (params: IGetOrganisationsRequest): Promise<IGetOrganisationsResponce> => {
+        return ApiService.get(
+            'http://localmodx.appsj.su/get-organizations.json',
+            { params }
+        )
+    }
 }
 
-export function townsRequest(params: ITownsRequest): Promise<ITownsResponce> {
-    return ApiService.get(
-        'http://localmodx.appsj.su/towns.json',
-        { params }
-    )
-}
+
 

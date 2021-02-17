@@ -31,15 +31,18 @@ import { isEmpty } from 'lodash'
 import { LoginAction } from 'app/module/login/store/loginActions'
 import { ApiService } from 'app/system/api'
 import { LoginAsynсActions } from 'app/module/login/store/loginAsyncActions'
+import { MainAsyncActions } from '../store/mainAsyncActions'
 
 interface IStateProps extends IIsLoadingAndError {
   codeVerificationInformation: any
   promotions: IGetPromotionsResponce[]
+  organisations: IGetOrganisationsResponce[]
 }
 
 interface IDispatchProps {
   logoutAccount(): void
   getPromotions(): Promise<void>
+  getOrganisations(data: IGetOrganisationsRequest): Promise<void>
 }
 
 interface IProps {
@@ -52,7 +55,9 @@ interface IState {
   isUserLogin: boolean
   activePromotion: IGetPromotionsResponce | any
   activeBonus: boolean
+  defauldId: Number
 }
+
 
 @connectStore(
   (state: IApplicationState): IStateProps => ({
@@ -60,6 +65,7 @@ interface IState {
     error: state.login.error,
     codeVerificationInformation: state.login.codeVerificationInformation,
     promotions: state.login.promotions,
+    organisations: state.main.organisationsList
   }),
   (dispatch: ThunkDispatch<IApplicationState, void, any>): IDispatchProps => ({
     logoutAccount() {
@@ -68,6 +74,9 @@ interface IState {
     async getPromotions() {
       await dispatch(LoginAsynсActions.getPromotions())
     },
+    async getOrganisations(data) {
+      await dispatch(MainAsyncActions.getOrganisations(data))
+    }
   })
 )
 export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProps, IState> {
@@ -79,10 +88,15 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
     isUserLogin: false,
     activePromotion: {},
     activeBonus: false,
+    defauldId: 1830
   }
 
   async componentDidMount(): Promise<void> {
     await this.props.getPromotions()
+    await this.props.getOrganisations({
+      id: this.state.defauldId
+    })
+    console.log(this.props.organisations)
   }
 
   onChangeLoginStatusHandler = (): void => {
