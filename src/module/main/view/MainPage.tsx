@@ -55,7 +55,7 @@ interface IState {
   isUserLogin: boolean
   activePromotion: IGetPromotionsResponce | any
   activeBonus: boolean
-  defauldId: Number
+  defauldIdOrganisation: Number
 }
 
 
@@ -88,13 +88,13 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
     isUserLogin: false,
     activePromotion: {},
     activeBonus: false,
-    defauldId: 1830
+    defauldIdOrganisation: 1830
   }
 
   async componentDidMount(): Promise<void> {
     await this.props.getPromotions()
     await this.props.getOrganisations({
-      id: this.state.defauldId
+      id: this.state.defauldIdOrganisation
     })
     console.log(this.props.organisations)
   }

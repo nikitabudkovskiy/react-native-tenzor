@@ -99,7 +99,7 @@ const MainTabNavigator = () => {
 export const RootNavigator = (): JSX.Element => {
   return (
     <Stack.Navigator headerMode="none">
-      <Stack.Screen name={ListPages.MainTab} component={MainTabNavigator} />
+      {/* <Stack.Screen name={ListPages.MainTab} component={MainTabNavigator} />
       <Stack.Screen name={ListPages.ChooseCity} component={ChooseCity} />
       <Stack.Screen name={ListPages.ChooseSalon} component={ChooseSalon} />
       <Stack.Screen name={ListPages.SelectService} component={SelectService} /> 
@@ -109,7 +109,9 @@ export const RootNavigator = (): JSX.Element => {
       <Stack.Screen name={ListPages.PasswordSingIn} component={PasswordSingIn} />
       <Stack.Screen name={ListPages.EnterPhoneNumberSingInRegistration} component={EnterPhoneNumberSingInRegistration} />
       <Stack.Screen name={ListPages.PasswordRegistration} component={PasswordRegistration} />
-      <Stack.Screen name={ListPages.RegistrationContacts} component={RegistrationContacts} />    
+      <Stack.Screen name={ListPages.RegistrationContacts} component={RegistrationContacts} />     */}
+      {/* <Stack.Screen name={ListPages.Masters} component={Masters} />     */}
+      <Stack.Screen name={ListPages.NoteDetails} component={NoteDetails} />    
       {/* <Stack.Screen name={ListPages.FinishNote} component={FinishNote} />     */}
     </Stack.Navigator>
   )

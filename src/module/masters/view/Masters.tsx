@@ -24,6 +24,10 @@ import {
 import { StringHelper } from 'app/system/helpers/stringHelper'
 import { isEmpty } from 'lodash'
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
+import { connectStore } from 'app/system/store'
+import { IApplicationState } from 'app/system/store/applicationState'
+import { ThunkDispatch } from 'redux-thunk'
+import { MastersAsyncActions } from '../store/masterAsyncActions'
 
 interface IProps {
   navigation: BottomTabNavigationProp<any>
@@ -40,12 +44,41 @@ interface IHairDreesserItems {
   image: ImageURISource
 }
 
-export class Masters extends PureComponent<IProps, IState> {
+interface IStateProps extends IIsLoadingAndError{
+  mastersList: IGetMastersListResponce[]
+}
+
+interface IDispatchProps {
+  getMasterList(data: IGetMastersListRequest): void
+}
+
+@connectStore (
+  (state: IApplicationState): IStateProps => ({
+    isLoading: state.master.isLoading,
+    error: state.master.error,
+    mastersList: state.master.mastersList
+  }),
+  (dispatch: ThunkDispatch<IApplicationState, void, any>): IDispatchProps => ({
+    getMasterList(data) {
+      dispatch(MastersAsyncActions.getMastersList(data))
+    }
+  })
+)
+
+
+export class Masters extends PureComponent<IProps & IState & IStateProps & IDispatchProps> {
   refTextInput: any
 
   state = {
     searchValue: '',
     animatedMarginLeft: new Animated.Value(0)
+  }
+
+  async componentDidMount() {
+    await this.props.getMasterList({
+      pointId: 0
+    })
+    console.log('qqqq',this.props.mastersList)
   }
 
   searchMasterHandler = (searchValue: string): void => {

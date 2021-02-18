@@ -22,6 +22,9 @@ import Modal from 'react-native-modal'
 import Svg, { Path } from 'react-native-svg'
 import { Modalize } from 'react-native-modalize'
 import { Portal } from 'react-native-portalize'
+import { connectStore, IApplicationState } from 'app/system/store'
+import { ThunkDispatch } from 'redux-thunk'
+import { MyNotesAsyncActions } from '../store/myNotesAsyncActions'
 
 interface IProps {
   navigation: StackNavigationProp<any>
@@ -34,9 +37,29 @@ interface IState {
   inputIsCorrect: boolean
 }
 
+interface IStateProps extends IIsLoadingAndError{
+
+}
+
+interface IDispatchProps {
+  setOrderRaiting(data: ISetOderRatingRequest): Promise<void>
+}
+
 const masterAssessment = [1, 2, 3, 4, 5]
 
-export class NoteDetails extends PureComponent<IProps, IState>{
+@connectStore(
+  (state: IApplicationState): IStateProps => ({
+    isLoading: state.myNotes.isLoading,
+    error: state.myNotes.error
+  }),
+  (dispatch: ThunkDispatch<IApplicationState, void, any>):IDispatchProps => ({
+    async setOrderRaiting(data) {
+      dispatch(MyNotesAsyncActions.setOrderRating(data))
+    }
+  })
+)
+
+export class NoteDetails extends PureComponent<IProps & IState & IDispatchProps & IStateProps>{
   refModalize: any
 
   state = {
@@ -46,6 +69,18 @@ export class NoteDetails extends PureComponent<IProps, IState>{
     inputIsCorrect: true,
   }
 
+  async componentDidMount() {
+    await this.props.setOrderRaiting({
+      general_rating: 0,
+      param1: 0,
+      param2: 0,
+      param3: 0,
+      param4: 0,
+      param5: 0,
+      comment: 'Курьер грязный'
+    })
+    
+  }
   onChangeMasterAssessmentHandler = (masterAssessment: number): void => {
     this.setState({ masterAssessment })
   }
