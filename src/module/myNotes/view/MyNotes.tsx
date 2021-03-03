@@ -19,6 +19,18 @@ import {
 } from 'app/system/helpers'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { ListPages } from 'app/system/navigation'
+import { IMainState } from 'app/module/main/store/mainState'
+import { connectStore, IApplicationState } from 'app/system/store'
+import { ThunkDispatch } from 'redux-thunk'
+import { MyNotesAsyncActions } from '../store/myNotesAsyncActions'
+
+interface IDispatchProps {
+  getOrdersHistory(data: IGetOrdersHistoryRequest): Promise<void>
+}
+
+interface IStateProps extends IIsLoadingAndError {
+  myNotes: IGetOrdersHistoryResponce
+}
 
 interface IProps {
   navigation: StackNavigationProp<any>
@@ -39,9 +51,26 @@ interface INote {
   price: number
 }
 
-export class MyNotes extends PureComponent<IProps, IState>{
+@connectStore(
+  (state: IApplicationState): IStateProps => ({
+    isLoading: state.myNotes.isLoading,
+    error: state.main.error,
+    myNotes: state.myNotes.myNotes,
+  }),
+  (dispatch: ThunkDispatch<IMainState, void, any>): IDispatchProps => ({
+    async getOrdersHistory(data) {
+      await dispatch(MyNotesAsyncActions.getOrdersHistory(data))
+    },
+  })
+)
+export class MyNotes extends PureComponent<IProps & IDispatchProps & IStateProps, IState> {
 
-  
+  async componentDidMount(): Promise<void> {
+    // await this.props.getOrdersHistory({
+    //   order_id: 
+    // })
+  }
+
   goToNoteDetailsHandler = (): void => {
     this.props.navigation.push(ListPages.NoteDetails)
   }

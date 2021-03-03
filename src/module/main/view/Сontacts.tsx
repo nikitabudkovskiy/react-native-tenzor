@@ -21,6 +21,18 @@ import {
 import MapView, { Marker } from 'react-native-maps'
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
 import { Modalize } from 'react-native-modalize'
+import { connectStore, IApplicationState } from 'app/system/store'
+import { ThunkDispatch } from 'redux-thunk'
+import { MainAsyncActions } from '../store/mainAsyncActions'
+
+interface IStateProps extends IIsLoadingAndError {
+  organisations: IGetOrganisationsResponce[]
+  userCity: ITownsResponce
+}
+
+interface IDispatchProps {
+  getOrganisations(data: IGetOrganisationsRequest): Promise<void>
+}
 
 interface IProps {
   navigation: BottomTabNavigationProp<any>
@@ -70,12 +82,27 @@ const listContacts: IContactsList[] = [
   }
 ]
 
-export class Сontacts extends PureComponent<IProps, IState> {
+@connectStore(
+  (state: IApplicationState): IStateProps => ({
+    organisations: state.main.organisationsList,
+    userCity: state.system.userCity,
+  }),
+  (dispatch: ThunkDispatch<IApplicationState, void, any>): IDispatchProps => ({
+    async getOrganisations(data) {
+      await dispatch(MainAsyncActions.getOrganisations(data))
+    }
+  })
+)
+export class Сontacts extends PureComponent<IStateProps & IDispatchProps & IProps, IState> {
   refModalize: any
 
   state = {
     isVisible: false,
     isScreenFocus: false,
+  }
+
+  async componentDidMount(): Promise<void> {
+  //  await this.props.getOrganisations()
   }
 
   goBackHandler = (): void => {

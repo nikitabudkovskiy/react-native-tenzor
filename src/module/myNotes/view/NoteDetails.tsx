@@ -58,7 +58,6 @@ const masterAssessment = [1, 2, 3, 4, 5]
     }
   })
 )
-
 export class NoteDetails extends PureComponent<IProps & IState & IDispatchProps & IStateProps>{
   refModalize: any
 
@@ -70,17 +69,9 @@ export class NoteDetails extends PureComponent<IProps & IState & IDispatchProps 
   }
 
   async componentDidMount() {
-    await this.props.setOrderRaiting({
-      general_rating: 0,
-      param1: 0,
-      param2: 0,
-      param3: 0,
-      param4: 0,
-      param5: 0,
-      comment: 'Курьер грязный'
-    })
-    
+
   }
+
   onChangeMasterAssessmentHandler = (masterAssessment: number): void => {
     this.setState({ masterAssessment })
   }
@@ -107,6 +98,13 @@ export class NoteDetails extends PureComponent<IProps & IState & IDispatchProps 
 
   openMasterAssessmentBottomHandler = (): void => {
     this.refModalize.open()
+  }
+
+  sendReviewHandler = async  (): Promise<void> => {
+    await this.props.setOrderRaiting({
+      general_rating: this.state.yourOpinion,
+      comment: 'Курьер грязный'
+    })
   }
 
   refModalizeHandler = (ref: any) => this.refModalize = ref
@@ -146,7 +144,8 @@ export class NoteDetails extends PureComponent<IProps & IState & IDispatchProps 
       {
         borderColor: this.state.inputIsCorrect 
           ? Color.gray 
-          : Color.electricOrange
+          : Color.electricOrange,
+          height: windowWidth * 0.15,
       }
     ])
 
@@ -337,10 +336,10 @@ export class NoteDetails extends PureComponent<IProps & IState & IDispatchProps 
           >
              <View style={styles.bottomSheetContent}>
               <Text style={styles.bottomSheetText}>
-                Удовлетварительно
+                Оцените качество услуг
               </Text>
               <Text style={styles.bottomSheetYourMark}>
-                Ваша оценка
+                Заказ от 15.01.2021 в 14:30
               </Text>
               <View style={styles.bottomSheetYourMarkContainer}>
                 {
@@ -366,11 +365,13 @@ export class NoteDetails extends PureComponent<IProps & IState & IDispatchProps 
                 }
               </View>
               <CommonInput
-                label='Ваше имя'
+                label={`Ваш комментарий ${this.state.yourOpinion.length} / 200`}
                 containerStyle={styles.bottomSheetInput}
                 onChangeText={this.onChangeYourOpinionHandler}
                 onBlur={this.checkYourOpinionHandler}
                 inputStyle={yourOpinionFlatten}
+                maxLength={200}
+                numberOfLines={3}
               />
               <CommonButton 
                 title="Готово"

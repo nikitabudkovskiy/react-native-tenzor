@@ -45,7 +45,8 @@ interface IHairDreesserItems {
 }
 
 interface IStateProps extends IIsLoadingAndError{
-  mastersList: IGetMastersListResponce[]
+  mastersList: IGetMastersListResponce
+  userCity: ITownsResponce
 }
 
 interface IDispatchProps {
@@ -56,7 +57,8 @@ interface IDispatchProps {
   (state: IApplicationState): IStateProps => ({
     isLoading: state.master.isLoading,
     error: state.master.error,
-    mastersList: state.master.mastersList
+    mastersList: state.master.mastersList,
+    userCity: state.system.userCity,
   }),
   (dispatch: ThunkDispatch<IApplicationState, void, any>): IDispatchProps => ({
     getMasterList(data) {
@@ -64,7 +66,6 @@ interface IDispatchProps {
     }
   })
 )
-
 
 export class Masters extends PureComponent<IProps & IState & IStateProps & IDispatchProps> {
   refTextInput: any
@@ -75,10 +76,11 @@ export class Masters extends PureComponent<IProps & IState & IStateProps & IDisp
   }
 
   async componentDidMount() {
-    await this.props.getMasterList({
-      pointId: 0
-    })
-    console.log('qqqq',this.props.mastersList)
+    if (this.props.userCity.id) {
+      await this.props.getMasterList({
+        pointId: this.props.userCity.id,
+      })
+    }
   }
 
   searchMasterHandler = (searchValue: string): void => {
@@ -134,8 +136,9 @@ export class Masters extends PureComponent<IProps & IState & IStateProps & IDisp
       }
     ])
 
-    const masterList = drawerList
-      .filter(items => StringHelper.search(items.name, this.state.searchValue))
+    const masterList: IGetMastersListResponce | any = this.props.mastersList && 
+      !isEmpty(this.props.mastersList.masters) && 
+      this.props.mastersList.masters.filter(items => StringHelper.search(items.name, this.state.searchValue))
 
     return (
       <ScrollView
@@ -183,21 +186,21 @@ export class Masters extends PureComponent<IProps & IState & IStateProps & IDisp
           </View>
           {
             !isEmpty(masterList)
-            ? masterList.map(items => {
+            ? masterList.map((item: IMasters) => {
               return (
                 <TouchableOpacity 
-                key={items.name}
+                key={item.name}
                 style={styles.hairDresserContainer}>
                   <Image
-                    source={items.image}
+                    source={{ uri: item.image }}
                     style={styles.master}
                   />
                   <View style={styles.hairDresserInfoContainer}>
                     <Text style={styles.hairDresserName}>
-                      {items.name}
+                      {item.name}
                     </Text>
                     <Text style={styles.hairDresserPosition}>
-                      {items.position}
+                      {item.role}
                     </Text>
                     <View style={styles.starContainer}>
                       {

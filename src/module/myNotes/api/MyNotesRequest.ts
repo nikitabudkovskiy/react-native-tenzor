@@ -7,4 +7,11 @@ export class MyNotesRequest {
             { data }
         )
     }
+
+    static getOrdersHistory = (data: IGetOrdersHistoryRequest): Promise<IGetOrdersHistoryResponce> => {
+        return ApiService.post(
+            'http://tbeauteam.appsj.su/getordershistory.json',
+            { data }
+        )
+    }
 }

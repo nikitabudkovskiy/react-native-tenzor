@@ -21,17 +21,9 @@ import { IMainState } from '../store/mainState'
 import { isEmpty } from 'lodash'
 import { SystemAction } from 'app/system/store/system'
 
-interface IProps {
-  navigation: StackNavigationProp<any>
-}
-
 interface IDispatchProps {
   setChooseCity(data: ITownsResponce): void
   getTowns(): Promise<void>
-}
-
-interface IState {
-  selectedСity: ITown
 }
 
 interface IStateProps {
@@ -40,12 +32,18 @@ interface IStateProps {
   error: boolean
 }
 
+interface IProps {
+  navigation: StackNavigationProp<any>
+}
+
+interface IState {
+  selectedСity: ITown
+}
+
 interface ITown {
   id: Number
   title: string
 }
-
-const list = ['Ижевск', 'Абакан', 'Адлер']
 
 @connectStore(
   (state: IApplicationState): IStateProps => ({
@@ -62,7 +60,6 @@ const list = ['Ижевск', 'Абакан', 'Адлер']
     }
   })
 )
-
 export class ChooseCity extends PureComponent<IProps & IState & IDispatchProps & IStateProps> {
 
   state = {
@@ -146,7 +143,7 @@ export class ChooseCity extends PureComponent<IProps & IState & IDispatchProps &
                     }
                   </TouchableOpacity>
                   {
-                    list.length - 1 === index
+                    this.props.towns.length - 1 === index
                       ? null
                       : (
                         <View style={styles.cardDevider} />

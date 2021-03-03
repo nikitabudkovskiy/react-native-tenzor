@@ -8,4 +8,9 @@ export class MyNotesAsyncActions {
         MyNotesRequest.setOrderRating
     )
 
+    static getOrdersHistory = asyncActionCreator<IGetOrdersHistoryRequest, IGetOrdersHistoryResponce, Error>(
+        'MY_NOTES/GET_ORDERS_HISTORY',
+        MyNotesRequest.getOrdersHistory
+    )
+
 }
