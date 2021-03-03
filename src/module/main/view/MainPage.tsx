@@ -18,6 +18,7 @@ import {
   platform,
   isLongDevices,
 } from 'app/system/helpers'
+import { StackActions } from '@react-navigation/native'
 import Barcode from "react-native-barcode-builder"
 import { CommonButton } from 'app/module/global/view'
 import { StackNavigationProp } from '@react-navigation/stack'
@@ -88,6 +89,12 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
   }
 
   logoutHandler = (): void => {
+    this.props.navigation.reset({
+      index: 0,
+      routes: [
+        {  name: ListPages.MainTab }
+      ],
+    })
     this.props.logoutAccount()
   }
 
@@ -360,7 +367,7 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
                     />
                   </TouchableOpacity>
                   <TouchableOpacity
-                    onPress={this.onChangeLoginStatusHandler}
+                    onPress={this.logoutHandler}
                     style={styles.exitContainer}
                   >
                     <Image

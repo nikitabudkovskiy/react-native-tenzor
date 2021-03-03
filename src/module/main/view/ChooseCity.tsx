@@ -19,6 +19,7 @@ import { Loader } from 'app/module/global/view/Loader'
 import { MainAsynсActions } from '../store/mainAsyncActions'
 import { IMainState } from '../store/mainState'
 import { isEmpty } from 'lodash'
+import { LoginAsynсActions } from 'app/module/login/store/loginAsyncActions'
 
 interface IProps {
   navigation: StackNavigationProp<any>
@@ -54,14 +55,14 @@ const list = ['Ижевск', 'Абакан', 'Адлер']
 
 @connectStore(
   (state: IApplicationState): IStateProps => ({
-    isLoading: state.main.isLoading,
-    error: state.main.error,
-    towns: state.main.towns,
+    isLoading: state.login.isLoading,
+    error: state.login.error,
+    towns: state.login.towns,
   }),
   (dispatch: ThunkDispatch<IMainState, void, any>): IDispatchProps => ({
-    async getTowns() {
-      await dispatch(MainAsynсActions.getTowns())
-    }
+    // async getTowns() {
+    //   await dispatch(LoginAsynсActions.getTowns())
+    // }
   })
 )
 

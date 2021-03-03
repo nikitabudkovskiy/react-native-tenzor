@@ -1,7 +1,6 @@
 import React, { ComponentType } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { ListPages } from 'app/system/navigation'
-import { ChooseCity } from 'app/module/login/view/main/view/ChooseCity'
 import { RegistrationContacts } from 'app/module/registration/view/RegistrationContacts'
 import { Masters } from 'app/module/masters/view/Masters'
 import { MyNotes } from 'app/module/myNotes/view/MyNotes'
@@ -24,6 +23,7 @@ import { Сontacts } from 'app/module/main/view/Сontacts'
 import { View } from 'react-native'
 import { Color, windowWidth } from '../helpers'
 import { MainPage } from 'app/module/main/view/MainPage'
+import { ChooseCity } from 'app/module/main/view/ChooseCity'
 
 export interface IListTabBar {
   name: string
@@ -99,7 +99,7 @@ const MainTabNavigator = () => {
 export const RootNavigator = (): JSX.Element => {
   return (
     <Stack.Navigator headerMode="none">
-      {/* <Stack.Screen name={ListPages.ChooseCity} component={ChooseCity} /> */}
+      <Stack.Screen name={ListPages.ChooseCity} component={ChooseCity} />
       <Stack.Screen name={ListPages.MainTab} component={MainTabNavigator} />
       <Stack.Screen name={ListPages.ChooseSalon} component={ChooseSalon} />
       <Stack.Screen name={ListPages.SelectService} component={SelectService} /> 
