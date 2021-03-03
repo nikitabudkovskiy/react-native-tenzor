@@ -10,5 +10,14 @@ const setLanguage = (state: ISystemState, payload: EListLanguage): ISystemState 
   }
 }
 
+const setChooseCity = (state: ISystemState, payload: ITownsResponce): ISystemState => {
+  return {
+    ...state,
+    userCity: payload,
+  }
+}
+
+
 export const systemReducer: ReducerBuilder<ISystemState> = reducerWithInitialState(SystemInitialState)
   .case(SystemAction.setLanguage, setLanguage)
+  .case(SystemAction.setChooseCity, setChooseCity)

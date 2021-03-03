@@ -19,25 +19,19 @@ import { Loader } from 'app/module/global/view/Loader'
 import { MainAsyncActions } from '../store/mainAsyncActions'
 import { IMainState } from '../store/mainState'
 import { isEmpty } from 'lodash'
-import { LoginAsynсActions } from 'app/module/login/store/loginAsyncActions'
+import { SystemAction } from 'app/system/store/system'
 
 interface IProps {
   navigation: StackNavigationProp<any>
 }
 
 interface IDispatchProps {
-  // appSettings(data: IAppSettingsRequest): Promise<void>
+  setChooseCity(data: ITownsResponce): void
   getTowns(): Promise<void>
 }
 
 interface IState {
   selectedСity: ITown
-  // appStateStatus: boolean
-  // appStateDisableText: string
-  // appCashBackStatus: boolean
-  // appPromocodeStatus: boolean
-  // appReferalStatus: boolean
-  // appVerApi: string
 }
 
 interface IStateProps {
@@ -62,6 +56,9 @@ const list = ['Ижевск', 'Абакан', 'Адлер']
   (dispatch: ThunkDispatch<IMainState, void, any>): IDispatchProps => ({
     async getTowns() {
       await dispatch(MainAsyncActions.getTownsList())
+    },
+    setChooseCity(data) {
+      dispatch(SystemAction.setChooseCity(data))
     }
   })
 )
@@ -95,6 +92,7 @@ export class ChooseCity extends PureComponent<IProps & IState & IDispatchProps &
   }
 
   goToMainTabBarHandler = (): void => {
+    this.props.setChooseCity(this.state.selectedСity)
     this.props.navigation.replace(ListPages.MainTab)
   }
 
@@ -160,7 +158,7 @@ export class ChooseCity extends PureComponent<IProps & IState & IDispatchProps &
           }
         </ScrollView>
           <CommonButton
-            disabled={!this.state.selectedСity}
+            disabled={this.state.selectedСity.id === -1}
             title="Выбрать город"
             styleButton={styles.chooseCity}
             onPress={this.goToMainTabBarHandler}
