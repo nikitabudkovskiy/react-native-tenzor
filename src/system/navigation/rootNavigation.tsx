@@ -1,6 +1,7 @@
 import React, { ComponentType } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { ListPages } from 'app/system/navigation'
+import { ChooseCity } from 'app/module/main/view/ChooseCity'
 import { RegistrationContacts } from 'app/module/registration/view/RegistrationContacts'
 import { Masters } from 'app/module/masters/view/Masters'
 import { MyNotes } from 'app/module/myNotes/view/MyNotes'
@@ -18,12 +19,8 @@ import { ChooseMaster } from 'app/module/appointments/view/ChooseMaster'
 import { EnterPhoneNumberSingInRegistration } from 'app/module/login/view/EnterPhoneNumberSingInRegistration'
 import { PasswordRegistration } from 'app/module/login/view/PasswordRegistration'
 // import { RegistrationContacts } from 'app/module/registration/view/RegistrationContacts'
-import { FinishNote } from 'app/module/myNotes/view/FinishNote'
 import { Сontacts } from 'app/module/main/view/Сontacts'
-import { View } from 'react-native'
-import { Color, windowWidth } from '../helpers'
 import { MainPage } from 'app/module/main/view/MainPage'
-import { ChooseCity } from 'app/module/main/view/ChooseCity'
 
 export interface IListTabBar {
   name: string
@@ -42,7 +39,6 @@ const MyNotesStack = () => {
     </Stack.Navigator>
   )
 }
-
 
 export const listTabBar: Array<IListTabBar> = [
   {
@@ -85,8 +81,6 @@ const MainTabNavigator = () => {
                 key={index.toString()}
                 name={item.routeName}
                 component={item.component}
-                
-                
               />
             )
           })
@@ -109,7 +103,9 @@ export const RootNavigator = (): JSX.Element => {
       <Stack.Screen name={ListPages.PasswordSingIn} component={PasswordSingIn} />
       <Stack.Screen name={ListPages.EnterPhoneNumberSingInRegistration} component={EnterPhoneNumberSingInRegistration} />
       <Stack.Screen name={ListPages.PasswordRegistration} component={PasswordRegistration} />
-      <Stack.Screen name={ListPages.RegistrationContacts} component={RegistrationContacts} />    
+      <Stack.Screen name={ListPages.RegistrationContacts} component={RegistrationContacts} />     
+      {/* <Stack.Screen name={ListPages.Masters} component={Masters} />     */}
+      <Stack.Screen name={ListPages.NoteDetails} component={NoteDetails} />    
       {/* <Stack.Screen name={ListPages.FinishNote} component={FinishNote} />     */}
     </Stack.Navigator>
   )

@@ -27,6 +27,7 @@
     "axios": "^0.19.2",
     "lodash": "^4.17.20",
     "moment": "^2.27.0",
+    "patch-package": "^6.2.2",
     "react": "16.11.0",
     "react-native": "^0.62.2",
     "react-native-barcode-builder": "^2.0.0",
@@ -51,8 +52,7 @@
     "redux-thunk": "^2.3.0",
     "typescript-fsa": "^3.0.0",
     "typescript-fsa-reducers": "^1.2.1",
-    "typescript-fsa-redux-thunk": "^2.1.9",
-    "patch-package": "^6.2.2"
+    "typescript-fsa-redux-thunk": "^2.1.9"
   },
   "devDependencies": {
     "@babel/core": "^7.10.3",

@@ -32,15 +32,18 @@ import { isEmpty } from 'lodash'
 import { LoginAction } from 'app/module/login/store/loginActions'
 import { ApiService } from 'app/system/api'
 import { LoginAsynсActions } from 'app/module/login/store/loginAsyncActions'
+import { MainAsyncActions } from '../store/mainAsyncActions'
 
 interface IStateProps extends IIsLoadingAndError {
   codeVerificationInformation: any
   promotions: IGetPromotionsResponce[]
+  organisations: IGetOrganisationsResponce[]
 }
 
 interface IDispatchProps {
   logoutAccount(): void
   getPromotions(): Promise<void>
+  getOrganisations(data: IGetOrganisationsRequest): Promise<void>
 }
 
 interface IProps {
@@ -52,7 +55,10 @@ interface IState {
   bonusActiveDot: number
   isUserLogin: boolean
   activePromotion: IGetPromotionsResponce | any
+  activeBonus: boolean
+  defauldIdOrganisation: Number
 }
+
 
 @connectStore(
   (state: IApplicationState): IStateProps => ({
@@ -60,6 +66,7 @@ interface IState {
     error: state.login.error,
     codeVerificationInformation: state.login.codeVerificationInformation,
     promotions: state.login.promotions,
+    organisations: state.main.organisationsList
   }),
   (dispatch: ThunkDispatch<IApplicationState, void, any>): IDispatchProps => ({
     logoutAccount() {
@@ -68,6 +75,9 @@ interface IState {
     async getPromotions() {
       await dispatch(LoginAsynсActions.getPromotions())
     },
+    async getOrganisations(data) {
+      await dispatch(MainAsyncActions.getOrganisations(data))
+    }
   })
 )
 export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProps, IState> {
@@ -78,10 +88,16 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
     bonusActiveDot: 0,
     isUserLogin: false,
     activePromotion: {},
+    activeBonus: false,
+    defauldIdOrganisation: 1830
   }
 
   async componentDidMount(): Promise<void> {
     await this.props.getPromotions()
+    await this.props.getOrganisations({
+      id: this.state.defauldIdOrganisation
+    })
+    console.log(this.props.organisations)
   }
 
   onChangeLoginStatusHandler = (): void => {
@@ -107,7 +123,11 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
   }
 
   openSupportServiceHandler = (activePromotion: IGetCodeVerificationRequest): void => {
-    this.setState({  activePromotion }, () => this.refModalize.open())
+    this.setState({ activePromotion }, () => this.refModalize.open())
+  }
+
+  openBonusServiceHandler = (): void => {
+    this.setState({ activeBonus: !this.state.activeBonus }, () => this.refModalize.open())
   }
 
   onPromotionScrollHandler = (event: any): void => {
@@ -121,7 +141,7 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
 
   onBonusesScrollHandler = (event: any): void => {
     const { x: bonusPositionX } = event.nativeEvent.contentOffset
-    const bonusSlideSize = event.nativeEvent.layoutMeasurement.width * 0.2
+    const bonusSlideSize = event.nativeEvent.layoutMeasurement.width * 0.5
     const bonusActiveDot = Math.round(bonusPositionX / bonusSlideSize)
     this.setState({ bonusActiveDot }, () => {
       console.log("bonusActiveDot", bonusActiveDot)
@@ -147,6 +167,7 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
       }
     ])
 
+
     return (
       <View style={styles.content}>
         <ScrollView
@@ -169,7 +190,7 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
           >
             <View style={styles.promotionSlidesContainer}>
               {
-              !isEmpty(this.props.promotions) && this.props.promotions.map((item: IGetPromotionsResponce) => {
+                !isEmpty(this.props.promotions) && this.props.promotions.map((item: IGetPromotionsResponce) => {
                   return (
                     <ImageBackground
                       source={{ uri: item.img_big }}
@@ -208,9 +229,40 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
               }
             </View>
           </View>
-
+          <View style={styles.appointments}>
+            <TouchableOpacity style={styles.serviceAppointment}>
+              <Image
+                source={ImageRepository.mainPageHairdry}
+                style={styles.sign}
+              // resizeMode="contain"
+              />
+              <Text style={styles.appointmentDescription}>
+                Запись{'\n'} на услугу
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.serviceAppointment}>
+              <Image
+                source={ImageRepository.mainPageRecordingMaster}
+                style={styles.sign}
+              // resizeMode="contain"
+              />
+              <Text style={styles.appointmentDescription}>
+                Запись{'\n'} к мастеру
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.serviceAppointment}>
+              <Image
+                source={ImageRepository.mainPageSolariumAppointment}
+                style={styles.sign}
+              // resizeMode="contain"
+              />
+              <Text style={styles.appointmentDescription}>
+                Запись{'\n'} в солярий
+              </Text>
+            </TouchableOpacity>
+          </View>
           {
-            !isEmpty(this.props.codeVerificationInformation)
+            isEmpty(this.props.codeVerificationInformation)
               ? (
                 <View>
                   <View style={styles.cardContent}>
@@ -248,10 +300,15 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
                           </Text>
                           <Text style={styles.bounusSlideOneDescription}>
                             Баланс{'\n'}
-                            абонемента{'\n'}
-                            110₽ сгорят через{'\n'}
-                            3 дня (под вопросом???)
+                            абонемента
                           </Text>
+                          <TouchableOpacity
+                          onPress={this.openBonusServiceHandler} 
+                          style={styles.bonusBurningContainer}>
+                            <Text style={styles.bonusBurningTitle}>
+                              🔥Сгорит 500 руб
+                            </Text>
+                          </TouchableOpacity>
                         </View>
                       </View>
                       <View style={styles.slides}>
@@ -281,7 +338,7 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
                   <View style={styles.dotConteiner}>
                     <View style={styles.dots}>
                       {
-                        [0, 1, 2].map(item => {
+                        [0, 1].map(item => {
                           return (
                             <View
                               key={item}
@@ -314,40 +371,9 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
               )
           }
 
-          <View style={styles.appointments}>
-            <TouchableOpacity style={styles.serviceAppointment}>
-              <Image
-                source={ImageRepository.mainPageSign}
-                style={styles.sign}
-              // resizeMode="contain"
-              />
-              <Text style={styles.appointmentDescription}>
-                Запись{'\n'} на услугу
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.serviceAppointment}>
-              <Image
-                source={ImageRepository.mainPageRecordingMaster}
-                style={styles.sign}
-              // resizeMode="contain"
-              />
-              <Text style={styles.appointmentDescription}>
-                Запись{'\n'} к мастеру
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.serviceAppointment}>
-              <Image
-                source={ImageRepository.mainPageSolariumAppointment}
-                style={styles.sign}
-              // resizeMode="contain"
-              />
-              <Text style={styles.appointmentDescription}>
-                Запись{'\n'} в солярий
-              </Text>
-            </TouchableOpacity>
-          </View>
+
           {
-            !isEmpty(this.props.codeVerificationInformation)
+            isEmpty(this.props.codeVerificationInformation)
               ? (
                 <View style={styles.menuContainer}>
                   <TouchableOpacity
@@ -449,6 +475,45 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
               title="Завершить"
             />
           </Modalize>
+          
+          <Modalize
+           ref={this.refModalizeHandler}
+           modalHeight={windowWidth * 1.02}
+           >
+            <View style={styles.bottomSheetChildren}>
+              <Text style={styles.burningBonusTitle}>
+                Ближайшие сгорания
+              </Text>
+              <View style={styles.burningBonusNoteContainer}>
+                <Text style={styles.burningBonusTimeTitle}>
+                  12.02.2021
+                </Text>
+                <Text style={styles.burningBonusMoneyTitle}>
+                  сгорят 120 ₽
+                </Text>
+              </View>
+              <View style={styles.burningBonusNoteContainer}>
+                <Text style={styles.burningBonusTimeTitle}>
+                  23.02.2021
+                </Text>
+                <Text style={styles.burningBonusMoneyTitle}>
+                  сгорят 288 ₽
+                </Text>
+              </View>
+              <View style={styles.burningBonusNoteContainer}>
+                <Text style={styles.burningBonusTimeTitle}>
+                  19.02.2021
+                </Text>
+                <Text style={styles.burningBonusMoneyTitle}>
+                  сгорят 367 ₽
+                </Text>
+              </View>
+              <CommonButton
+              title="Понятно"
+              styleButton={styles.understand}
+            />
+            </View>
+          </Modalize>
         </Portal>
       </View>
     )
@@ -469,7 +534,7 @@ const styles = styleSheetCreate({
   }),
   bonusesContainer: style.view({
     width: windowWidth * 1.42,
-    height: windowWidth * 0.387,
+    height: windowWidth * 0.272,
     marginTop: windowWidth * 0.05,
   }),
   promotionSlidesContainer: style.view({
@@ -495,7 +560,7 @@ const styles = styleSheetCreate({
   }),
   bonusSlideOne: style.view({
     width: windowWidth * 0.42,
-    height: windowWidth * 0.384,
+    height: windowWidth * 0.272,
     backgroundColor: Color.pastaAndCheese,
     paddingLeft: windowWidth * 0.042,
     paddingTop: windowWidth * 0.021,
@@ -503,7 +568,7 @@ const styles = styleSheetCreate({
   }),
   bonusSlideTwo: style.view({
     width: windowWidth * 0.42,
-    height: windowWidth * 0.384,
+    height: windowWidth * 0.272,
     backgroundColor: Color.electricOrange,
     paddingLeft: windowWidth * 0.042,
     paddingTop: windowWidth * 0.021,
@@ -511,7 +576,7 @@ const styles = styleSheetCreate({
   }),
   bonusSlideThree: style.view({
     width: windowWidth * 0.42,
-    height: windowWidth * 0.384,
+    height: windowWidth * 0.272,
     backgroundColor: Color.frostySky,
     paddingLeft: windowWidth * 0.042,
     paddingTop: windowWidth * 0.021,
@@ -545,6 +610,14 @@ const styles = styleSheetCreate({
     fontSize: windowWidth * 0.036,
     color: Color.white,
   }),
+  bonusBurningContainer: style.view({
+    // marginTop: windowWidth * 0.01
+  }),
+  bonusBurningTitle: style.text({
+    fontSize: windowWidth * 0.04,
+    fontFamily: fonts.robotoBold,
+    color: Color.alizarinCrimson
+  }),
   bounusSlideOneDescription: style.text({
     fontFamily: fonts.robotoRegular,
     fontSize: windowWidth * 0.036,
@@ -569,7 +642,8 @@ const styles = styleSheetCreate({
     width: windowWidth * 0.0106,
     height: windowWidth * 0.0106,
     borderRadius: windowWidth * 0.375,
-    backgroundColor: Color.black,
+    backgroundColor: Color.electricOrange,
+    opacity: 0.4,
     marginRight: windowWidth * 0.01,
   }),
   dotIsActive: style.view({
@@ -597,7 +671,7 @@ const styles = styleSheetCreate({
     width: windowWidth * 0.28,
     height: windowWidth * 0.24,
     borderWidth: windowWidth * 0.002,
-    borderColor: Color.electricOrange,
+    borderColor: Color.white,
     borderRadius: windowWidth * 0.032,
     alignItems: 'center',
     justifyContent: 'center',
@@ -783,4 +857,29 @@ const styles = styleSheetCreate({
     marginTop: windowWidth * 0.04,
     marginBottom: windowWidth * 0.6,
   }),
+  burningBonusNoteContainer: style.view({
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: windowWidth * 0.082
+  }),
+  burningBonusTitle: style.text({
+    alignSelf: 'center',
+    marginTop: windowWidth * 0.04,
+    fontSize: windowWidth * 0.064,
+    fontFamily: fonts.robotoBold
+  }),
+  burningBonusMoneyTitle: style.text({
+    fontSize: windowWidth * 0.04,
+    color: Color.alizarinCrimson,
+    fontFamily: fonts.robotoRegular
+  }),
+  burningBonusTimeTitle: style.text({
+    fontSize: windowWidth * 0.04,
+    color: Color.gray600,
+    fontFamily: fonts.robotoRegular
+  }),
+  understand: style.view({
+    marginTop: windowWidth * 0.42,
+  })
 })
