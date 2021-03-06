@@ -1,5 +1,5 @@
 interface IGetMastersListRequest {
-    pointId: Number
+    point_id: number
 }
 
 interface IMasters {

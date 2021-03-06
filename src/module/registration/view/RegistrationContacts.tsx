@@ -4,6 +4,7 @@ import {
   Text,
   Image,
   TouchableOpacity,
+  Alert,
 } from 'react-native'
 import {
   styleSheetCreate,
@@ -110,11 +111,16 @@ export class RegistrationContacts extends PureComponent<IStateProps & IDispatchP
   }
 
   sendUserDataHandler = async (): Promise<void> => {
+    if (!this.state.genderSelected) {
+      Alert.alert('Ошибка', 'Выберите пол!')
+    }
+    if (!this.state.termsOfUseChecked) {
+      Alert.alert('Ошибка', 'Примите соглашение')
+    }
     await this.props.changeUserData({
       name: this.state.name,
-      email: 'this.state.email',
       bithday: this.state.birthDate,
-      gender: this.state.genderSelected === 'male' ? 1 : 0,
+      gender: this.state.genderSelected === 'male' ? 1 : 2,
     })
   }
 
@@ -253,7 +259,7 @@ export class RegistrationContacts extends PureComponent<IStateProps & IDispatchP
             title='ЗАВЕРШИТЬ'
             styleButton={styles.fininshButton}
             onPress={this.sendUserDataHandler}
-            disabled={!((this.state.correctBirthDate && this.state.isInputTouched) && (this.state.correctName && this.state.isInputTouched))}
+            disabled={!((this.state.correctBirthDate && this.state.isInputTouched && this.state.birthDate.length === 10) && (this.state.correctName && this.state.isInputTouched && this.state.name))}
           />
         </View>
       </KeyboardAwareScrollView>

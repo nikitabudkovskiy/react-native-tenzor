@@ -71,8 +71,6 @@ export class ChooseCity extends PureComponent<IProps & IState & IDispatchProps &
 
   async componentDidMount() {
     await this.props.getTowns()
-
-    console.log(this.props.towns)
   }
 
   onChangeCityHandler = (selectedСity: ITown): void => {

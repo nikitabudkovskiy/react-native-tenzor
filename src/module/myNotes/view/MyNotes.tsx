@@ -66,9 +66,8 @@ interface INote {
 export class MyNotes extends PureComponent<IProps & IDispatchProps & IStateProps, IState> {
 
   async componentDidMount(): Promise<void> {
-    // await this.props.getOrdersHistory({
-    //   order_id: 
-    // })
+    await this.props.getOrdersHistory({
+    })
   }
 
   goToNoteDetailsHandler = (): void => {
@@ -76,8 +75,6 @@ export class MyNotes extends PureComponent<IProps & IDispatchProps & IStateProps
   }
 
   render() {
-
-    console.log(this.props)
 
     const container = styleSheetFlatten([
       styles.container,

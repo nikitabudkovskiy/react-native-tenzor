@@ -72,6 +72,7 @@ const MainTabNavigator = () => {
   return (
     <Host>
       <Tab.Navigator
+        // lazy={false}
         tabBar={props => <CustomTabbar tabs={listTabBar} {...props} />}
       >
         {

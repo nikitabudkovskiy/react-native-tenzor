@@ -28,6 +28,7 @@ import { connectStore } from 'app/system/store'
 import { IApplicationState } from 'app/system/store/applicationState'
 import { ThunkDispatch } from 'redux-thunk'
 import { MastersAsyncActions } from '../store/masterAsyncActions'
+import { FloatingLoader } from 'app/module/global/view/FloatingLoader'
 
 interface IProps {
   navigation: BottomTabNavigationProp<any>
@@ -66,7 +67,6 @@ interface IDispatchProps {
     }
   })
 )
-
 export class Masters extends PureComponent<IProps & IState & IStateProps & IDispatchProps> {
   refTextInput: any
 
@@ -78,7 +78,7 @@ export class Masters extends PureComponent<IProps & IState & IStateProps & IDisp
   async componentDidMount() {
     if (this.props.userCity.id) {
       await this.props.getMasterList({
-        pointId: this.props.userCity.id,
+        point_id: this.props.userCity.id,
       })
     }
   }
@@ -125,6 +125,10 @@ export class Masters extends PureComponent<IProps & IState & IStateProps & IDisp
         marginTop: isLongDevices ? windowWidth * 0.1 : windowWidth * 0.05
       }
     ])
+
+    if (this.props.isLoading) {
+      return <FloatingLoader />
+    }
 
     const searchMasterInputBlur = styleSheetFlatten([
       styles.searchMasterInputBlur,

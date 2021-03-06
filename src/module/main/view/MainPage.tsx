@@ -18,7 +18,6 @@ import {
   platform,
   isLongDevices,
 } from 'app/system/helpers'
-import { StackActions } from '@react-navigation/native'
 import Barcode from "react-native-barcode-builder"
 import { CommonButton } from 'app/module/global/view'
 import { StackNavigationProp } from '@react-navigation/stack'
@@ -30,7 +29,6 @@ import { IApplicationState } from 'app/system/store/applicationState'
 import { ThunkDispatch } from 'redux-thunk'
 import { isEmpty } from 'lodash'
 import { LoginAction } from 'app/module/login/store/loginActions'
-import { ApiService } from 'app/system/api'
 import { LoginAsynсActions } from 'app/module/login/store/loginAsyncActions'
 import { MainAsyncActions } from '../store/mainAsyncActions'
 
@@ -81,7 +79,8 @@ interface IState {
   })
 )
 export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProps, IState> {
-  refModalize: any
+  refModalizePromotions: any
+  refModalizeBonus: any
 
   state = {
     activeDot: 0,
@@ -94,14 +93,10 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
 
   async componentDidMount(): Promise<void> {
     await this.props.getPromotions()
-    await this.props.getOrganisations({
-      id: this.state.defauldIdOrganisation
-    })
-    console.log(this.props.organisations)
   }
 
   onChangeLoginStatusHandler = (): void => {
-    this.setState({ isUserLogin: !this.state.isUserLogin })
+    this.props.navigation.navigate(ListPages.Сontacts)
   }
 
   logoutHandler = (): void => {
@@ -122,12 +117,15 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
     this.props.navigation.replace(ListPages.EnterPhoneNumberSingInRegistration)
   }
 
-  openSupportServiceHandler = (activePromotion: IGetCodeVerificationRequest): void => {
-    this.setState({ activePromotion }, () => this.refModalize.open())
+  openPromotionsModalHandler = (activePromotion: IGetCodeVerificationRequest): void => {
+    this.setState({ activePromotion }, () => {
+      console.log('t', this.refModalizePromotions)
+      this.refModalizePromotions.open()
+    })
   }
 
   openBonusServiceHandler = (): void => {
-    this.setState({ activeBonus: !this.state.activeBonus }, () => this.refModalize.open())
+    this.setState({ activeBonus: !this.state.activeBonus }, () => this.refModalizeBonus.open())
   }
 
   onPromotionScrollHandler = (event: any): void => {
@@ -143,16 +141,16 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
     const { x: bonusPositionX } = event.nativeEvent.contentOffset
     const bonusSlideSize = event.nativeEvent.layoutMeasurement.width * 0.5
     const bonusActiveDot = Math.round(bonusPositionX / bonusSlideSize)
-    this.setState({ bonusActiveDot }, () => {
-      console.log("bonusActiveDot", bonusActiveDot)
-    })
+    this.setState({ bonusActiveDot })
   }
 
   changeCityHandler = () => {
     this.props.navigation.navigate('ChooseCity')
   }
 
-  refModalizeHandler = (ref: any) => this.refModalize = ref
+  refModalizePromotionsHandler = (ref: any) => this.refModalizePromotions = ref
+
+  refModalizeBonusHandler = (ref: any) => this.refModalizeBonus = ref
 
   render() {
 
@@ -200,7 +198,7 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
                       <TouchableOpacity
                         key={Math.random().toString()}
                         style={styles.slideOne}
-                        onPress={this.openSupportServiceHandler.bind(this, item)}
+                        onPress={this.openPromotionsModalHandler.bind(this, item)}
                       >
                         <Text style={styles.slideOneTitle}>
                           Акция
@@ -218,11 +216,11 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
           <View style={styles.dotConteiner}>
             <View style={styles.dots}>
               {
-                [0, 1, 2].map(item => {
+                this.props.promotions.map((_, index) => {
                   return (
                     <View
-                      key={item}
-                      style={this.state.activeDot === item ? styles.dotIsActive : styles.dotInactive}>
+                      key={index.toString()}
+                      style={this.state.activeDot === index ? styles.dotIsActive : styles.dotInactive}>
                     </View>
                   )
                 })
@@ -450,7 +448,7 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
 
         <Portal>
           <Modalize
-            ref={this.refModalizeHandler}
+            ref={this.refModalizePromotionsHandler}
             childrenStyle={styles.bottomSheetChildren}
             modalHeight={windowWidth * 1.5}
           >
@@ -463,7 +461,7 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
               </Text>
             </View>
             <Text style={styles.bottomSheetTitle}>
-              Скидка 20% на все креативные стрижки
+            {/* {this.state.activePromotion?.title} */}
             </Text>
             <Text style={styles.bottomSheetWorks}>
               Действует до 18.10.202
@@ -475,9 +473,11 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
               title="Завершить"
             />
           </Modalize>
+          </Portal>
           
+          <Portal>
           <Modalize
-           ref={this.refModalizeHandler}
+           ref={this.refModalizeBonusHandler}
            modalHeight={windowWidth * 1.02}
            >
             <View style={styles.bottomSheetChildren}>

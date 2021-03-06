@@ -40,7 +40,6 @@ interface IGetCodeVerificationResponce {
 
 interface IChangeUserDataRequest {
   name: string
-  email: string,
   bithday: string
   gender: number
 }

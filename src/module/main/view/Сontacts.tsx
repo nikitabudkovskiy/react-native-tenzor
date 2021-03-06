@@ -24,8 +24,10 @@ import { Modalize } from 'react-native-modalize'
 import { connectStore, IApplicationState } from 'app/system/store'
 import { ThunkDispatch } from 'redux-thunk'
 import { MainAsyncActions } from '../store/mainAsyncActions'
+import { isEmpty } from 'lodash'
+import Geolocation from 'react-native-geolocation-service'
 
-interface IStateProps extends IIsLoadingAndError {
+interface IStateProps {
   organisations: IGetOrganisationsResponce[]
   userCity: ITownsResponce
 }
@@ -43,45 +45,6 @@ interface IState {
   isScreenFocus: boolean
 }
 
-interface IContactsList {
-  address: string
-  phoneNumber: string
-  isVkLink: boolean
-}
-
-const listContacts: IContactsList[] = [
-  {
-    address: 'пер. Широкий, 53 (ТРК Сигма)',
-    phoneNumber: '+7 925 123 45 67',
-    isVkLink: true
-  },
-  {
-    address: 'ул. Красная 154',
-    phoneNumber: '+7 925 123 45 68',
-    isVkLink: false
-  },
-  {
-    address: 'ул. 30 лет Победы, 19А',
-    phoneNumber: '+7 925 123 45 69',
-    isVkLink: true
-  },
-  {
-    address: 'ул. Московская, 43',
-    phoneNumber: '+7 925 123 45 70',
-    isVkLink: true
-  },
-  {
-    address: 'ул. Узкая, 54',
-    phoneNumber: '+7 925 123 45 71',
-    isVkLink: true
-  },
-  {
-    address: 'ул. Максима Горького, 78',
-    phoneNumber: '+7 925 123 45 72',
-    isVkLink: true
-  }
-]
-
 @connectStore(
   (state: IApplicationState): IStateProps => ({
     organisations: state.main.organisationsList,
@@ -95,6 +58,7 @@ const listContacts: IContactsList[] = [
 )
 export class Сontacts extends PureComponent<IStateProps & IDispatchProps & IProps, IState> {
   refModalize: any
+  refMap: any
 
   state = {
     isVisible: false,
@@ -102,13 +66,36 @@ export class Сontacts extends PureComponent<IStateProps & IDispatchProps & IPro
   }
 
   async componentDidMount(): Promise<void> {
-  //  await this.props.getOrganisations()
+    await this.props.getOrganisations({
+      id: this.props.userCity.id,
+    })
   }
 
   goBackHandler = (): void => {
     if (this.props.navigation.canGoBack()) {
       this.props.navigation.goBack()
     }
+  }
+
+  goToCurrentLocationHandler = async (): Promise<void> => {
+    Geolocation.getCurrentPosition(
+      (position) => {
+        this.goToСoordinatesHandler(position.coords)
+      },
+      (error) => {
+        console.log(error.code, error.message)
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+    )
+  }
+
+  goToСoordinatesHandler = (coordinate: any): void => {
+    this.refMap.animateToRegion({
+      latitude: coordinate.latitude,
+      longitude: coordinate.longitude,
+      latitudeDelta: 0.1,
+      longitudeDelta: 0.1
+    })
   }
 
   makeCallHandler = async (phoneNumber: string): Promise<void> => {
@@ -126,18 +113,26 @@ export class Сontacts extends PureComponent<IStateProps & IDispatchProps & IPro
   }
 
   onPressMarkerHandler = (): void => {
-    console.log('test')
     this.setState({ isVisible: true })
   }
 
   refModalizeHandler = (ref: any) => this.refModalize = ref
 
+  arrogateMapRefHandler = (ref: any) => this.refMap = ref
+
   render(): JSX.Element {
 
+    //@ts-ignore
+    const contacts: any = this.props.organisations &&
+      !isEmpty(this.props.organisations.orgs)
+      && this.props.organisations.orgs
+
+    console.log('this.pr', contacts)
     return (
       <View style={styles.container}>
         <View style={styles.mapContainer}>
           <MapView
+            ref={this.arrogateMapRefHandler}
             showsUserLocation={true}
             initialRegion={{
               latitude: 48.784627,
@@ -148,13 +143,29 @@ export class Сontacts extends PureComponent<IStateProps & IDispatchProps & IPro
             style={styles.map}
             zoomEnabled={false}
           >
-            <Marker coordinate={{
+            {/* {
+              !isEmpty(contacts) && contacts.map((item => {
+                return (
+                  <Marker
+                    coordinate={{
+                      latitude: item.GPS.latitude,
+                      longitude: item.GPS.longitude,
+                    }}
+                    key={Math.random().toString()}
+                    image={ImageRepository.contactsCustomMarker}
+                  >
+
+                  </Marker>
+                )
+              }))
+            } */}
+            {/* <Marker coordinate={{
               latitude: 48.784627,
               longitude: 44.807354,
             }}
               image={ImageRepository.contactsCustomMarker}
-            >
-              {/* <Callout tooltip>
+            > */}
+            {/* <Callout tooltip>
                 <CalloutSubview onPress={this.onPressMarkerHandler}>
                   <View style={styles.markerTooltip}>
                     <Text style={styles.markerTooltipAddress}>
@@ -167,8 +178,8 @@ export class Сontacts extends PureComponent<IStateProps & IDispatchProps & IPro
                   </View>
                 </CalloutSubview>
               </Callout> */}
-              
-            </Marker>
+
+            {/* </Marker> */}
 
           </MapView>
           {/* <TouchableOpacity
@@ -182,6 +193,7 @@ export class Сontacts extends PureComponent<IStateProps & IDispatchProps & IPro
           </TouchableOpacity> */}
           <TouchableOpacity
             style={styles.currentLocationButton}
+            onPress={this.goToCurrentLocationHandler}
           >
             <Image
               source={ImageRepository.contactsCurrentLocation}
@@ -190,65 +202,66 @@ export class Сontacts extends PureComponent<IStateProps & IDispatchProps & IPro
           </TouchableOpacity>
         </View>
         {/* <Portal> */}
-          <Modalize 
-            ref={this.refModalizeHandler}
-            alwaysOpen={windowHeight * 0.5}
-            panGestureEnabled={false}
-          >
-            <View>
-              <ScrollView
-                style={styles.listContacts}
-                bounces={false}
-                showsVerticalScrollIndicator={false}
-              >
-                {
-                  listContacts.map((item, index) => {
-                    return (
-                      <View
-                        key={Math.random().toString()}
-                        style={listContacts.length - 1 !== index ? styles.listContactsTextContainer : styles.listContactsTextContainerWithoutBorderBottom}>
-                        <Text style={styles.listContactsText}>
-                          {item.address}
+        <Modalize
+          ref={this.refModalizeHandler}
+          alwaysOpen={windowHeight * 0.5}
+          panGestureEnabled={false}
+        >
+          <View>
+            <ScrollView
+              style={styles.listContacts}
+              bounces={false}
+              showsVerticalScrollIndicator={false}
+            >
+              {
+               !isEmpty(contacts) && contacts.map((item: IOrganisation, index: number) => {
+                  return (
+                    <TouchableOpacity
+                      key={Math.random().toString()}
+                      onPress={this.goToСoordinatesHandler.bind(this, item.GPS)}
+                      style={contacts.length - 1 !== index ? styles.listContactsTextContainer : styles.listContactsTextContainerWithoutBorderBottom}>
+                      <Text style={styles.listContactsText}>
+                        {item.address}
+                      </Text>
+                      <View style={styles.listContactsDescription}>
+                        <Text style={styles.phoneNumber}>
+                          {item.phone}
                         </Text>
-                        <View style={styles.listContactsDescription}>
-                          <Text style={styles.phoneNumber}>
-                            {item.phoneNumber}
-                          </Text>
-                          <View style={styles.socialsContainer}>
-                            <TouchableOpacity
-                              onPress={this.makeCallHandler.bind(this, item.phoneNumber)}
-                            >
-                              <Image
-                                style={styles.soicals}
-                                source={ImageRepository.contactsPhone}
-                              />
-                            </TouchableOpacity>
-                            {
-                              item.isVkLink ? (
-                                <Image
-                                  style={styles.soicals}
-                                  source={ImageRepository.contactsVk}
-                                />
-                              ) : null
-                            }
+                        <View style={styles.socialsContainer}>
+                          <TouchableOpacity
+                            onPress={this.makeCallHandler.bind(this, item.phoneNumber)}
+                          >
                             <Image
                               style={styles.soicals}
-                              source={ImageRepository.contactsInsta}
+                              source={ImageRepository.contactsPhone}
                             />
-                          </View>
+                          </TouchableOpacity>
+                          {
+                            item.isVkLink ? (
+                              <Image
+                                style={styles.soicals}
+                                source={ImageRepository.contactsVk}
+                              />
+                            ) : null
+                          }
+                          <Image
+                            style={styles.soicals}
+                            source={ImageRepository.contactsInsta}
+                          />
                         </View>
                       </View>
-                    )
-                  })
-                }
-                <View style={{height: windowWidth * 0.2}} />
-              </ScrollView>
-              {/* <CommonButton
+                    </TouchableOpacity>
+                  )
+                })
+              }
+              <View style={{ height: windowWidth * 0.2 }} />
+            </ScrollView>
+            {/* <CommonButton
                 styleButton={styles.signSalonButton}
                 title="Записаться в салон"
               /> */}
-            </View>
-          </Modalize>
+          </View>
+        </Modalize>
         {/* </Portal> */}
       </View>
     )

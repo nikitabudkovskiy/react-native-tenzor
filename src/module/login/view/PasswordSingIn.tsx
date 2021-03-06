@@ -32,6 +32,8 @@ import { RouteProp } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import { IApplicationState } from 'app/system/store'
 import { LoginAsynсActions } from '../store/loginAsyncActions'
+import { ListPages } from 'app/system/navigation'
+import { ApiService } from 'app/system/api'
 
 const CELL_COUNT = 4
 
@@ -43,10 +45,10 @@ interface IProps {
 export const PasswordSingIn = ({ navigation, route }: IProps) => {
   let intervalId: any = useRef(null)
   const isInitialMount = useRef(true)
-  
+
   const dispatch = useDispatch()
   const error = useSelector((state: IApplicationState) => state.login.error)
-  const codeVerificationInformation = 
+  const codeVerificationInformation =
     useSelector((state: IApplicationState) => state.login.codeVerificationInformation)
 
   const [IsResending, setIsResending] = useState<boolean>(false)
@@ -72,8 +74,15 @@ export const PasswordSingIn = ({ navigation, route }: IProps) => {
         }))
         if (error) {
           setValue('')
+        } else {
+          ApiService.defaults.headers.common['Authorization'] = `Bearer ${codeVerificationInformation.token}`
+          if (!codeVerificationInformation?.user?.birthday) {
+            navigation.replace(ListPages.MainTab)
+          } else {
+            navigation.push(ListPages.RegistrationContacts)
+          }
         }
-      
+
         console.log('code', codeVerificationInformation)
         // if (!codeVerificationInformation) {
         //   setValue('')
@@ -124,10 +133,10 @@ export const PasswordSingIn = ({ navigation, route }: IProps) => {
   const forgetPasswordButton = styleSheetFlatten([
     styles.forgetPasswordButton,
     {
-      bottom: isKeyboardShow 
-        ? platform.isAndroid 
-          ? windowWidth * 0.06  
-          : windowWidth * 0.06 + heightKeybord 
+      bottom: isKeyboardShow
+        ? platform.isAndroid
+          ? windowWidth * 0.06
+          : windowWidth * 0.06 + heightKeybord
         : windowWidth * 0.06
     }
   ])

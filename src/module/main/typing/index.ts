@@ -12,30 +12,30 @@ interface IGetOrganisationsRequest {
 }
 
 interface IGetOrganisationsResponce {
-    orgs : [
-        {
-            title: string
-            id: Number
-            requisites: string
-            deliveryTerminalId: string
-            img: string
-            address: string
-            description: string
-            comment: string
-            phone: string
-            worktime: string
-            payments: [
-                {
-                    id: Number
-                    name: string
-                }
-            ]
-            deleveries: [
-                {
-                    id: Number
-                    name: string
-                }
-            ]
-        }
-    ]
+    orgs : IOrganisation[]
+}
+
+interface IOrganisation {
+    title: string
+    id: Number
+    requisites: string
+    deliveryTerminalId: string
+    img: string
+    address: string
+    description: string
+    comment: string
+    phone: string
+    worktime: string
+    payments: IOrganisationPayment[]
+    deleveries: IOrganisationDeleveries[]
+}
+
+interface IOrganisationPayment {
+    id: number
+    name: string
+}
+
+interface IOrganisationDeleveries {
+    id: number
+    name: string
 }
