@@ -74,14 +74,14 @@ export class App extends PureComponent<IProps, IState>{
     if (codeVerificationInformation && codeVerificationInformation.token) {
       ApiService.defaults.headers.common['Authorization'] = `Bearer ${codeVerificationInformation.token}`
     }
+    setTimeout(() => {
+      this.setState({ isLoading: false })
+    }, 4000)
     if (userCity.id !== -1) {
       setTimeout(() => {
         this.navigatorRef.dispatch(StackActions.replace(ListPages.MainTab))
       }, 800)
     }
-    setTimeout(() => {
-      this.setState({ isLoading: false })
-    }, 4000)
   }
 
   renderLoader = (): JSX.Element => {
@@ -99,7 +99,7 @@ export class App extends PureComponent<IProps, IState>{
             : null
         }
         <PersistGate
-          loading={this.renderLoader()}
+          // loading={this.renderLoader()}
           persistor={this.persistor}
         >
           <Provider store={this.store}>

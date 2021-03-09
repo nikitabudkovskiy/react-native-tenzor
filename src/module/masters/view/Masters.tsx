@@ -51,7 +51,8 @@ interface IStateProps extends IIsLoadingAndError{
 }
 
 interface IDispatchProps {
-  getMasterList(data: IGetMastersListRequest): void
+  getMasterList(data: IGetMastersListRequest): Promise<void>
+  getWorkingHoursMaster(data: IGetWorkingHoursMasterRequest): Promise<void>
 }
 
 @connectStore (
@@ -62,8 +63,11 @@ interface IDispatchProps {
     userCity: state.system.userCity,
   }),
   (dispatch: ThunkDispatch<IApplicationState, void, any>): IDispatchProps => ({
-    getMasterList(data) {
-      dispatch(MastersAsyncActions.getMastersList(data))
+    async getMasterList(data) {
+      await dispatch(MastersAsyncActions.getMastersList(data))
+    },
+    async getWorkingHoursMaster(data) {
+      await dispatch(MastersAsyncActions.getWorkingHoursMaster(data))
     }
   })
 )
@@ -78,13 +82,20 @@ export class Masters extends PureComponent<IProps & IState & IStateProps & IDisp
   async componentDidMount() {
     if (this.props.userCity.id) {
       await this.props.getMasterList({
-        point_id: this.props.userCity.id,
+        point_id: 1830,
       })
     }
   }
 
   searchMasterHandler = (searchValue: string): void => {
     this.setState({ searchValue })
+  }
+
+  goToWorkingHoursMasterHandler = async (item: IMasters): Promise<void> => {
+    await this.props.getWorkingHoursMaster({
+      point_id: 1830,
+      master_id: item.id,
+    })
   }
 
   goBackHandler = (): void => {
@@ -194,9 +205,11 @@ export class Masters extends PureComponent<IProps & IState & IStateProps & IDisp
               return (
                 <TouchableOpacity 
                 key={item.name}
-                style={styles.hairDresserContainer}>
+                style={styles.hairDresserContainer}
+                onPress={this.goToWorkingHoursMasterHandler.bind(this, item)}
+                >
                   <Image
-                    source={{ uri: item.image }}
+                    source={{ uri: item.photo }}
                     style={styles.master}
                   />
                   <View style={styles.hairDresserInfoContainer}>
@@ -260,6 +273,7 @@ const styles = styleSheetCreate({
   master: style.image({
     width: windowWidth * 0.16,
     height: windowWidth * 0.16,
+    borderRadius: windowWidth * 0.1,
   }),
   masterStar: style.image({
     width: windowWidth * 0.0395,

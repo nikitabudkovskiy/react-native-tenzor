@@ -22,9 +22,24 @@ import {
 import { CommonButton } from 'app/module/global/view'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { ListPages } from 'app/system/navigation'
+import { MainAsyncActions } from 'app/module/main/store/mainAsyncActions'
+import { MastersAsyncActions } from 'app/module/masters/store/masterAsyncActions'
+import { connectStore, IApplicationState } from 'app/system/store'
+import { ThunkDispatch } from 'redux-thunk'
+import { Loader } from 'app/module/global/view/Loader'
+import { RouteProp } from '@react-navigation/native'
+
+interface IStateProps extends IIsLoadingAndError {
+  userCity: ITownsResponce
+}
+
+interface IDispatchProps {
+  getServices(data: IGetServicesRequest): Promise<void>
+}
 
 interface IProps {
   navigation: StackNavigationProp<any>
+  route: RouteProp<any, any>
 }
 
 interface IState {
@@ -42,11 +57,29 @@ interface IServiceList {
 const serviceListItemHight = windowWidth * 5
 const serviceListHight = serviceListItemHight
 
-export class SelectService extends PureComponent<IProps, IState>{
+@connectStore(
+  (state: IApplicationState): IStateProps => ({
+    userCity: state.system.userCity,
+    isLoading: state.main.isLoading,
+    error: state.main.error,
+  }),
+  (dispatch: ThunkDispatch<IApplicationState, void, any>): IDispatchProps => ({
+    async getServices(data) {
+      await dispatch(MastersAsyncActions.getServices(data))
+    }
+  })
+)
+export class SelectService extends PureComponent<IStateProps & IDispatchProps & IProps, IState> {
 
   state = {
     isServiceListOpen: false,
     aniamtedHeightServiceList: new Animated.Value(0)
+  }
+
+  async componentDidMount(): Promise<void> {
+    await this.props.getServices({
+      point_id: this.props.userCity.id,
+    })
   }
 
   goBackHandler = (): void => {
@@ -56,7 +89,12 @@ export class SelectService extends PureComponent<IProps, IState>{
   }
 
   goToChooseMasterHandler = (): void => {
-    this.props.navigation.push(ListPages.ChooseMaster)
+    this.props.navigation.push(
+      ListPages.ChooseMaster,
+      {
+        salon: this.props.route.params?.salon
+      }
+    )
   }
 
   openServiceListHandler = (): void => {
@@ -87,6 +125,10 @@ export class SelectService extends PureComponent<IProps, IState>{
   }
 
   render() {
+
+    if (this.props.isLoading) {
+      return <Loader /> 
+    }
 
     const container = styleSheetFlatten([
       styles.container,

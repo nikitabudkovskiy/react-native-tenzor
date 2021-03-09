@@ -6,6 +6,7 @@ import {
   ImageRepository,
   windowWidth,
   Color,
+  windowHeight,
 } from 'app/system/helpers'
 
 interface IProps {
@@ -20,13 +21,11 @@ export class FloatingLoader extends PureComponent<IProps, IState>{
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.darkeningСontent}>
-          <Image
-            source={ImageRepository.loaderLogo}
-            style={styles.image}
-            resizeMode="contain"
-          />
-        </View>
+        <Image
+          source={ImageRepository.loaderLogo}
+          style={styles.image}
+          resizeMode="contain"
+        />
       </View>
     )
   }
@@ -36,6 +35,7 @@ const styles = styleSheetCreate({
   container: style.view({
     flex: 1,
     backgroundColor: Color.white,
+    position: 'absolute',
     //@ts-ignore
     ...StyleSheet.absoluteFill,
     alignItems: 'center',

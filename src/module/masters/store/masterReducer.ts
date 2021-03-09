@@ -11,7 +11,6 @@ export const getMastersListStarted = (state: IMasterState): IMasterState => {
 }
 
 export const getMastersListDone = (state: IMasterState, { result }: any): IMasterState => {
-    console.log('wwwwwwwww', result)
     return {
         ...state,
         isLoading: false,
@@ -28,7 +27,65 @@ export const getMastersListFailed = (state: IMasterState): IMasterState => {
     }
 }
 
+export const getServicesStarted = (state: IMasterState): IMasterState => {
+    return {
+        ...state,
+        isLoading: true,
+        error: false,
+    }
+}
+
+export const getServicesDone = (state: IMasterState, { result }: any): IMasterState => {
+    return {
+        ...state,
+        isLoading: false,
+        error: false,
+        services: result
+    }
+}
+
+export const getServicesFailed = (state: IMasterState): IMasterState => {
+    return {
+        ...state,
+        isLoading: false,
+        error: true,
+    }
+}
+
+export const getWorkingHoursMasterStarted = (state: IMasterState): IMasterState => {
+    return {
+        ...state,
+        isLoading: true,
+        error: false,
+    }
+}
+
+export const getWorkingHoursMasterDone = (state: IMasterState, { result }: any): IMasterState => {
+    return {
+        ...state,
+        isLoading: false,
+        error: false,
+        services: result
+    }
+}
+
+export const getWorkingHoursMasterFailed = (state: IMasterState): IMasterState => {
+    return {
+        ...state,
+        isLoading: false,
+        error: true,
+    }
+}
+
 export const masterReducer: ReducerBuilder<IMasterState> = reducerWithInitialState(MasterInitialState)
     .case(MastersAsyncActions.getMastersList.async.started, getMastersListStarted)
     .case(MastersAsyncActions.getMastersList.async.done, getMastersListDone)
     .case(MastersAsyncActions.getMastersList.async.failed, getMastersListFailed)
+
+    .case(MastersAsyncActions.getServices.async.started, getServicesStarted)
+    .case(MastersAsyncActions.getServices.async.done, getServicesDone)
+    .case(MastersAsyncActions.getServices.async.failed, getServicesFailed)
+
+    .case(MastersAsyncActions.getWorkingHoursMaster.async.started, getWorkingHoursMasterStarted)
+    .case(MastersAsyncActions.getWorkingHoursMaster.async.done, getWorkingHoursMasterDone)
+    .case(MastersAsyncActions.getWorkingHoursMaster.async.failed, getWorkingHoursMasterFailed)

@@ -22,6 +22,22 @@ import MapView, { Callout, CalloutSubview, Marker } from 'react-native-maps'
 import { CommonButton } from 'app/module/global/view'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { ListPages } from 'app/system/navigation'
+import { MainAsyncActions } from 'app/module/main/store/mainAsyncActions'
+import { connectStore, IApplicationState } from 'app/system/store'
+import { ThunkDispatch } from 'redux-thunk'
+import { isEmpty } from 'lodash'
+import { Loader } from 'app/module/global/view/Loader'
+import { request, PERMISSIONS, RESULTS } from 'react-native-permissions'
+import Geolocation from 'react-native-geolocation-service'
+
+interface IStateProps extends IIsLoadingAndError {
+  organisations: IGetOrganisationsResponce
+  userCity: ITownsResponce
+}
+
+interface IDispatchProps {
+  getOrganisations(data: IGetOrganisationsRequest): Promise<void>
+}
 
 interface IProps {
   navigation: StackNavigationProp<any>
@@ -29,24 +45,41 @@ interface IProps {
 
 interface IState {
   isVisible: boolean
-  selectedSalon: string
+  selectedSalon: {
+    address: string
+  }
 }
 
-const listAddress = [
-  'пер. Широкий, 53 (ТРК Сигма)',
-  'ул. Красная 154',
-  'ул. 30 лет Победы, 19А',
-  'ул. Московская, 43',
-  'ул. Узкая, 54',
-  'ул. Максима Горького, 78',
-]
-
-export class ChooseSalon extends PureComponent<IProps, IState> {
+@connectStore(
+  (state: IApplicationState): IStateProps => ({
+    organisations: state.main.organisationsList,
+    userCity: state.system.userCity,
+    isLoading: state.main.isLoading,
+    error: state.main.error,
+  }),
+  (dispatch: ThunkDispatch<IApplicationState, void, any>): IDispatchProps => ({
+    async getOrganisations(data) {
+      await dispatch(MainAsyncActions.getOrganisations(data))
+    }
+  })
+)
+export class ChooseSalon extends PureComponent<IStateProps & IDispatchProps & IProps, IState> {
   refModalize: any
+  refMap: any
 
   state = {
     isVisible: false,
-    selectedSalon: '',
+    selectedSalon: {
+      address: '',
+    },
+  }
+
+  async componentDidMount(): Promise<void> {
+    if (isEmpty(this.props.organisations)) {
+      await this.props.getOrganisations({
+        id: this.props.userCity.id,
+      })
+    }
   }
 
   goBackHandler = (): void => {
@@ -55,9 +88,9 @@ export class ChooseSalon extends PureComponent<IProps, IState> {
     }
   }
 
-  changeSelectedSalon = (salon: string): void => {
-    if (this.state.selectedSalon === salon) {
-      this.setState({ selectedSalon: '' })
+  changeSelectedSalon = (salon: IOrganisation): void => {
+    if (this.state.selectedSalon.address === salon.address) {
+      this.setState({ selectedSalon: { address: '' } })
       return
     }
     this.setState({ selectedSalon: salon })
@@ -77,53 +110,119 @@ export class ChooseSalon extends PureComponent<IProps, IState> {
     }
   }
 
+  goToCurrentLocationHandler = async (): Promise<void> => {
+    let permission
+    if (platform.isIos) {
+      permission = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE)
+    } else {
+      permission = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+    }
+
+    if (permission === RESULTS.GRANTED) {
+      Geolocation.getCurrentPosition(
+        (position) => {
+          this.refMap.animateToRegion({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            latitudeDelta: 0.1,
+            longitudeDelta: 0.1
+          })
+        },
+        (error) => {
+          console.log(error.code, error.message)
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+      )
+    } else {
+      Alert.alert('Ошибка', 'Предоставьте разрешение')
+    }
+  }
+
   goToSelectServiceHandler = (): void => {
-    this.props.navigation.push(ListPages.SelectService)
+    this.props.navigation.push(
+      ListPages.SelectService, 
+      { salon: this.state.selectedSalon }
+    )
   }
 
   onPressMarkerHandler = (): void => {
-    console.log('test')
-    this.setState({ isVisible: true })
+    console.log('fdjknjf')
   }
+
+  arrogateMapRefHandler = (ref: any) => this.refMap = ref
 
   refModalizeHandler = (ref: any) => this.refModalize = ref
 
   render(): JSX.Element {
 
+    if (this.props.isLoading) {
+      return <Loader />
+    }
+
+    const contacts: any = this.props.organisations &&
+      !isEmpty(this.props.organisations.orgs)
+      && this.props.organisations.orgs
+
     return (
       <View style={styles.container}>
         <View style={styles.mapContainer}>
           <MapView
+            ref={this.arrogateMapRefHandler}
             showsUserLocation={true}
             initialRegion={{
-              latitude: 48.784627,
-              longitude: 44.807354,
+              latitude: 56.854281,
+              longitude: 60.556179,
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
             style={styles.map}
             zoomEnabled={false}
           >
-            <Marker coordinate={{
-              latitude: 48.784627,
-              longitude: 44.807354,
-            }}
-              image={ImageRepository.contactsCustomMarker}
-            >
-              <Callout tooltip>
-                <CalloutSubview onPress={this.onPressMarkerHandler}>
-                  <View style={styles.markerTooltip}>
-                    <Text style={styles.markerTooltipAddress}>
-                      ул. Красная 154
+            {
+              !isEmpty(contacts) && contacts.map(((item: IOrganisation) => {
+                return (
+                  <Marker
+                    coordinate={{
+                      latitude: +item.GPS.latitude,
+                      longitude: +item.GPS.longitude,
+                    }}
+                    key={Math.random().toString()}
+                  >
+
+                    <Image
+                      source={ImageRepository.contactsCustomMarker}
+                      style={{ width: 40, height: 40, }}
+                      resizeMode="contain"
+                    />
+
+                    <Callout tooltip>
+                      <CalloutSubview onPress={() => console.log('11')}>
+
+                      <View style={styles.markerTooltip}>
+                        <Text style={styles.markerTooltipAddress}>
+                          ул. Красная 154
                       </Text>
-                    <Text style={styles.markerTooltipTime}>
-                      С 10:00 до 22:00
+                        <Text style={styles.markerTooltipTime}>
+                          С 10:00 до 22:00
                       </Text>
-                    <CommonButton title="Выбрать" />
-                  </View>
-                </CalloutSubview>
-              </Callout>
-            </Marker>
+                        {/* <CalloutSubview onPress={this.onPressMarkerHandler}> */}
+                        <TouchableOpacity onPress={() => console.log('11')}>
+                          <Text>
+                            klvdlgnlg
+                          </Text>
+                        </TouchableOpacity>
+                          {/* <CommonButton title="Выбрать"  /> */}
+                    
+
+                      </View>
+                      </CalloutSubview>
+     
+                    </Callout>
+
+                  </Marker>
+                )
+              }))
+            }
 
           </MapView>
           <TouchableOpacity
@@ -137,6 +236,7 @@ export class ChooseSalon extends PureComponent<IProps, IState> {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.currentLocationButton}
+            onPress={this.goToCurrentLocationHandler}
           >
             <Image
               source={ImageRepository.contactsCurrentLocation}
@@ -151,7 +251,7 @@ export class ChooseSalon extends PureComponent<IProps, IState> {
             showsVerticalScrollIndicator={false}
           >
             {
-              listAddress.map((item) => {
+              !isEmpty(contacts) && contacts.map((item: IOrganisation) => {
                 return (
                   <View
                     key={Math.random().toString()}
@@ -161,17 +261,17 @@ export class ChooseSalon extends PureComponent<IProps, IState> {
                       style={styles.listAddressCardContainer}
                       onPress={this.changeSelectedSalon.bind(this, item)}
                     >
-                      <Text style={this.state.selectedSalon === item ? styles.listAddressCardActiveText : styles.listAddressCardText}>
-                        {item}
+                      <Text style={this.state.selectedSalon.address === item.address ? styles.listAddressCardActiveText : styles.listAddressCardText}>
+                        {item.address}
                       </Text>
                       {
-                        this.state.selectedSalon === item 
+                        this.state.selectedSalon.address === item.address
                           ? (
                             <Image
-                            source={ImageRepository.globalOrangeCheckMark}
-                            style={styles.orangeCheckMark}
-                            resizeMode="contain"
-                          />
+                              source={ImageRepository.globalOrangeCheckMark}
+                              style={styles.orangeCheckMark}
+                              resizeMode="contain"
+                            />
                           )
                           : null
                       }
@@ -184,7 +284,7 @@ export class ChooseSalon extends PureComponent<IProps, IState> {
             }
           </ScrollView>
           <CommonButton
-            disabled={!this.state.selectedSalon}
+            disabled={!this.state.selectedSalon.address}
             styleButton={styles.signSalonButton}
             title="Далее"
             onPress={this.goToSelectServiceHandler}
@@ -293,6 +393,7 @@ const styles = styleSheetCreate({
     marginLeft: windowWidth * 0.021,
   }),
   markerTooltip: style.view({
+    minWidth: windowWidth * 0.37,
     padding: windowWidth * 0.03,
     backgroundColor: Color.white,
     borderRadius: windowWidth * 0.025,

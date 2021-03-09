@@ -8,6 +8,7 @@ export class ImageRepository {
 
   static readonly mainPageLogo = require('assets/images/main/logo.png')
   static readonly mainPageSign = require('assets/images/main/signService.png')
+  static readonly mainReadCardBackground = require('assets/images/main/read_card_background.png')
   static readonly mainPageRecordingMaster = require('assets/images/main/recordingMaster.png')
   static readonly mainPageSolariumAppointment = require('assets/images/main/solariumAppointment.png')
   static readonly mainPageChangeLocation = require('assets/images/main/changeLocation.png')

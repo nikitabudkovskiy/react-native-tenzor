@@ -3,10 +3,10 @@ interface IGetMastersListRequest {
 }
 
 interface IMasters {
-    id: Number
+    id: number
     name: string
     role: string
-    image: string  
+    photo: string  
 }
 
 interface IGetMastersListResponce {
@@ -14,5 +14,22 @@ interface IGetMastersListResponce {
     outcome: {
         hasMore: boolean
     }
+}
+
+interface IGetWorkingHoursMasterRequest {
+    point_id: number
+    master_id: number
+}
+
+interface IGetWorkingHoursMasterResponce {
+    dates: any
+}
+
+interface IGetServicesRequest {
+    point_id: number
+}
+
+interface IGetServicesResponce {
+
 }
 

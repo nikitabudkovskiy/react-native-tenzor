@@ -23,6 +23,19 @@ import { isEmpty } from 'lodash'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { CommonButton } from 'app/module/global/view'
 import { ListPages } from 'app/system/navigation'
+import { IApplicationState } from 'app/system/store/applicationState'
+import { MainAsyncActions } from 'app/module/main/store/mainAsyncActions'
+import { connectStore } from 'app/system/store'
+import { ThunkDispatch } from 'redux-thunk'
+
+interface IStateProps extends IIsLoadingAndError {
+  organisations: IGetOrganisationsResponce
+  userCity: ITownsResponce
+}
+
+interface IDispatchProps {
+  getOrganisations(data: IGetOrganisationsRequest): Promise<void>
+}
 
 interface IProps {
   navigation: StackNavigationProp<any>
@@ -46,7 +59,21 @@ const masterList: IHairDreesserItems[] = [
   }
 ]
 
-export class ChooseMaster extends PureComponent<IProps, IState> {
+
+@connectStore(
+  (state: IApplicationState): IStateProps => ({
+    organisations: state.main.organisationsList,
+    userCity: state.system.userCity,
+    isLoading: state.main.isLoading,
+    error: state.main.error,
+  }),
+  (dispatch: ThunkDispatch<IApplicationState, void, any>): IDispatchProps => ({
+    async getOrganisations(data) {
+      await dispatch(MainAsyncActions.getOrganisations(data))
+    }
+  })
+)
+export class ChooseMaster extends PureComponent<IStateProps & IDispatchProps & IProps, IState> {
 
   state = {
     searchValue: '',

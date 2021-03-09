@@ -16,9 +16,9 @@ import {
   ImageRepository,
   Color,
   fonts,
-  platform
+  platform,
 } from 'app/system/helpers'
-import MapView, { Marker } from 'react-native-maps'
+import MapView, { Callout, CalloutSubview, Marker } from 'react-native-maps'
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
 import { Modalize } from 'react-native-modalize'
 import { connectStore, IApplicationState } from 'app/system/store'
@@ -26,9 +26,10 @@ import { ThunkDispatch } from 'redux-thunk'
 import { MainAsyncActions } from '../store/mainAsyncActions'
 import { isEmpty } from 'lodash'
 import Geolocation from 'react-native-geolocation-service'
+import { PERMISSIONS, request, RESULTS } from 'react-native-permissions'
 
 interface IStateProps {
-  organisations: IGetOrganisationsResponce[]
+  organisations: IGetOrganisationsResponce
   userCity: ITownsResponce
 }
 
@@ -59,6 +60,7 @@ interface IState {
 export class Сontacts extends PureComponent<IStateProps & IDispatchProps & IProps, IState> {
   refModalize: any
   refMap: any
+  listMarkerRef: any = {}
 
   state = {
     isVisible: false,
@@ -69,8 +71,12 @@ export class Сontacts extends PureComponent<IStateProps & IDispatchProps & IPro
     await this.props.getOrganisations({
       id: this.props.userCity.id,
     })
-  }
 
+    // if (this.props.organisations && this.props.organisations.orgs) {
+
+    // }
+    // console.log('psop', this.props.organisations)
+  }
   goBackHandler = (): void => {
     if (this.props.navigation.canGoBack()) {
       this.props.navigation.goBack()
@@ -78,24 +84,42 @@ export class Сontacts extends PureComponent<IStateProps & IDispatchProps & IPro
   }
 
   goToCurrentLocationHandler = async (): Promise<void> => {
-    Geolocation.getCurrentPosition(
-      (position) => {
-        this.goToСoordinatesHandler(position.coords)
-      },
-      (error) => {
-        console.log(error.code, error.message)
-      },
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-    )
+    let permission
+    if (platform.isIos) {
+      permission = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE)
+    } else {
+      permission = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+    }
+
+    if (permission === RESULTS.GRANTED) {
+      Geolocation.getCurrentPosition(
+        (position) => {
+          this.refMap.animateToRegion({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            latitudeDelta: 0.1,
+            longitudeDelta: 0.1
+          })
+        },
+        (error) => {
+          console.log(error.code, error.message)
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+      )
+    } else {
+      Alert.alert('Ошибка', 'Предоставьте разрешение')
+    }
   }
 
-  goToСoordinatesHandler = (coordinate: any): void => {
+  goToСoordinatesHandler = (data: IOrganisation): void => {
     this.refMap.animateToRegion({
-      latitude: coordinate.latitude,
-      longitude: coordinate.longitude,
-      latitudeDelta: 0.1,
-      longitudeDelta: 0.1
+      latitude: +data.GPS.latitude,
+      longitude: +data.GPS.longitude,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
     })
+    this.listMarkerRef[data.id].showCallout()
+
   }
 
   makeCallHandler = async (phoneNumber: string): Promise<void> => {
@@ -120,14 +144,16 @@ export class Сontacts extends PureComponent<IStateProps & IDispatchProps & IPro
 
   arrogateMapRefHandler = (ref: any) => this.refMap = ref
 
+  pushMarkerRefHandler = (id: number, ref: any): void => {
+    this.listMarkerRef[id] = ref
+  }
+
   render(): JSX.Element {
 
-    //@ts-ignore
     const contacts: any = this.props.organisations &&
       !isEmpty(this.props.organisations.orgs)
       && this.props.organisations.orgs
 
-    console.log('this.pr', contacts)
     return (
       <View style={styles.container}>
         <View style={styles.mapContainer}>
@@ -135,38 +161,36 @@ export class Сontacts extends PureComponent<IStateProps & IDispatchProps & IPro
             ref={this.arrogateMapRefHandler}
             showsUserLocation={true}
             initialRegion={{
-              latitude: 48.784627,
-              longitude: 44.807354,
+              latitude: 56.854281,
+              longitude: 60.556179,
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
             style={styles.map}
             zoomEnabled={false}
           >
-            {/* {
-              !isEmpty(contacts) && contacts.map((item => {
+            {
+              !isEmpty(contacts) && contacts.map(((item: IOrganisation) => {
                 return (
                   <Marker
+                  //@ts-ignore
+                    ref={this.pushMarkerRefHandler.bind(this, item.id)}
                     coordinate={{
-                      latitude: item.GPS.latitude,
-                      longitude: item.GPS.longitude,
+                      latitude: +item.GPS.latitude,
+                      longitude: +item.GPS.longitude,
                     }}
                     key={Math.random().toString()}
-                    image={ImageRepository.contactsCustomMarker}
+                    // image={ImageRepository.contactsCustomMarker}
                   >
+  
+                      <Image 
+                        source={ImageRepository.contactsCustomMarker} 
+                        style={{ width: 40, height: 40,}} 
+                        resizeMode="contain"
+                      />
 
-                  </Marker>
-                )
-              }))
-            } */}
-            {/* <Marker coordinate={{
-              latitude: 48.784627,
-              longitude: 44.807354,
-            }}
-              image={ImageRepository.contactsCustomMarker}
-            > */}
-            {/* <Callout tooltip>
-                <CalloutSubview onPress={this.onPressMarkerHandler}>
+                 <Callout tooltip>
+                {/* <CalloutSubview onPress={this.onPressMarkerHandler}> */}
                   <View style={styles.markerTooltip}>
                     <Text style={styles.markerTooltipAddress}>
                       ул. Красная 154
@@ -176,10 +200,14 @@ export class Сontacts extends PureComponent<IStateProps & IDispatchProps & IPro
                       </Text>
                   
                   </View>
-                </CalloutSubview>
-              </Callout> */}
+                {/* </CalloutSubview> */}
+              </Callout>
 
-            {/* </Marker> */}
+            </Marker>
+                )
+              }))
+            }
+
 
           </MapView>
           {/* <TouchableOpacity
@@ -207,7 +235,7 @@ export class Сontacts extends PureComponent<IStateProps & IDispatchProps & IPro
           alwaysOpen={windowHeight * 0.5}
           panGestureEnabled={false}
         >
-          <View>
+          <View style={styles.listContactsContainer}>
             <ScrollView
               style={styles.listContacts}
               bounces={false}
@@ -218,7 +246,7 @@ export class Сontacts extends PureComponent<IStateProps & IDispatchProps & IPro
                   return (
                     <TouchableOpacity
                       key={Math.random().toString()}
-                      onPress={this.goToСoordinatesHandler.bind(this, item.GPS)}
+                      onPress={this.goToСoordinatesHandler.bind(this, item)}
                       style={contacts.length - 1 !== index ? styles.listContactsTextContainer : styles.listContactsTextContainerWithoutBorderBottom}>
                       <Text style={styles.listContactsText}>
                         {item.address}
@@ -229,7 +257,7 @@ export class Сontacts extends PureComponent<IStateProps & IDispatchProps & IPro
                         </Text>
                         <View style={styles.socialsContainer}>
                           <TouchableOpacity
-                            onPress={this.makeCallHandler.bind(this, item.phoneNumber)}
+                            onPress={this.makeCallHandler.bind(this, item.phone)}
                           >
                             <Image
                               style={styles.soicals}
@@ -254,7 +282,7 @@ export class Сontacts extends PureComponent<IStateProps & IDispatchProps & IPro
                   )
                 })
               }
-              <View style={{ height: windowWidth * 0.2 }} />
+              {/* <View style={{ height: windowWidth * 0.2 }} /> */}
             </ScrollView>
             {/* <CommonButton
                 styleButton={styles.signSalonButton}
@@ -274,7 +302,6 @@ const styles = styleSheetCreate({
     backgroundColor: Color.white,
   }),
   mapContainer: style.view({
-    backgroundColor: 'red',
   }),
   map: style.view({
     width: windowWidth,
@@ -304,7 +331,7 @@ const styles = styleSheetCreate({
     justifyContent: 'center',
     borderRadius: windowWidth * 0.1,
     position: 'absolute',
-    bottom: windowWidth * 0.07,
+    bottom: windowWidth * 0.09,
     right: windowHeight * 0.035,
   }),
   currentLocationImage: style.image({
@@ -313,11 +340,15 @@ const styles = styleSheetCreate({
     marginRight: windowWidth * 0.01,
     marginTop: windowWidth * 0.01,
   }),
-  listContacts: style.view({
+  listContactsContainer: style.view({
+    // backgroundColor: Color.philippineGray,
+    paddingBottom: windowWidth * 0.21,
     height: windowHeight * 0.48,
+  }),
+  listContacts: style.view({
+    // backgroundColor: 'red',
     // borderTopLeftRadius: windowWidth * 0.05,
     // borderTopRightRadius: windowWidth * 0.05,
-    backgroundColor: Color.white,
   }),
   listContactsTextContainer: style.view({
     paddingVertical: windowWidth * 0.036,
@@ -360,6 +391,7 @@ const styles = styleSheetCreate({
     marginLeft: windowWidth * 0.021,
   }),
   markerTooltip: style.view({
+    minWidth: windowWidth * 0.37,
     padding: windowWidth * 0.03,
     backgroundColor: Color.white,
     borderRadius: windowWidth * 0.025,
@@ -368,6 +400,7 @@ const styles = styleSheetCreate({
     marginBottom: windowWidth * 0.02,
     color: Color.chineseBlack,
     fontSize: windowWidth * 0.036,
+    textAlign: 'center',
   }),
   markerTooltipTime: style.text({
     marginBottom: windowWidth * 0.02,

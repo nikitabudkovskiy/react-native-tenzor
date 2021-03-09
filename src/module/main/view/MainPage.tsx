@@ -103,7 +103,7 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
     this.props.navigation.reset({
       index: 0,
       routes: [
-        {  name: ListPages.MainTab }
+        { name: ListPages.MainTab }
       ],
     })
     this.props.logoutAccount()
@@ -119,7 +119,6 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
 
   openPromotionsModalHandler = (activePromotion: IGetCodeVerificationRequest): void => {
     this.setState({ activePromotion }, () => {
-      console.log('t', this.refModalizePromotions)
       this.refModalizePromotions.open()
     })
   }
@@ -164,7 +163,6 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
             : 0
       }
     ])
-
 
     return (
       <View style={styles.content}>
@@ -228,35 +226,55 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
             </View>
           </View>
           <View style={styles.appointments}>
-            <TouchableOpacity style={styles.serviceAppointment}>
-              <Image
-                source={ImageRepository.mainPageHairdry}
-                style={styles.sign}
-              // resizeMode="contain"
-              />
-              <Text style={styles.appointmentDescription}>
-                Запись{'\n'} на услугу
+            <TouchableOpacity>
+              <ImageBackground
+                source={ImageRepository.mainReadCardBackground}
+                style={styles.serviceAppointment}
+                resizeMode="cover"
+              >
+                <Image
+                  source={ImageRepository.mainPageHairdry}
+                  style={styles.sign}
+                // resizeMode="contain"
+                />
+                <Text style={styles.appointmentDescription}>
+                  Запись{'\n'} на услугу
               </Text>
+              </ImageBackground>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.serviceAppointment}>
-              <Image
-                source={ImageRepository.mainPageRecordingMaster}
-                style={styles.sign}
-              // resizeMode="contain"
-              />
-              <Text style={styles.appointmentDescription}>
-                Запись{'\n'} к мастеру
+
+            <TouchableOpacity>
+              <ImageBackground
+                resizeMode="cover"
+                source={ImageRepository.mainReadCardBackground}
+                style={styles.serviceAppointment}
+              >
+                <Image
+                  source={ImageRepository.mainPageRecordingMaster}
+                  style={styles.sign}
+                // resizeMode="contain"
+                />
+                <Text style={styles.appointmentDescription}>
+                  Запись{'\n'} к мастеру
               </Text>
+              </ImageBackground>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.serviceAppointment}>
-              <Image
-                source={ImageRepository.mainPageSolariumAppointment}
-                style={styles.sign}
-              // resizeMode="contain"
-              />
-              <Text style={styles.appointmentDescription}>
-                Запись{'\n'} в солярий
+
+            <TouchableOpacity>
+              <ImageBackground
+                resizeMode="cover"
+                source={ImageRepository.mainReadCardBackground}
+                style={styles.serviceAppointment}
+              >
+                <Image
+                  source={ImageRepository.mainPageSolariumAppointment}
+                  style={styles.sign}
+                // resizeMode="contain"
+                />
+                <Text style={styles.appointmentDescription}>
+                  Запись{'\n'} в солярий
               </Text>
+              </ImageBackground>
             </TouchableOpacity>
           </View>
           {
@@ -291,7 +309,11 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
                     onScroll={this.onBonusesScrollHandler}
                   >
                     <View style={styles.bonusesSlidesContainer}>
-                      <View style={styles.slides}>
+
+                      <TouchableOpacity
+                        style={styles.slides}
+                        onPress={this.openBonusServiceHandler}
+                      >
                         <View style={styles.bonusSlideOne}>
                           <Text style={styles.bounusSlideOneTitle}>
                             5900 ₽
@@ -300,16 +322,20 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
                             Баланс{'\n'}
                             абонемента
                           </Text>
-                          <TouchableOpacity
-                          onPress={this.openBonusServiceHandler} 
-                          style={styles.bonusBurningContainer}>
+                          <View
+                            // onPress={this.openBonusServiceHandler} 
+                            style={styles.bonusBurningContainer}>
                             <Text style={styles.bonusBurningTitle}>
                               🔥Сгорит 500 руб
                             </Text>
-                          </TouchableOpacity>
+                          </View>
                         </View>
-                      </View>
-                      <View style={styles.slides}>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        style={styles.slides}
+                        onPress={this.openBonusServiceHandler}
+                      >
                         <View style={styles.bonusSlideTwo}>
                           <Text style={styles.bounusSlideTwoTitle}>
                             50 ₽
@@ -319,8 +345,12 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
                             Порядке
                           </Text>
                         </View>
-                      </View>
-                      <View style={styles.slides}>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        style={styles.slides}
+                        onPress={this.openBonusServiceHandler}
+                      >
                         <View style={styles.bonusSlideThree}>
                           <Text style={styles.bounusSlideTwoTitle}>
                             100 ₽
@@ -330,7 +360,8 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
                             Денди
                           </Text>
                         </View>
-                      </View>
+                      </TouchableOpacity>
+
                     </View>
                   </ScrollView>
                   <View style={styles.dotConteiner}>
@@ -461,7 +492,7 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
               </Text>
             </View>
             <Text style={styles.bottomSheetTitle}>
-            {/* {this.state.activePromotion?.title} */}
+              {/* {this.state.activePromotion?.title} */}
             </Text>
             <Text style={styles.bottomSheetWorks}>
               Действует до 18.10.202
@@ -473,13 +504,13 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
               title="Завершить"
             />
           </Modalize>
-          </Portal>
-          
-          <Portal>
+        </Portal>
+
+        <Portal>
           <Modalize
-           ref={this.refModalizeBonusHandler}
-           modalHeight={windowWidth * 1.02}
-           >
+            ref={this.refModalizeBonusHandler}
+            adjustToContentHeight
+          >
             <View style={styles.bottomSheetChildren}>
               <Text style={styles.burningBonusTitle}>
                 Ближайшие сгорания
@@ -509,9 +540,9 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
                 </Text>
               </View>
               <CommonButton
-              title="Понятно"
-              styleButton={styles.understand}
-            />
+                title="Понятно"
+                styleButton={styles.understand}
+              />
             </View>
           </Modalize>
         </Portal>
@@ -669,7 +700,7 @@ const styles = styleSheetCreate({
   }),
   serviceAppointment: style.view({
     width: windowWidth * 0.28,
-    height: windowWidth * 0.24,
+    height: windowWidth * 0.28,
     borderWidth: windowWidth * 0.002,
     borderColor: Color.white,
     borderRadius: windowWidth * 0.032,
@@ -686,7 +717,8 @@ const styles = styleSheetCreate({
     fontFamily: fonts.robotoRegular,
     fontSize: windowWidth * 0.0346,
     textAlign: 'center',
-    color: Color.gray600,
+    color: Color.yankeesBlue,
+    fontWeight: 'bold',
   }),
   menuContainer: style.view({
     paddingLeft: windowWidth * 0.06,
@@ -881,5 +913,6 @@ const styles = styleSheetCreate({
   }),
   understand: style.view({
     marginTop: windowWidth * 0.42,
+    marginBottom: windowWidth * 0.07,
   })
 })

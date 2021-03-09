@@ -3,21 +3,25 @@ interface ITownsRequest {
 }
 
 interface ITownsResponce {
-    id: Number
+    id: number
     title: string
 }
 
 interface IGetOrganisationsRequest {
-    id: Number
+    id: number
 }
 
 interface IGetOrganisationsResponce {
-    orgs : IOrganisation[]
+    orgs: IOrganisation[]
 }
 
 interface IOrganisation {
+    GPS: {
+        latitude: string
+        longitude: string
+    }
     title: string
-    id: Number
+    id: number
     requisites: string
     deliveryTerminalId: string
     img: string

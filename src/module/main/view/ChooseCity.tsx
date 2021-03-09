@@ -93,11 +93,11 @@ export class ChooseCity extends PureComponent<IProps & IState & IDispatchProps &
 
   render(): JSX.Element {
 
-    if (this.props.isLoading) {
-      return (
-        <Loader />
-      )
-    }
+    // if (this.props.isLoading) {
+    //   return (
+    //     <Loader />
+    //   )
+    // }
 
     const mainContainer = styleSheetFlatten([
       styles.mainContainer,
