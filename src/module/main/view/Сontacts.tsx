@@ -18,7 +18,7 @@ import {
   fonts,
   platform,
 } from 'app/system/helpers'
-import MapView, { Callout, CalloutSubview, Marker } from 'react-native-maps'
+import MapView, { Callout, Marker } from 'react-native-maps'
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
 import { Modalize } from 'react-native-modalize'
 import { connectStore, IApplicationState } from 'app/system/store'

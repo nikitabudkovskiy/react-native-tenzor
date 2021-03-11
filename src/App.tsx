@@ -40,7 +40,7 @@ export class App extends PureComponent<IProps, IState>{
 
   state = {
     appStatus: AppState.currentState,
-    isLoading: true,
+    isLoading: false,
   }
 
   componentDidMount(): void {
@@ -49,6 +49,9 @@ export class App extends PureComponent<IProps, IState>{
       StatusBar.setBackgroundColor(Color.white)
       StatusBar.setBarStyle('dark-content')
     }
+   ApiService.defaults.headers.common['Authorization'] = `Bearer 2db1160cc53c57b68ff3bc63f67448de`
+    // ApiService.defaults.headers.common = {'Authorization': `Bearer 2db1160cc53c57b68ff3bc63f67448de`}
+    console.log('aomf', ApiService)
   }
 
   componentWillUnmount(): void {
@@ -71,9 +74,10 @@ export class App extends PureComponent<IProps, IState>{
     localization.list.setLanguage(state.system.language)
     const { userCity } = state.system
     const { codeVerificationInformation } = state.login
-    if (codeVerificationInformation && codeVerificationInformation.token) {
-      ApiService.defaults.headers.common['Authorization'] = `Bearer ${codeVerificationInformation.token}`
-    }
+    // if (codeVerificationInformation && codeVerificationInformation.token) {
+   //   ApiService.defaults.headers.common['Authorization'] = `Bearer ${codeVerificationInformation.token}
+    console.log('Apis', ApiService.defaults)
+    // }
     setTimeout(() => {
       this.setState({ isLoading: false })
     }, 4000)

@@ -75,7 +75,7 @@ export const PasswordSingIn = ({ navigation, route }: IProps) => {
         if (error) {
           setValue('')
         } else {
-          ApiService.defaults.headers.common['Authorization'] = `Bearer ${codeVerificationInformation.token}`
+          ApiService.defaults.headers.common['Authorization'] = `Bearer 2db1160cc53c57b68ff3bc63f67448de`
           if (!codeVerificationInformation?.user?.birthday) {
             navigation.replace(ListPages.MainTab)
           } else {

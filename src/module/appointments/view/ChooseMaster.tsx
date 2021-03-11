@@ -27,10 +27,11 @@ import { IApplicationState } from 'app/system/store/applicationState'
 import { MainAsyncActions } from 'app/module/main/store/mainAsyncActions'
 import { connectStore } from 'app/system/store'
 import { ThunkDispatch } from 'redux-thunk'
+import { MastersAsyncActions } from 'app/module/masters/store/masterAsyncActions'
 
 interface IStateProps extends IIsLoadingAndError {
-  organisations: IGetOrganisationsResponce
   userCity: ITownsResponce
+  mastersList: IGetMastersListResponce
 }
 
 interface IDispatchProps {
@@ -46,31 +47,17 @@ interface IState {
   animatedMarginLeft: Animated.Value
 }
 
-const masterList: IHairDreesserItems[] = [
-  {
-    name: 'Карамова Рузанна',
-    position: 'Парикмахер',
-    image: ImageRepository.masterOne
-  },
-  {
-    name: 'Лушникова Анна',
-    position: 'Парикмахер-стилист',
-    image: ImageRepository.masterTwo
-  }
-]
-
-
 @connectStore(
   (state: IApplicationState): IStateProps => ({
-    organisations: state.main.organisationsList,
     userCity: state.system.userCity,
     isLoading: state.main.isLoading,
     error: state.main.error,
+    mastersList: state.master.mastersList,
   }),
   (dispatch: ThunkDispatch<IApplicationState, void, any>): IDispatchProps => ({
-    async getOrganisations(data) {
-      await dispatch(MainAsyncActions.getOrganisations(data))
-    }
+    async getMasterList(data) {
+      await dispatch(MastersAsyncActions.getMastersList(data))
+    },
   })
 )
 export class ChooseMaster extends PureComponent<IStateProps & IDispatchProps & IProps, IState> {
@@ -78,6 +65,10 @@ export class ChooseMaster extends PureComponent<IStateProps & IDispatchProps & I
   state = {
     searchValue: '',
     animatedMarginLeft: new Animated.Value(0)
+  }
+
+  async componentDidMount(): Promise<void> {
+
   }
 
   searchMasterHandler = (searchValue: string): void => {
