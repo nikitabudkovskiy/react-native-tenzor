@@ -31,6 +31,7 @@ import { isEmpty } from 'lodash'
 import { LoginAction } from 'app/module/login/store/loginActions'
 import { LoginAsynсActions } from 'app/module/login/store/loginAsyncActions'
 import { MainAsyncActions } from '../store/mainAsyncActions'
+import moment from 'moment'
 
 interface IStateProps extends IIsLoadingAndError {
   codeVerificationInformation: any
@@ -112,6 +113,10 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
     this.props.navigation.replace(ListPages.EnterPhoneNumberSingIn)
   }
 
+  goToRecordHandler = (): void => {
+    this.props.navigation.navigate('Enroll')
+  }
+
   goToRegistraionPageHandler = (): void => {
     this.props.navigation.replace(ListPages.EnterPhoneNumberSingInRegistration)
   }
@@ -119,6 +124,12 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
   openPromotionsModalHandler = (activePromotion: IGetCodeVerificationRequest): void => {
     this.setState({ activePromotion }, () => {
       this.refModalizePromotions.open()
+    })
+  }
+
+  closePromotionsModalHandler = (): void => {
+    this.setState({ activePromotion: {} }, () => {
+      this.refModalizePromotions.close()
     })
   }
 
@@ -131,7 +142,6 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
     const slideSize = event.nativeEvent.layoutMeasurement.width * 0.8
     const activeDot = Math.round(positionX / slideSize)
     this.setState({ activeDot }, () => {
-      console.log("slideSize", slideSize)
     })
   }
 
@@ -143,7 +153,7 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
   }
 
   changeCityHandler = () => {
-    this.props.navigation.navigate('ChooseCity')
+    this.props.navigation.navigate(ListPages.ChooseCity)
   }
 
   refModalizePromotionsHandler = (ref: any) => this.refModalizePromotions = ref
@@ -225,7 +235,7 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
             </View>
           </View>
           <View style={styles.appointments}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={this.goToRecordHandler}>
               <ImageBackground
                 source={ImageRepository.mainReadCardBackground}
                 style={styles.serviceAppointment}
@@ -242,7 +252,7 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
               </ImageBackground>
             </TouchableOpacity>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={this.goToRecordHandler}>
               <ImageBackground
                 resizeMode="cover"
                 source={ImageRepository.mainReadCardBackground}
@@ -259,7 +269,7 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
               </ImageBackground>
             </TouchableOpacity>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={this.goToRecordHandler}>
               <ImageBackground
                 resizeMode="cover"
                 source={ImageRepository.mainReadCardBackground}
@@ -300,7 +310,8 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
                       </View>
                     </View>
                   </View>
-                  <ScrollView
+                  
+                  {/* <ScrollView
                     horizontal
                     contentContainerStyle={styles.bonusesContainer}
                     showsHorizontalScrollIndicator={false}
@@ -376,7 +387,7 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
                         })
                       }
                     </View>
-                  </View>
+                  </View> */}
                 </View>
               ) : (
                 <View style={styles.cardContent}>
@@ -482,25 +493,30 @@ export class MainPage extends PureComponent<IStateProps & IDispatchProps & IProp
             childrenStyle={styles.bottomSheetChildren}
             modalHeight={windowWidth * 1.5}
           >
-            <View style={styles.bottomSheetBackground}>
+            <ImageBackground 
+              resizeMode="cover" 
+              source={{ uri: this.state.activePromotion?.img_big}} 
+              style={styles.bottomSheetBackground}
+            >
               <Text style={styles.bottomSheetBackgroundTitle}>
                 Акция!
               </Text>
               <Text style={styles.bottomSheetBackgroundSubtitle}>
                 {this.state.activePromotion?.title}
               </Text>
-            </View>
+            </ImageBackground>
             <Text style={styles.bottomSheetTitle}>
               {/* {this.state.activePromotion?.title} */}
             </Text>
             <Text style={styles.bottomSheetWorks}>
-              Действует до 18.10.202
+              Действует до {moment(this.state.activePromotion?.date_end).format('DD.MM.YYYY')}
             </Text>
             <Text style={styles.bottomSheetSubtitle}>
-              Тут какой-то дополнительный текст по акции. Можно написать в каких салонах действует и т.п.
+              {this.state.activePromotion?.content}
             </Text>
             <CommonButton
               title="Завершить"
+              onPress={this.closePromotionsModalHandler}
             />
           </Modalize>
         </Portal>
@@ -851,12 +867,12 @@ const styles = styleSheetCreate({
     paddingHorizontal: windowWidth * 0.04,
   }),
   bottomSheetBackground: style.view({
-    width: '100%',
+    width: windowWidth * 0.92,
     height: windowWidth * 0.3,
-    backgroundColor: Color.candyAppleRed,
     marginTop: windowWidth * 0.03,
     borderRadius: windowWidth * 0.04,
     paddingHorizontal: windowWidth * 0.05,
+    overflow: 'hidden',
   }),
   bottomSheetBackgroundTitle: style.text({
     fontSize: windowWidth * 0.06,

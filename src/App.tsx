@@ -80,7 +80,7 @@ export class App extends PureComponent<IProps, IState>{
     // }
     setTimeout(() => {
       this.setState({ isLoading: false })
-    }, 4000)
+    },1000)
     if (userCity.id !== -1) {
       setTimeout(() => {
         this.navigatorRef.dispatch(StackActions.replace(ListPages.MainTab))
