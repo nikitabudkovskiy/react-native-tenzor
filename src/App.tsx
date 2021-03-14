@@ -40,7 +40,7 @@ export class App extends PureComponent<IProps, IState>{
 
   state = {
     appStatus: AppState.currentState,
-    isLoading: false,
+    isLoading: true,
   }
 
   componentDidMount(): void {

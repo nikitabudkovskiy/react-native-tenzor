@@ -57,7 +57,6 @@ interface IState {
   defauldIdOrganisation: Number
 }
 
-
 @connectStore(
   (state: IApplicationState): IStateProps => ({
     isLoading: state.login.isLoading,

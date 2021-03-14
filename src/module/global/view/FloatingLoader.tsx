@@ -40,6 +40,7 @@ const styles = styleSheetCreate({
     ...StyleSheet.absoluteFill,
     alignItems: 'center',
     justifyContent: 'center',
+    zIndex: 9999,
   }),
   image: style.image({
     width: windowWidth * 0.75,
