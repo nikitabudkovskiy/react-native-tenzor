@@ -19,13 +19,31 @@ import {
 } from 'app/system/helpers'
 import { CommonButton } from 'app/module/global/view/CommonButton'
 import { StackNavigationProp } from '@react-navigation/stack'
+import { MastersAsyncActions } from 'app/module/masters/store/masterAsyncActions'
+import { connectStore, IApplicationState } from 'app/system/store'
+import { ThunkDispatch } from 'redux-thunk'
+import { RouteProp } from '@react-navigation/native'
+import moment from 'moment'
+import { FloatingLoader } from 'app/module/global/view/FloatingLoader'
+import { isEmpty } from 'lodash'
+
+interface IStateProps extends IIsLoadingAndError {
+  userCity: ITownsResponce
+  workingHoursMaster: any
+}
+
+interface IDispatchProps {
+  getWorkingHoursMaster(data: IGetWorkingHoursMasterRequest): Promise<void>
+}
 
 interface IProps {
   navigation: StackNavigationProp<any>
+  route: RouteProp<any, any>
 }
 
 interface IState {
-
+  activeDate: any
+  activeTime: any
 }
 
 interface IDateTime {
@@ -40,7 +58,57 @@ interface ITime {
   timeStatus: string
 }
 
-export class TimeSelect extends PureComponent<IProps, IState> {
+function convert(minutes) {
+  var h = Math.floor(minutes / 60)
+  var m = minutes % 60
+  h = h < 10 ? '0' + h : h
+  m = m < 10 ? '0' + m : m
+  return h + ':' + m
+}
+
+@connectStore(
+  (state: IApplicationState): IStateProps => ({
+    userCity: state.system.userCity,
+    isLoading: state.main.isLoading,
+    error: state.main.error,
+    workingHoursMaster: state.master.workingHoursMaster,
+  }),
+  (dispatch: ThunkDispatch<IApplicationState, void, any>): IDispatchProps => ({
+    async getWorkingHoursMaster(data) {
+      await dispatch(MastersAsyncActions.getWorkingHoursMaster(data))
+    },
+  })
+)
+export class TimeSelect extends PureComponent<IStateProps & IDispatchProps & IProps, IState> {
+
+  state = {
+    activeDate: -1,
+    activeTime: -1,
+  }
+
+  async componentDidMount(): Promise<void> {
+    moment.locale('ru')
+    await this.props.getWorkingHoursMaster({
+      point_id: this.props.userCity.id,
+      master_id: this.props.route.params?.master.id,
+    })
+  }
+
+  onChangeDateHandler = (activeDate: any): void => {
+    if (this.state.activeDate === activeDate) {
+      this.setState({ activeDate: -1 })
+      return
+    }
+    this.setState({ activeDate })
+  }
+
+  onChangeTimeHandler = (activeTime: any): void => {
+    if (this.state.activeTime === activeTime) {
+      this.setState({ activeTime: -1 })
+      return
+    }
+    this.setState({ activeTime })
+  }
 
   goBackHandler = (): void => {
     if (this.props.navigation.canGoBack()) {
@@ -49,6 +117,10 @@ export class TimeSelect extends PureComponent<IProps, IState> {
   }
 
   render() {
+
+    if (this.props.isLoading) {
+      return <FloatingLoader />
+    }
 
     const container = styleSheetFlatten([
       styles.container,
@@ -81,7 +153,7 @@ export class TimeSelect extends PureComponent<IProps, IState> {
     const timeContainerFlatten = styleSheetFlatten([
       styles.timeContainer,
       {
-        opacity: 0.5,
+        backgroundColor: Color.electricOrange,
       }
     ])
 
@@ -114,72 +186,61 @@ export class TimeSelect extends PureComponent<IProps, IState> {
             decelerationRate="normal"
           >
             {
-              dateTimeList.map(item => {
+              !isEmpty(this.props.workingHoursMaster) && this.props.workingHoursMaster.map(item => {
                 return (
-                  item.status == 'active'
-                    ? (
-                      <TouchableOpacity
-                        key={Math.random().toString()}
-                        style={dateContainerFlatten}>
-                        <View style={styles.monthDateContainer}>
-                          <Text style={styles.monthDateNumberTitle}>
-                            {item.date}
-                          </Text>
-                          <Text style={styles.monthDateTitle}>
-                            {item.month}
-                          </Text>
-                        </View>
-                        <Text style={styles.dayOfWeek}>
-                          {item.dayOfWeek}
-                        </Text>
-                      </TouchableOpacity>
-                    ) : (
-                      <TouchableOpacity
-                        key={Math.random().toString()}
-                        style={styles.dateContainer}>
-                        <View style={styles.monthDateContainer}>
-                          <Text style={monthDateNumberTitleFlatten}>
-                            {item.date}
-                          </Text>
-                          <Text style={monthDateTitleFlatten}>
-                            {item.month}
-                          </Text>
-                        </View>
-                        <Text style={monthDateTitleFlatten}>
-                          {item.dayOfWeek}
-                        </Text>
-                      </TouchableOpacity>
-                    )
+                  <TouchableOpacity
+                    key={Math.random().toString()}
+                    style={this.state.activeDate === item.date ? dateContainerFlatten : styles.dateContainer}
+                    onPress={this.onChangeDateHandler.bind(this, item.date)}
+                  >
+                    <View style={styles.monthDateContainer}>
+                      <Text style={this.state.activeDate === item.date ? styles.monthDateNumberTitle : monthDateNumberTitleFlatten}>
+                        {moment(item.date).format('DD')}
+                      </Text>
+                      <Text style={this.state.activeDate === item.date ? styles.monthDateTitle : monthDateTitleFlatten}>
+                        {moment(item.month).format('MMM')}
+                      </Text>
+                    </View>
+                    <Text style={this.state.activeDate === item.date ? styles.dayOfWeek : monthDateTitleFlatten}>
+                      {moment(item.dayOfWeek).format('ddd')}
+                    </Text>
+                  </TouchableOpacity>
                 )
               })
             }
           </ScrollView>
-          <View style={styles.timeContent}>
+          <ScrollView horizontal style={styles.timeContent}>
             {
-              timeList.map(item => {
-                return (
-                  item.timeStatus == 'active'
-                    ? (
-                      <View
-                        key={Math.random().toString()}
-                        style={styles.timeContainer}>
-                        <Text style={styles.timeTitle}>
-                          {item.time}
-                        </Text>
-                      </View>
-                    ) : (
-                      <View
-                        key={Math.random().toString()}
-                        style={timeContainerFlatten}>
-                        <Text style={styles.timeTitle}>
-                          {item.time}
-                        </Text>
-                      </View>
-                    )
-                )
+              !isEmpty(this.props.workingHoursMaster) &&
+              this.props.workingHoursMaster.map(topItem => {
+                return topItem.masters.map(midddleItem => {
+                  return (
+                    <View 
+                      style={{ marginRight: 20 }}
+                      key={Math.random().toString()}
+                    >
+                      {
+                        midddleItem.time_intervals.map(bottomItem => {
+                          return (
+                            <TouchableOpacity
+                              key={Math.random().toString()}
+                              style={this.state.activeTime === bottomItem.start && this.state.activeTime === topItem.date ? timeContainerFlatten : styles.timeContainer}
+                              disabled={this.state.activeDate !== topItem.date}
+                              onPress={this.onChangeTimeHandler.bind(this, bottomItem.start)}
+                            >
+                              <Text style={this.state.activeTime === bottomItem.start && this.state.activeTime === topItem.date ? styles.timeTitleActive :  styles.timeTitle}>
+                                {convert(bottomItem.start)}
+                              </Text>
+                            </TouchableOpacity>
+                          )
+                        })
+                      }
+                    </View>
+                  )
+                })
               })
             }
-          </View>
+          </ScrollView>
         </ScrollView>
         <View style={styles.calculationsContainer}>
           <Text style={styles.calculationsTitle}>
@@ -229,6 +290,17 @@ const styles = styleSheetCreate({
     borderWidth: windowWidth * 0.002,
     borderColor: Color.anitFlashWhite
   }),
+  dateContainerActive: style.view({
+    width: windowWidth * 0.154,
+    height: windowWidth * 0.152,
+    backgroundColor: Color.electricOrange,
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    borderRadius: windowWidth * 0.021,
+    marginRight: windowWidth * 0.021,
+    borderWidth: windowWidth * 0.002,
+    borderColor: Color.anitFlashWhite
+  }),
   monthDateContainer: style.view({
     flexDirection: 'row',
     alignItems: 'flex-end'
@@ -247,7 +319,7 @@ const styles = styleSheetCreate({
     color: Color.white
   }),
   dateContent: style.view({
-    width: windowWidth * 1.2,
+    // width: windowWidth * 1.2,
     height: windowWidth * 0.216,
     marginTop: windowWidth * 0.05,
     // paddingLeft: windowWidth * 0.042
@@ -266,9 +338,16 @@ const styles = styleSheetCreate({
     fontFamily: fonts.robotoRegular,
     fontSize: windowWidth * 0.04
   }),
+  timeTitleActive: style.text({
+    fontFamily: fonts.robotoRegular,
+    fontSize: windowWidth * 0.04,
+    color: Color.white,
+  }),
   timeContent: style.view({
     paddingHorizontal: windowWidth * 0.048,
-    paddingBottom: windowWidth * 0.085
+    paddingBottom: windowWidth * 0.085,
+
+    // flexDirection: 'row',
   }),
   makeAppointment: style.view({
     width: windowWidth * 0.914,
@@ -286,94 +365,3 @@ const styles = styleSheetCreate({
     fontFamily: fonts.robotoRegular
   }),
 })
-
-const dateTimeList: IDateTime[] = [
-  {
-    date: 18,
-    month: 'Янв',
-    dayOfWeek: 'Пт',
-    status: 'active'
-  },
-  {
-    date: 19,
-    month: 'Янв',
-    dayOfWeek: 'Пн',
-    status: 'inactive'
-  },
-  {
-    date: 22,
-    month: 'Янв',
-    dayOfWeek: 'Пт',
-    status: 'inactive'
-  },
-  {
-    date: 25,
-    month: 'Янв',
-    dayOfWeek: 'Пн',
-    status: 'inactive'
-  },
-  {
-    date: 26,
-    month: 'Янв',
-    dayOfWeek: 'Вт',
-    status: 'inactive'
-  },
-  {
-    date: 28,
-    month: 'Янв',
-    dayOfWeek: 'Чт',
-    status: 'inactive'
-  },
-]
-
-
-const timeList: ITime[] = [
-  {
-    time: '09:00',
-    timeStatus: 'active'
-  },
-  {
-    time: '10:00',
-    timeStatus: 'active'
-  },
-  {
-    time: '11:00',
-    timeStatus: 'inactive'
-  },
-  {
-    time: '12:00',
-    timeStatus: 'active'
-  },
-  {
-    time: '13:00',
-    timeStatus: 'active'
-  },
-  {
-    time: '14:00',
-    timeStatus: 'active'
-  },
-  {
-    time: '15:00',
-    timeStatus: 'inactive'
-  },
-  {
-    time: '16:00',
-    timeStatus: 'active'
-  },
-  {
-    time: '17:00',
-    timeStatus: 'active'
-  },
-  {
-    time: '18:00',
-    timeStatus: 'inactive'
-  },
-  {
-    time: '19:00',
-    timeStatus: 'active'
-  },
-  {
-    time: '20:00',
-    timeStatus: 'active'
-  },
-]

@@ -5,7 +5,6 @@ import {
   Image,
   TouchableOpacity,
   Animated,
-  ImageURISource,
   ScrollView,
 } from 'react-native'
 import {
@@ -22,15 +21,17 @@ import {
 import { CommonButton } from 'app/module/global/view'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { ListPages } from 'app/system/navigation'
-import { MainAsyncActions } from 'app/module/main/store/mainAsyncActions'
 import { MastersAsyncActions } from 'app/module/masters/store/masterAsyncActions'
 import { connectStore, IApplicationState } from 'app/system/store'
 import { ThunkDispatch } from 'redux-thunk'
-import { Loader } from 'app/module/global/view/Loader'
 import { RouteProp } from '@react-navigation/native'
+import { isEmpty } from 'lodash'
+import { FloatingLoader } from 'app/module/global/view/FloatingLoader'
+import { SelectServiceCard } from './SelectServiceCard'
 
 interface IStateProps extends IIsLoadingAndError {
   userCity: ITownsResponce
+  services: any
 }
 
 interface IDispatchProps {
@@ -45,13 +46,7 @@ interface IProps {
 interface IState {
   isServiceListOpen: boolean
   aniamtedHeightServiceList: Animated.Value
-}
-
-interface IServiceList {
-  title: string
-  checkedImg: ImageURISource
-  time: number
-  price: number
+  selectedServices: Object
 }
 
 const serviceListItemHight = windowWidth * 5
@@ -62,6 +57,7 @@ const serviceListHight = serviceListItemHight
     userCity: state.system.userCity,
     isLoading: state.main.isLoading,
     error: state.main.error,
+    services: state.master.services,
   }),
   (dispatch: ThunkDispatch<IApplicationState, void, any>): IDispatchProps => ({
     async getServices(data) {
@@ -73,7 +69,8 @@ export class SelectService extends PureComponent<IStateProps & IDispatchProps & 
 
   state = {
     isServiceListOpen: false,
-    aniamtedHeightServiceList: new Animated.Value(0)
+    aniamtedHeightServiceList: new Animated.Value(0),
+    selectedServices: {},
   }
 
   async componentDidMount(): Promise<void> {
@@ -92,7 +89,8 @@ export class SelectService extends PureComponent<IStateProps & IDispatchProps & 
     this.props.navigation.push(
       ListPages.ChooseMaster,
       {
-        salon: this.props.route.params?.salon
+        salon: this.props.route.params?.salon,
+        selectedServices: this.state.selectedServices,
       }
     )
   }
@@ -106,6 +104,42 @@ export class SelectService extends PureComponent<IStateProps & IDispatchProps & 
       .start()
   }
 
+  onChangeSelectedServiceHandler = (mainId: number, serviceInformation: any): void => {
+    let selectedServices: any = this.state.selectedServices
+    const services: any = selectedServices[mainId] || []
+    if (isEmpty(services)) {
+      this.setState({
+        selectedServices: {
+          ...this.state.selectedServices,
+          [mainId]: [serviceInformation]
+        }
+      })
+    } else {
+      //@ts-ignore
+      let elementsServices = Object.values(this.state.selectedServices[mainId])
+      const findElement = elementsServices.find((item: any) => +item.id === +serviceInformation.id)
+      if (findElement) {
+        const test =  elementsServices.filter((item: any) => {
+          console.log(item.id, serviceInformation.id)
+          return +item.id !== +serviceInformation.id
+        })
+         this.setState({ 
+          selectedServices: {
+            ...this.state.selectedServices,
+            [mainId]: test,
+          }
+         })
+      } else {
+        this.setState({ 
+          selectedServices: {
+            ...this.state.selectedServices,
+            [mainId]: [...elementsServices, serviceInformation],
+          }
+        })
+      }
+    }
+  }
+
   closeServiceListHandler = (): void => {
     Animated.timing(this.state.aniamtedHeightServiceList, {
       toValue: 0,
@@ -115,7 +149,7 @@ export class SelectService extends PureComponent<IStateProps & IDispatchProps & 
       .start()
   }
 
-  toggleServiceListHandler = ():void => {
+  toggleServiceListHandler = (): void => {
     if (this.state.isServiceListOpen) {
       this.setState({ isServiceListOpen: false }, this.closeServiceListHandler)
     }
@@ -127,8 +161,13 @@ export class SelectService extends PureComponent<IStateProps & IDispatchProps & 
   render() {
 
     if (this.props.isLoading) {
-      return <Loader /> 
+      return <FloatingLoader />
     }
+    
+    //@ts-ignore
+    const selectedServices = Object.values(this.state.selectedServices).flat()
+
+    console.log('props', this.props.services)
 
     const container = styleSheetFlatten([
       styles.container,
@@ -136,38 +175,7 @@ export class SelectService extends PureComponent<IStateProps & IDispatchProps & 
         paddingTop: isLongDevices ? windowWidth * 0.1 : windowWidth * 0.08,
       }
     ])
-
-    const servicePoints = styleSheetFlatten([
-      styles.serviceList,
-      {
-        maxHeight: this.state.aniamtedHeightServiceList.interpolate({
-          inputRange: [0, 1],
-          outputRange: [0, serviceListHight]
-        }),
-      }
-    ])
-
-    const serviceContentFlatten = styleSheetFlatten([
-      styles.serviceContent,
-      {
-        backgroundColor: this.state.isServiceListOpen ? Color.smokyWhite : Color.white
-      }
-    ])
-
-    const spin = this.state.aniamtedHeightServiceList.interpolate({
-      inputRange: [0, 1],
-      outputRange: ['0deg', '180deg']
-    })
-
-    const arrrowBottomFlip = styleSheetFlatten([
-      styles.selectServiceArrowBottom,
-      {
-        transform: [{
-          rotate: spin
-        }]
-      }
-    ])
-
+    
     return (
       <View style={container}>
 
@@ -187,64 +195,32 @@ export class SelectService extends PureComponent<IStateProps & IDispatchProps & 
         </View>
 
         <ScrollView style={styles.scrollViewContainer}>
-        <View style={serviceContentFlatten}>
-          <TouchableOpacity
-            onPress={this.toggleServiceListHandler}
-            style={styles.serviceContainer}
-          >
-            <Text style={styles.serviceTitle}>
-              Мужской зал
-            </Text>
-            <View style={styles.serviceAmountContainer}>
-              <Text style={styles.serviceAmount}>
-                2
-              </Text>
-            </View>
-            <Animated.Image
-              style={arrrowBottomFlip}
-              source={ImageRepository.selectServiceArrowBottom}
-            />
-          </TouchableOpacity>
-          <Animated.View style={servicePoints}>
-            <View style={styles.servicePointsContainer}>
-              {
-                serviceList.map(items => {
-                  return (
-                    <View key={Math.random().toString()} style={styles.serviceItemContainer}>
-                      <View style={styles.serviceItemTitleContainer}>
-                        <Text style={styles.serviceItemTitle}>
-                          {items.title}
-                        </Text>
-                        <Image
-                          style={styles.serviceCheck}
-                          source={items.checkedImg}
-                        />
-                      </View>
-                      <View style={styles.serviceItemTitleContainer}>
-                        <Text style={styles.serivceItemDescriptionTime}>
-                          {items.time} мин
-                        </Text>
-                        <Text style={styles.serivceItemDescriptionPrice}>
-                          {items.price} ₽
-                        </Text>
-                      </View>
-                    </View>
-                  )
-                })
-              }
-            </View>
-          </Animated.View>
-        </View>
+          {
+            !isEmpty(this.props.services) && this.props.services.map(mainItem => {
+              console.log('test', mainItem)
+              return (
+                <SelectServiceCard
+                  service={mainItem}
+                  onChangeHandler={this.onChangeSelectedServiceHandler}
+                  //@ts-ignore
+                  selectedServices={this.state.selectedServices[mainItem.hierarchicalId] || []}
+                  // key={mainItem.id.toString()}
+                />
+              )
+            })
+          }
         </ScrollView>
 
         <View style={styles.serviceCalculationsContainer}>
           <View style={styles.serviceCalculations}>
             <Text style={styles.serviceCalculationsTitle}>
-              Услуг: 3 на 600 ₽ / 90 мин
+              Услуг: {selectedServices.length} на {selectedServices.reduce((sum, item )=> item.cost, 0)} ₽ 
+              {/* / 90 мин */}
             </Text>
             <CommonButton
               title='Далее'
               styleButton={styles.continue}
+              // disabled={!selectedServices.length}
               onPress={this.goToChooseMasterHandler}
             />
           </View>
@@ -261,7 +237,7 @@ const styles = styleSheetCreate({
     flex: 1
   }),
   scrollViewContainer: style.view({
- 
+
   }),
   serviceContainer: style.view({
     paddingHorizontal: windowWidth * 0.021,
@@ -366,7 +342,7 @@ const styles = styleSheetCreate({
   }),
   masterArrowLeft: style.image({
     width: windowWidth * 0.064,
-    height: windowWidth * 0.064, 
+    height: windowWidth * 0.064,
   }),
   serivceHeadTitle: style.text({
     fontSize: windowWidth * 0.05,
@@ -375,18 +351,3 @@ const styles = styleSheetCreate({
   })
 })
 
-
-const serviceList: IServiceList[] = [
-  {
-    title: 'Модельная/теннис стрижка',
-    checkedImg: ImageRepository.chooseCityCheck,
-    time: 30,
-    price: 350
-  },
-  {
-    title: 'Бокс/Ролубокс/спортивная/окантовка с переходом/стрижка шейвером',
-    checkedImg: ImageRepository.selectServiceNotChecked,
-    time: 20,
-    price: 270
-  }
-]

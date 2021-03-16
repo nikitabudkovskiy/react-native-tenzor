@@ -105,9 +105,7 @@ export const RootNavigator = (): JSX.Element => {
       <Stack.Screen name={ListPages.EnterPhoneNumberSingInRegistration} component={EnterPhoneNumberSingInRegistration} />
       <Stack.Screen name={ListPages.PasswordRegistration} component={PasswordRegistration} />
       <Stack.Screen name={ListPages.RegistrationContacts} component={RegistrationContacts} />     
-      {/* <Stack.Screen name={ListPages.Masters} component={Masters} />     */}
       <Stack.Screen name={ListPages.NoteDetails} component={NoteDetails} />    
-      {/* <Stack.Screen name={ListPages.FinishNote} component={FinishNote} />     */}
     </Stack.Navigator>
   )
 }

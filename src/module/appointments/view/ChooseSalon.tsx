@@ -29,6 +29,7 @@ import { isEmpty } from 'lodash'
 import { Loader } from 'app/module/global/view/Loader'
 import { request, PERMISSIONS, RESULTS } from 'react-native-permissions'
 import Geolocation from 'react-native-geolocation-service'
+import { FloatingLoader } from 'app/module/global/view/FloatingLoader'
 
 interface IStateProps extends IIsLoadingAndError {
   organisations: IGetOrganisationsResponce
@@ -156,7 +157,7 @@ export class ChooseSalon extends PureComponent<IStateProps & IDispatchProps & IP
   render(): JSX.Element {
 
     if (this.props.isLoading) {
-      return <Loader />
+      return <FloatingLoader />
     }
 
     const contacts: any = this.props.organisations &&

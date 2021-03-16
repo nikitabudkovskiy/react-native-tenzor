@@ -27,6 +27,7 @@ interface IGetWorkingHoursMasterResponce {
 
 interface IGetServicesRequest {
     point_id: number
+    master_id: number
 }
 
 interface IGetServicesResponce {

@@ -1,6 +1,7 @@
 import { ReducerBuilder, reducerWithInitialState } from 'typescript-fsa-reducers'
 import { IMasterState, MasterInitialState } from './masterState'
 import { MastersAsyncActions } from './masterAsyncActions'
+import { isEmpty } from 'lodash'
 
 export const getMastersListStarted = (state: IMasterState): IMasterState => {
     return {
@@ -61,11 +62,13 @@ export const getWorkingHoursMasterStarted = (state: IMasterState): IMasterState 
 }
 
 export const getWorkingHoursMasterDone = (state: IMasterState, { result }: any): IMasterState => {
+    const workingHoursMaster = result.dates.filter(item => !isEmpty(item.masters))
+    
     return {
         ...state,
         isLoading: false,
         error: false,
-        services: result
+        workingHoursMaster,
     }
 }
 

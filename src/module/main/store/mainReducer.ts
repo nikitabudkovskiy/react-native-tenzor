@@ -11,7 +11,6 @@ export const getTownsListStarted = (state: IMainState): IMainState => {
 }
 
 export const getTownsListDone = (state: IMainState, { result }: any): IMainState => {
-    console.log(result)
     return {
         ...state,
         isLoading: false,
@@ -37,7 +36,6 @@ export const getOrganisationsStarted = (state: IMainState): IMainState => {
 }
 
 export const getOrganisationsDone = (state: IMainState, { result }: any): IMainState => {
-    console.log('qqqqq',result)
     return {
         ...state,
         isLoading: false,
@@ -58,6 +56,7 @@ export const mainReducer: ReducerBuilder<IMainState>  = reducerWithInitialState(
     .case(MainAsyncActions.getTownsList.async.started, getTownsListStarted)
     .case(MainAsyncActions.getTownsList.async.done, getTownsListDone)
     .case(MainAsyncActions.getTownsList.async.failed, getTownsListFailed)
+
     .case(MainAsyncActions.getOrganisations.async.started, getOrganisationsStarted)
     .case(MainAsyncActions.getOrganisations.async.done, getOrganisationsDone)
     .case(MainAsyncActions.getOrganisations.async.failed, getOrganisationsFailed)

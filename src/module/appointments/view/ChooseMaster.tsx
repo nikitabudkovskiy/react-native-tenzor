@@ -24,10 +24,11 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import { CommonButton } from 'app/module/global/view'
 import { ListPages } from 'app/system/navigation'
 import { IApplicationState } from 'app/system/store/applicationState'
-import { MainAsyncActions } from 'app/module/main/store/mainAsyncActions'
 import { connectStore } from 'app/system/store'
 import { ThunkDispatch } from 'redux-thunk'
 import { MastersAsyncActions } from 'app/module/masters/store/masterAsyncActions'
+import { FloatingLoader } from 'app/module/global/view/FloatingLoader'
+import { RouteProp } from '@react-navigation/native'
 
 interface IStateProps extends IIsLoadingAndError {
   userCity: ITownsResponce
@@ -36,10 +37,12 @@ interface IStateProps extends IIsLoadingAndError {
 
 interface IDispatchProps {
   getOrganisations(data: IGetOrganisationsRequest): Promise<void>
+  getMasterList(data: IGetMastersListRequest): Promise<void>
 }
 
 interface IProps {
   navigation: StackNavigationProp<any>
+  route: RouteProp<any, any>
 }
 
 interface IState {
@@ -68,7 +71,9 @@ export class ChooseMaster extends PureComponent<IStateProps & IDispatchProps & I
   }
 
   async componentDidMount(): Promise<void> {
-
+    await this.props.getMasterList({
+      point_id: this.props.userCity.id,
+    })
   }
 
   searchMasterHandler = (searchValue: string): void => {
@@ -81,11 +86,21 @@ export class ChooseMaster extends PureComponent<IStateProps & IDispatchProps & I
     }
   }
 
-  goToTimeSelectHandler = (): void => {
-    this.props.navigation.push(ListPages.TimeSelect)
+  goToTimeSelectHandler = (master: IMasters): void => {
+    this.props.navigation.push(ListPages.TimeSelect, 
+      {
+        salon: this.props.route.params?.salon,
+        selectedServices: this.props.route.params?.selectedServices,
+        master,
+      }
+    )
   }
 
   render() {
+
+    if (this.props.isLoading) {
+      return <FloatingLoader />
+    }
 
     const container = styleSheetFlatten([
       styles.container,
@@ -94,10 +109,11 @@ export class ChooseMaster extends PureComponent<IStateProps & IDispatchProps & I
       }
     ])
 
+    console.log('lol', this.props.route.params)
+
     return (
       <View style={styles.mainContainer}>
         <View style={container} >
-
           <View style={styles.headerContainer}>
             <TouchableOpacity
               onPress={this.goBackHandler}
@@ -112,19 +128,19 @@ export class ChooseMaster extends PureComponent<IStateProps & IDispatchProps & I
               Наши мастера
           </Text>
           </View>
-
           <ScrollView>
             {
-              !isEmpty(masterList)
-                ? masterList.map(items => {
+              !isEmpty(this.props.mastersList.masters)
+                ? this.props.mastersList.masters.map(items => {
                   return (
                     <TouchableOpacity
                       key={items.name}
                       style={styles.hairDresserWrapper}
+                      onPress={this.goToTimeSelectHandler.bind(this, items)}
                     >
                       <View style={styles.hairDresserContainer}>
                         <Image
-                          source={items.image}
+                          source={{ uri: items.photo }}
                           style={styles.master}
                         />
                         <View style={styles.hairDresserInfoContainer}>
@@ -132,7 +148,7 @@ export class ChooseMaster extends PureComponent<IStateProps & IDispatchProps & I
                             {items.name}
                           </Text>
                           <Text style={styles.hairDresserPosition}>
-                            {items.position}
+                            {items.role}
                           </Text>
                           <View style={styles.starContainer}>
                             {
@@ -173,7 +189,7 @@ export class ChooseMaster extends PureComponent<IStateProps & IDispatchProps & I
                 Услуг: 3 на 600 ₽ / 90 мин
               </Text>
               <CommonButton
-                title='Далее'
+                title='Любой мастер'
                 styleButton={styles.masterContinue}
                 styleText={styles.masterContinueText}
                 onPress={this.goToTimeSelectHandler}
@@ -223,6 +239,7 @@ const styles = styleSheetCreate({
   master: style.image({
     width: windowWidth * 0.16,
     height: windowWidth * 0.16,
+    borderRadius: windowWidth * 0.1,
   }),
   masterStar: style.image({
     width: windowWidth * 0.0395,
