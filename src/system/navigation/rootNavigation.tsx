@@ -18,9 +18,9 @@ import { SelectService } from 'app/module/appointments/view/SelectService'
 import { ChooseMaster } from 'app/module/appointments/view/ChooseMaster'
 import { EnterPhoneNumberSingInRegistration } from 'app/module/login/view/EnterPhoneNumberSingInRegistration'
 import { PasswordRegistration } from 'app/module/login/view/PasswordRegistration'
-// import { RegistrationContacts } from 'app/module/registration/view/RegistrationContacts'
 import { Сontacts } from 'app/module/main/view/Сontacts'
 import { MainPage } from 'app/module/main/view/MainPage'
+import { DetailsRecord } from 'app/module/appointments/view/DetailsRecord'
 
 export interface IListTabBar {
   name: string
@@ -100,6 +100,7 @@ export const RootNavigator = (): JSX.Element => {
       <Stack.Screen name={ListPages.SelectService} component={SelectService} /> 
       <Stack.Screen name={ListPages.ChooseMaster} component={ChooseMaster} /> 
       <Stack.Screen name={ListPages.TimeSelect} component={TimeSelect} />
+      <Stack.Screen name={ListPages.DetailsRecord} component={DetailsRecord} />
       <Stack.Screen name={ListPages.EnterPhoneNumberSingIn} component={EnterPhoneNumberSingIn} />
       <Stack.Screen name={ListPages.PasswordSingIn} component={PasswordSingIn} />
       <Stack.Screen name={ListPages.EnterPhoneNumberSingInRegistration} component={EnterPhoneNumberSingInRegistration} />

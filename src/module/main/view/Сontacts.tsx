@@ -69,13 +69,8 @@ export class Сontacts extends PureComponent<IStateProps & IDispatchProps & IPro
 
   async componentDidMount(): Promise<void> {
     await this.props.getOrganisations({
-      id: this.props.userCity.id,
+     id: this.props.userCity.id,
     })
-
-    // if (this.props.organisations && this.props.organisations.orgs) {
-
-    // }
-    // console.log('psop', this.props.organisations)
   }
   goBackHandler = (): void => {
     if (this.props.navigation.canGoBack()) {

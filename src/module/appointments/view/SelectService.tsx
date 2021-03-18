@@ -86,11 +86,16 @@ export class SelectService extends PureComponent<IStateProps & IDispatchProps & 
   }
 
   goToChooseMasterHandler = (): void => {
+    // @ts-ignore
+    const selectedServices = Object.values(this.state.selectedServices).flat()
     this.props.navigation.push(
       ListPages.ChooseMaster,
       {
         salon: this.props.route.params?.salon,
         selectedServices: this.state.selectedServices,
+        countService: selectedServices.length,
+        priceService: selectedServices.reduce((sum, item) => item.cost, 0),
+
       }
     )
   }
@@ -220,7 +225,7 @@ export class SelectService extends PureComponent<IStateProps & IDispatchProps & 
             <CommonButton
               title='Далее'
               styleButton={styles.continue}
-              // disabled={!selectedServices.length}
+              disabled={!selectedServices.length}
               onPress={this.goToChooseMasterHandler}
             />
           </View>

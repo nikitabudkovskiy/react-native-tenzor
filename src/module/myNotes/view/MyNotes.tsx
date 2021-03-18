@@ -23,6 +23,10 @@ import { IMainState } from 'app/module/main/store/mainState'
 import { connectStore, IApplicationState } from 'app/system/store'
 import { ThunkDispatch } from 'redux-thunk'
 import { MyNotesAsyncActions } from '../store/myNotesAsyncActions'
+import moment from 'moment'
+import 'moment/locale/ru'
+import { FloatingLoader } from 'app/module/global/view/FloatingLoader'
+import { isEmpty } from 'lodash'
 
 interface IDispatchProps {
   getOrdersHistory(data: IGetOrdersHistoryRequest): Promise<void>
@@ -66,15 +70,21 @@ interface INote {
 export class MyNotes extends PureComponent<IProps & IDispatchProps & IStateProps, IState> {
 
   async componentDidMount(): Promise<void> {
+    moment.locale('ru')
     await this.props.getOrdersHistory({
+
     })
   }
 
-  goToNoteDetailsHandler = (): void => {
-    this.props.navigation.push(ListPages.NoteDetails)
+  goToNoteDetailsHandler = (order: any): void => {
+    this.props.navigation.push(ListPages.NoteDetails, { order })
   }
 
   render() {
+
+    if (this.props.isLoading) {
+      return <FloatingLoader />
+    }
 
     const container = styleSheetFlatten([
       styles.container,
@@ -117,21 +127,26 @@ export class MyNotes extends PureComponent<IProps & IDispatchProps & IStateProps
         >
           <Text style={styles.headerTitle}>
             Мои записи
-        </Text>
+          </Text>
           <View style={styles.noteContent}>
             {
-              noteList.map(items => {
+              !isEmpty(this.props.myNotes) && this.props.myNotes.map(items => {
                 return (
                   <TouchableOpacity 
-                    onPress={this.goToNoteDetailsHandler}
+                    onPress={this.goToNoteDetailsHandler.bind(this, items)}
                     style={styles.noteContainer}
                     key={Math.random().toString()}
                   >
                     <View style={styles.noteTitleContainer}>
                       <Text style={styles.noteTimeTitle}>
-                        {items.date}
+                        {moment(items.createdon).format('DD MMM в mm:ss')}
                       </Text>
-                      {
+                      <View style={[styles.statusContainer, { backgroundColor: "#" + items.status_color}]}>
+                        <Text style={styles.statusTitle}>
+                          {items.status_name}
+                        </Text>
+                      </View>
+                      {/* {
                         items.status == 'Ожидает'
                           ? (
                             <View style={styles.statusContainer}>
@@ -154,32 +169,32 @@ export class MyNotes extends PureComponent<IProps & IDispatchProps & IStateProps
                               </View>
                             )
 
-                      }
+                      } */}
                     </View>
                     <View style={styles.noteDescriptionConteiner}>
                       <Image
                         style={styles.master}
-                        source={items.image}
+                        // source={items.image}
                       />
                       <View style={styles.hairDresserInfoContainer}>
                         <Text style={styles.hairDresserName}>
-                          {items.hairDresserName}
+                          {/* {items.hairDresserName} */}
                         </Text>
                         <Text style={styles.hairDresserAddress}>
-                          {items.address}
+                          {/* {items.address} */}
                         </Text>
                       </View>
                     </View>
                     <View style={styles.footerNoteContainer}>
                       <Text style={styles.footerNoteNumber}>
-                        Запись №{items.noteNumber}
+                        Запись №{items.order_id}
                       </Text>
                       <View style={styles.footerTimePriceContainer}>
                         <Text style={styles.footerNoteTime}>
-                          {items.time} мин
+                          {/* {items.time} мин */}
                       </Text>
                         <Text style={styles.footerNotePrice}>
-                          {items.price} ₽
+                          {items.cost} ₽
                       </Text>
                       </View>
                     </View>
@@ -220,12 +235,13 @@ const styles = styleSheetCreate({
     backgroundColor: Color.gray50,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: windowWidth * 0.296
+    borderRadius: windowWidth * 0.296,
+    maxWidth: windowWidth * 0.3,
   }),
   statusTitle: style.text({
     fontSize: windowWidth * 0.0346,
     fontFamily: fonts.robotoBold,
-    color: Color.fauxLime,
+    color: Color.white,
   }),
   noteTitleContainer: style.view({
     alignItems: 'center',

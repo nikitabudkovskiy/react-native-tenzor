@@ -21,6 +21,13 @@ export class MainRequest {
             { params }
         )
     }
+
+    static createRecord = (params: ICreateRecordRequest): Promise<ICreateRecordResponce> => {
+        return ApiService.get(
+            'http://tbeauteam.appsj.su/api/sbis/sbisCreate',
+            { params }
+        )
+    }
 }
 
 

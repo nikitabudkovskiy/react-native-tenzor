@@ -25,9 +25,13 @@ import { Portal } from 'react-native-portalize'
 import { connectStore, IApplicationState } from 'app/system/store'
 import { ThunkDispatch } from 'redux-thunk'
 import { MyNotesAsyncActions } from '../store/myNotesAsyncActions'
+import { RouteProp } from '@react-navigation/core'
+import moment from 'moment'
+import 'moment/locale/ru'
 
 interface IProps {
   navigation: StackNavigationProp<any>
+  route: RouteProp<any, any>
 }
 
 interface IState {
@@ -69,7 +73,7 @@ export class NoteDetails extends PureComponent<IProps & IState & IDispatchProps 
   }
 
   async componentDidMount() {
-
+    moment.locale('ru')
   }
 
   onChangeMasterAssessmentHandler = (masterAssessment: number): void => {
@@ -149,6 +153,15 @@ export class NoteDetails extends PureComponent<IProps & IState & IDispatchProps 
       }
     ])
 
+    const { order } = this.props.route.params
+    console.log('order', order )
+    const styleButton = styleSheetFlatten([
+      styles.statusContainer,
+      {
+        backroundColor: "#" + order.status_color
+      }
+    ])
+
     return (
       <View style={container}>
 
@@ -165,16 +178,16 @@ export class NoteDetails extends PureComponent<IProps & IState & IDispatchProps 
               />
             </TouchableOpacity>
             <Text style={styles.noteHeadTitle}>
-              13.05.2020, 13:45
+              {moment(order.createdon).format('DD MMM в mm:ss')}
             </Text>
           </View>
           <View style={styles.statusContent}>
             <CommonButton
               title='Ожидает'
-              styleButton={styles.statusContainer}
+              styleButton={styleButton}
               styleText={styles.statusTitle}
             />
-            <CommonButton
+            {/* <CommonButton
               title='Отменить запись'
               styleButton={styles.cancelButton}
               styleText={styles.cancelTitle}
@@ -184,12 +197,12 @@ export class NoteDetails extends PureComponent<IProps & IState & IDispatchProps 
               title='Запись отменена'
               styleButton={styles.entryСanceledButton}
               styleText={styles.entryСanceledButtonText}
-            />
-            <CommonButton
+            /> */}
+            {/* <CommonButton
               title='Завершена'
               styleButton={styles.finishedRecordingButton}
               styleText={styles.finishedRecordingButtonText}
-            />
+            /> */}
             <View style={{ alignItems: 'center'}}>
             <Text style={styles.bottomSheetYourMark}>
                 Ваша оценка
@@ -245,7 +258,7 @@ export class NoteDetails extends PureComponent<IProps & IState & IDispatchProps 
                   Номер записи
                 </Text>
                 <Text style={styles.serviceTitle}>
-                  №7847
+                  {order.order_id}
                 </Text>
               </View>
               <View style={styles.serviceInfo}>
@@ -253,7 +266,7 @@ export class NoteDetails extends PureComponent<IProps & IState & IDispatchProps 
                   Дата записи
                 </Text>
                 <Text style={styles.serviceTitle}>
-                  15.01.2021 в 14:30
+                  {moment(order.createdon).format('DD MMM в mm:ss')}
                 </Text>
               </View>
               <View style={styles.serviceInfo}>
@@ -285,7 +298,7 @@ export class NoteDetails extends PureComponent<IProps & IState & IDispatchProps 
                   Стоимость услуг
                 </Text>
                 <Text style={styles.priceInfo}>
-                  620 ₽
+                  {order.cost} ₽
                 </Text>
               </View>
               <View style={styles.serviceInfo}>
@@ -411,7 +424,6 @@ const styles = styleSheetCreate({
   statusContainer: style.view({
     width: windowWidth * 0.914,
     height: windowWidth * 0.13,
-    backgroundColor: Color.chineseWhite,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: windowWidth * 0.032,
@@ -420,7 +432,7 @@ const styles = styleSheetCreate({
   statusTitle: style.text({
     fontFamily: fonts.robotoRegular,
     fontSize: windowWidth * 0.04,
-    color: Color.fauxLime,
+    color: Color.white,
     textTransform: 'none',
   }),
   cancelButton: style.view({

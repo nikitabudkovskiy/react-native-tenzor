@@ -19,5 +19,6 @@ export class ListPages {
   static readonly ChooseSalon = 'ChooseSalon'
   static readonly FinishNote = 'FinishNote'
   static readonly Enroll = 'Enroll'
+  static readonly DetailsRecord = 'DetailsRecord'
  
 }

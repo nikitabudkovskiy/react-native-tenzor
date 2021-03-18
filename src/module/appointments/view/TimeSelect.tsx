@@ -26,6 +26,7 @@ import { RouteProp } from '@react-navigation/native'
 import moment from 'moment'
 import { FloatingLoader } from 'app/module/global/view/FloatingLoader'
 import { isEmpty } from 'lodash'
+import { ListPages } from 'app/system/navigation'
 
 interface IStateProps extends IIsLoadingAndError {
   userCity: ITownsResponce
@@ -44,18 +45,6 @@ interface IProps {
 interface IState {
   activeDate: any
   activeTime: any
-}
-
-interface IDateTime {
-  date: number
-  month: string
-  dayOfWeek: string
-  status: string
-}
-
-interface ITime {
-  time: string
-  timeStatus: string
 }
 
 function convert(minutes) {
@@ -116,6 +105,18 @@ export class TimeSelect extends PureComponent<IStateProps & IDispatchProps & IPr
     }
   }
 
+  goToDetailsRecordHandler = (): void => {
+    this.props.navigation.push(ListPages.DetailsRecord, 
+      {
+        salon: this.props.route.params?.salon,
+        selectedServices: this.props.route.params?.selectedServices,
+        countService: this.props.route.params?.countService,
+        priceService: this.props.route.params?.priceService,
+        master: this.props.route.params?.master,
+      }
+    )
+  }
+
   render() {
 
     if (this.props.isLoading) {
@@ -156,6 +157,8 @@ export class TimeSelect extends PureComponent<IStateProps & IDispatchProps & IPr
         backgroundColor: Color.electricOrange,
       }
     ])
+
+    const { countService, priceService } = (this.props.route.params as any)
 
     return (
       <View style={styles.mainContainer}>
@@ -244,11 +247,12 @@ export class TimeSelect extends PureComponent<IStateProps & IDispatchProps & IPr
         </ScrollView>
         <View style={styles.calculationsContainer}>
           <Text style={styles.calculationsTitle}>
-            Услуг: 3 на 600 ₽ / 90 мин
+            Услуг: {countService} на {priceService} ₽ 
             </Text>
           <CommonButton
             title='ЗАПИСАТЬСЯ'
             styleButton={styles.makeAppointment}
+            onPress={this.goToDetailsRecordHandler}
           />
         </View>
       </View>

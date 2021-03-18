@@ -72,7 +72,8 @@ export class ChooseMaster extends PureComponent<IStateProps & IDispatchProps & I
 
   async componentDidMount(): Promise<void> {
     await this.props.getMasterList({
-      point_id: this.props.userCity.id,
+      // point_id: this.props.userCity.id,
+      point_id: 170,
     })
   }
 
@@ -91,6 +92,8 @@ export class ChooseMaster extends PureComponent<IStateProps & IDispatchProps & I
       {
         salon: this.props.route.params?.salon,
         selectedServices: this.props.route.params?.selectedServices,
+        countService: this.props.route.params?.countService,
+        priceService: this.props.route.params?.priceService,
         master,
       }
     )
@@ -101,6 +104,8 @@ export class ChooseMaster extends PureComponent<IStateProps & IDispatchProps & I
     if (this.props.isLoading) {
       return <FloatingLoader />
     }
+
+    const { countService, priceService } = this.props.route.params
 
     const container = styleSheetFlatten([
       styles.container,
@@ -186,7 +191,7 @@ export class ChooseMaster extends PureComponent<IStateProps & IDispatchProps & I
           <View style={styles.masterCalculationsContainer}>
             <View style={styles.masterCalculations}>
               <Text style={styles.masterCalculationsTitle}>
-                Услуг: 3 на 600 ₽ / 90 мин
+                Услуг: {countService} на {priceService} ₽ 
               </Text>
               <CommonButton
                 title='Любой мастер'

@@ -78,7 +78,8 @@ export class ChooseSalon extends PureComponent<IStateProps & IDispatchProps & IP
   async componentDidMount(): Promise<void> {
     if (isEmpty(this.props.organisations)) {
       await this.props.getOrganisations({
-        id: this.props.userCity.id,
+       id: this.props.userCity.id,
+    // id: 170,
       })
     }
   }

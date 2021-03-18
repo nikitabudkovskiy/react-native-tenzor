@@ -10,8 +10,12 @@ export class MyNotesRequest {
 
     static getOrdersHistory = (data: IGetOrdersHistoryRequest): Promise<IGetOrdersHistoryResponce> => {
         return ApiService.post(
-            'http://tbeauteam.appsj.su/getordershistory.json',
-            { data }
+            'http://tbeauteam.appsj.su/getordershistory.json', {  }, {
+                headers: {
+                    Authorization: 'Bearer 2db1160cc53c57b68ff3bc63f67448de',
+                    'Content-Type': 'application/json'
+                }
+            }
         )
     }
 }

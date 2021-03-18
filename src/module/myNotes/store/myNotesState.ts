@@ -7,7 +7,5 @@ export interface IMyNotesState {
 export const MyNotesInitialState: IMyNotesState = {
     isLoading: false,
     error: false,
-    myNotes: {
-        orders: [],
-    },
+    myNotes: {},
 }

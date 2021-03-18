@@ -19,6 +19,7 @@ interface IProps extends TouchableOpacityProps {
   title: string
   styleButton?: ViewStyle
   styleText?: TextStyle
+  backgrounColor?: string
 }
 
 interface IState {
@@ -34,7 +35,7 @@ export class CommonButton extends PureComponent<IProps,IState>{
       this.props.styleButton,
       {
         opacity: this.props.disabled ? 0.5 : 1,
-      }
+      },
     ])
 
     const text = styleSheetFlatten([

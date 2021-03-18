@@ -9,5 +9,6 @@ export const MainInitialState: IMainState = {
     isLoading: false,
     error: false,
     townsList: [],
-    organisationsList: []
+    organisationsList: [],
+    
 } 

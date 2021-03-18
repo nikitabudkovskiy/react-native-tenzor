@@ -43,3 +43,11 @@ interface IOrganisationDeleveries {
     id: number
     name: string
 }
+
+interface ICreateRecordRequest {
+
+}
+
+interface ICreateRecordResponce {
+
+}

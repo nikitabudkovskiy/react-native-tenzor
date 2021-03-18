@@ -12,4 +12,10 @@ export class MainAsyncActions {
         MainRequest.getOrganisations
     )
 
+    static creatreRecord = asyncActionCreator<ICreateRecordRequest, ICreateRecordResponce, Error>(
+        'MAIN/CREATE_RECORD',
+        MainRequest.createRecord
+    )
+
+
 }
