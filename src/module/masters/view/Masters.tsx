@@ -82,7 +82,7 @@ export class Masters extends PureComponent<IProps & IState & IStateProps & IDisp
   async componentDidMount() {
     if (this.props.userCity.id) {
       await this.props.getMasterList({
-        point_id: 1830,
+        point_id: this.props.userCity.id,
       })
     }
   }

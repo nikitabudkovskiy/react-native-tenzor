@@ -70,6 +70,7 @@ export class Сontacts extends PureComponent<IStateProps & IDispatchProps & IPro
   async componentDidMount(): Promise<void> {
     await this.props.getOrganisations({
      id: this.props.userCity.id,
+
     })
   }
   goBackHandler = (): void => {

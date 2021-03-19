@@ -79,7 +79,16 @@ export class DetailsRecord extends PureComponent<IStateProps & IDispatchProps & 
       point_id: this.props.userCity.id,
       datetime: moment().format('DDDD-MM-DD hh:mm:Ss'), 
       master: master.id,
-      nomenclatures: selectedServicesFlat
+      nomenclatures: selectedServicesFlat.map(item => {
+        return {
+          // priceListId: 4,
+          count: 1,
+          cost: item.cost,
+          externalId: item.externalId,
+          name: item.name,
+
+        }
+      })
   
     })
   }

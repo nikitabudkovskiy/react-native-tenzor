@@ -91,7 +91,7 @@ export class ChooseSalon extends PureComponent<IStateProps & IDispatchProps & IP
   }
 
   changeSelectedSalon = (salon: IOrganisation): void => {
-    if (this.state.selectedSalon.address === salon.address) {
+    if (this.state.selectedSalon.title === salon.title) {
       this.setState({ selectedSalon: { address: '' } })
       return
     }
@@ -263,11 +263,11 @@ export class ChooseSalon extends PureComponent<IStateProps & IDispatchProps & IP
                       style={styles.listAddressCardContainer}
                       onPress={this.changeSelectedSalon.bind(this, item)}
                     >
-                      <Text style={this.state.selectedSalon.address === item.address ? styles.listAddressCardActiveText : styles.listAddressCardText}>
-                        {item.address}
+                      <Text style={this.state.selectedSalon.title === item.title ? styles.listAddressCardActiveText : styles.listAddressCardText}>
+                        {item.title}
                       </Text>
                       {
-                        this.state.selectedSalon.address === item.address
+                        this.state.selectedSalon.title === item.title
                           ? (
                             <Image
                               source={ImageRepository.globalOrangeCheckMark}
@@ -286,7 +286,7 @@ export class ChooseSalon extends PureComponent<IStateProps & IDispatchProps & IP
             }
           </ScrollView>
           <CommonButton
-            disabled={!this.state.selectedSalon.address}
+            disabled={!this.state.selectedSalon.title}
             styleButton={styles.signSalonButton}
             title="Далее"
             onPress={this.goToSelectServiceHandler}
