@@ -25,6 +25,7 @@ import { RouteProp } from '@react-navigation/native'
 import { TextInput } from 'react-native-gesture-handler'
 import { MainAsyncActions } from 'app/module/main/store/mainAsyncActions'
 import moment from 'moment'
+import { convertMinutesToHoursAndMinutes } from './TimeSelect'
 
 interface IStateProps extends IIsLoadingAndError {
   userCity: ITownsResponce
@@ -41,8 +42,6 @@ interface IProps {
 }
 
 interface IState {
-  activeDate: any
-  activeTime: any
   comment: string
 }
 
@@ -62,8 +61,6 @@ interface IState {
 export class DetailsRecord extends PureComponent<IStateProps & IDispatchProps & IProps, IState> {
 
   state = {
-    activeDate: -1,
-    activeTime: -1,
     comment: '',
   }
 
@@ -120,6 +117,8 @@ export class DetailsRecord extends PureComponent<IStateProps & IDispatchProps & 
       countService,
       priceService,
       master,
+      dateRecord,
+      timeRecord,
     } = (this.props.route.params as any)
 
     //@ts-ignore
@@ -128,7 +127,7 @@ export class DetailsRecord extends PureComponent<IStateProps & IDispatchProps & 
     const details = [
       {
         key: 'Дата записи',
-        value: '15.01.2021 в 14:30',
+       value: `${moment(dateRecord).format('DD.MM.YYYY')} в ${convertMinutesToHoursAndMinutes(timeRecord)}`,
         boldValue: false,
       },
       {

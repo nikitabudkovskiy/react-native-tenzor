@@ -47,9 +47,9 @@ interface IState {
   activeTime: any
 }
 
-function convert(minutes) {
-  var h = Math.floor(minutes / 60)
-  var m = minutes % 60
+export function convertMinutesToHoursAndMinutes(minutes: number) {
+  let h: any = Math.floor(minutes / 60)
+  let m: any = minutes % 60
   h = h < 10 ? '0' + h : h
   m = m < 10 ? '0' + m : m
   return h + ':' + m
@@ -91,12 +91,12 @@ export class TimeSelect extends PureComponent<IStateProps & IDispatchProps & IPr
     this.setState({ activeDate })
   }
 
-  onChangeTimeHandler = (activeTime: any): void => {
+  onChangeTimeHandler = (activeTime: any, activeDate: string): void => {
     if (this.state.activeTime === activeTime) {
-      this.setState({ activeTime: -1 })
+      this.setState({ activeTime: -1, activeDate: -1 })
       return
     }
-    this.setState({ activeTime })
+    this.setState({ activeTime, activeDate })
   }
 
   goBackHandler = (): void => {
@@ -113,6 +113,8 @@ export class TimeSelect extends PureComponent<IStateProps & IDispatchProps & IPr
         countService: this.props.route.params?.countService,
         priceService: this.props.route.params?.priceService,
         master: this.props.route.params?.master,
+        dateRecord: this.state.activeDate,
+        timeRecord: this.state.activeTime,
       }
     )
   }
@@ -151,15 +153,11 @@ export class TimeSelect extends PureComponent<IStateProps & IDispatchProps & IPr
       }
     ])
 
-    const timeContainerFlatten = styleSheetFlatten([
-      styles.timeContainer,
-      {
-        backgroundColor: Color.electricOrange,
-      }
-    ])
-
     const { countService, priceService } = (this.props.route.params as any)
-
+    console.log('f', !this.state.activeTime)
+    console.log('f', !this.state.activeDate)
+    console.log('f', !this.state.activeTime && !this.state.activeDate)
+    console.log('fkm', !this.state.activeDate && !this.state.activeTime || !this.state.activeTime && !this.state.activeDate)
     return (
       <View style={styles.mainContainer}>
         <ScrollView
@@ -224,15 +222,16 @@ export class TimeSelect extends PureComponent<IStateProps & IDispatchProps & IPr
                     >
                       {
                         midddleItem.time_intervals.map(bottomItem => {
+                          const disabledButton = !bottomItem.available
                           return (
                             <TouchableOpacity
                               key={Math.random().toString()}
-                              style={this.state.activeTime === bottomItem.start && this.state.activeTime === topItem.date ? timeContainerFlatten : styles.timeContainer}
-                              disabled={this.state.activeDate !== topItem.date}
-                              onPress={this.onChangeTimeHandler.bind(this, bottomItem.start)}
+                              style={disabledButton ? styles.timeContainerDisabled : this.state.activeTime === bottomItem.start && this.state.activeDate === topItem.date ? styles.timeContainerActive : styles.timeContainer}
+                              disabled={disabledButton}
+                              onPress={this.onChangeTimeHandler.bind(this, bottomItem.start, topItem.date)}
                             >
-                              <Text style={this.state.activeTime === bottomItem.start && this.state.activeTime === topItem.date ? styles.timeTitleActive :  styles.timeTitle}>
-                                {convert(bottomItem.start)}
+                              <Text style={this.state.activeTime === bottomItem.start && this.state.activeDate === topItem.date ? styles.timeTitleActive :  styles.timeTitle}>
+                                {convertMinutesToHoursAndMinutes(bottomItem.start)}
                               </Text>
                             </TouchableOpacity>
                           )
@@ -248,11 +247,12 @@ export class TimeSelect extends PureComponent<IStateProps & IDispatchProps & IPr
         <View style={styles.calculationsContainer}>
           <Text style={styles.calculationsTitle}>
             Услуг: {countService} на {priceService} ₽ 
-            </Text>
+          </Text>
           <CommonButton
             title='ЗАПИСАТЬСЯ'
             styleButton={styles.makeAppointment}
             onPress={this.goToDetailsRecordHandler}
+            disabled={this.state.activeTime === -1}
           />
         </View>
       </View>
@@ -337,6 +337,25 @@ const styles = styleSheetCreate({
     justifyContent: 'center',
     borderRadius: windowWidth * 0.02,
     marginTop: windowWidth * 0.01
+  }),
+  timeContainerActive: style.view({
+    width: windowWidth * 0.22,
+    height: windowWidth * 0.1,
+    backgroundColor: Color.electricOrange,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: windowWidth * 0.02,
+    marginTop: windowWidth * 0.01
+  }),
+  timeContainerDisabled: style.view({
+    width: windowWidth * 0.22,
+    height: windowWidth * 0.1,
+    backgroundColor: Color.anitFlashWhite,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: windowWidth * 0.02,
+    marginTop: windowWidth * 0.01,
+    opacity: 0.3,
   }),
   timeTitle: style.text({
     fontFamily: fonts.robotoRegular,
